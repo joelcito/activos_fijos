@@ -52,6 +52,7 @@ public class SubGrupo implements Serializable{
 		this.creat_at = creat_at;
 	}
 
+	
 	/**
 	 * 
 	 */
