@@ -16,47 +16,50 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.activo.fijos.models.entity.UbicacionGeneral;
-import com.activo.fijos.models.services.IUbicacionGeneralService;
+import com.activo.fijos.models.entity.UnididadManejo;
+import com.activo.fijos.models.services.IUnidadManejoService;
 
 @CrossOrigin(origins = {"http://localhost:4200/"})
 @RestController
-@RequestMapping("/api/ubicacionGeneral")
-public class UbicacionGeneralRestController {
-
+@RequestMapping("/api/unidadManejo")
+public class UnidadManejoRestController {
+	
 	@Autowired
-	private IUbicacionGeneralService ubicacionGeneralService;
+	private IUnidadManejoService unidadManejoService;
 	
 	@GetMapping("/listado")
-	public List<UbicacionGeneral>index(){
-		return this.ubicacionGeneralService.findAll();
+	public List<UnididadManejo> index() {
+		return this.unidadManejoService.findAll();
 	}
 	
 	@GetMapping("/{id}")
-	public UbicacionGeneral show(@PathVariable String id) {
-		return ubicacionGeneralService.findById(id);
+	public UnididadManejo show(@PathVariable String id) {
+		return unidadManejoService.findById(id);
 	}
 	
 	@PostMapping("/")
 	@ResponseStatus(HttpStatus.CREATED)
-	public UbicacionGeneral create(@RequestBody UbicacionGeneral ubicacionGeneral) {
-		ubicacionGeneral.setFechacreacion(new Date());
-		return ubicacionGeneralService.save(ubicacionGeneral);
+	public UnididadManejo create(@RequestBody UnididadManejo unidadManejo) {
+		
+		unidadManejo.setFechacreacion(new Date());
+		unidadManejo.setFecha(new Date());
+		
+		return unidadManejoService.save(unidadManejo);
 	}
 	
 	@PutMapping("/{id}")
 	@ResponseStatus(HttpStatus.CREATED)
-	public UbicacionGeneral update(@RequestBody UbicacionGeneral ubicacionGeneral, @PathVariable String id) {
-		UbicacionGeneral ubicacionActual = ubicacionGeneralService.findById(id);
+	public UnididadManejo update(@RequestBody UnididadManejo unidadManejo, @PathVariable String id) {
+		UnididadManejo unidadManejoActual = unidadManejoService.findById(id);
 		
-		ubicacionActual.setDescripcion(ubicacionGeneral.getDescripcion());
-		ubicacionActual.setNombre(ubicacionGeneral.getNombre());
+		unidadManejoActual.setDescripcion(unidadManejo.getDescripcion());
 		
-		return ubicacionGeneralService.save(ubicacionActual);
+		return unidadManejoService.save(unidadManejoActual) ;
 	}
 	
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable String id) {
-		ubicacionGeneralService.delete(id);
+		unidadManejoService.delete(id);
 	}
+
 }

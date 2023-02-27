@@ -28,6 +28,7 @@ public class UbicacionGeneralImpl implements IUbicacionGeneralService {
 	}
 
 	@Override
+	@Transactional
 	public void delete(String idubicaciongeneral) {
 		ubicacionGeneralDao.deleteById(idubicaciongeneral);
 	}

@@ -16,47 +16,49 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.activo.fijos.models.entity.UbicacionGeneral;
-import com.activo.fijos.models.services.IUbicacionGeneralService;
+import com.activo.fijos.models.entity.Departamento;
+import com.activo.fijos.models.services.IDepartamentoService;
 
 @CrossOrigin(origins = {"http://localhost:4200/"})
 @RestController
-@RequestMapping("/api/ubicacionGeneral")
-public class UbicacionGeneralRestController {
+@RequestMapping("/api/departamento")
+public class DepartamentoRestController {
 
 	@Autowired
-	private IUbicacionGeneralService ubicacionGeneralService;
+	private IDepartamentoService departamentoService;
 	
 	@GetMapping("/listado")
-	public List<UbicacionGeneral>index(){
-		return this.ubicacionGeneralService.findAll();
+	public List<Departamento>index(){
+		return this.departamentoService.findAll();
 	}
 	
 	@GetMapping("/{id}")
-	public UbicacionGeneral show(@PathVariable String id) {
-		return ubicacionGeneralService.findById(id);
+	public Departamento show(@PathVariable String id) {
+		return departamentoService.findById(id);
 	}
 	
 	@PostMapping("/")
 	@ResponseStatus(HttpStatus.CREATED)
-	public UbicacionGeneral create(@RequestBody UbicacionGeneral ubicacionGeneral) {
-		ubicacionGeneral.setFechacreacion(new Date());
-		return ubicacionGeneralService.save(ubicacionGeneral);
+	public Departamento create(@RequestBody Departamento departamento) {
+		departamento.setFecha(new Date());
+		departamento.setFechacreacion(new Date());
+		
+		return departamentoService.save(departamento);
 	}
 	
 	@PutMapping("/{id}")
 	@ResponseStatus(HttpStatus.CREATED)
-	public UbicacionGeneral update(@RequestBody UbicacionGeneral ubicacionGeneral, @PathVariable String id) {
-		UbicacionGeneral ubicacionActual = ubicacionGeneralService.findById(id);
+	public Departamento update(@RequestBody Departamento departamento, @PathVariable String iddepartamento) {
+		Departamento departamentoActual = departamentoService.findById(iddepartamento);
 		
-		ubicacionActual.setDescripcion(ubicacionGeneral.getDescripcion());
-		ubicacionActual.setNombre(ubicacionGeneral.getNombre());
+		departamentoActual.setNombre(departamento.getNombre());
+		departamentoActual.setDescripcion(departamento.getDescripcion());
 		
-		return ubicacionGeneralService.save(ubicacionActual);
+		return departamentoService.save(departamentoActual);
 	}
 	
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable String id) {
-		ubicacionGeneralService.delete(id);
+		departamentoService.delete(id);
 	}
 }
