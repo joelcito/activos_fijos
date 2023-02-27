@@ -20,6 +20,7 @@ public class SubGrupo implements Serializable{
 	private String estado;
 	private Date creat_at;
 	
+	
 	public Long getId() {
 		return id;
 	}

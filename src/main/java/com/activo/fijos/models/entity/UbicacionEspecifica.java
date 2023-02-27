@@ -3,32 +3,31 @@ package com.activo.fijos.models.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="incorporacion")
-public class Incorporacion implements Serializable{
-	
+@Table(name="ubicacionespecifica")
+public class UbicacionEspecifica implements Serializable {
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@Column(length = 15)
+	private String idubicacionespecifica;
 	private String nombre;
 	private String descripcion;
-	private String estado;
+	@Column(columnDefinition = "DATE")
 	private Date fecha;
 	private Date fechacreacion;
-	private Date fechamodificado;
+	private Date fechamodificacion;
 	
-	public Long getId() {
-		return id;
+	public String getIdubicacionespecifica() {
+		return idubicacionespecifica;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setIdubicacionespecifica(String idubicacionespecifica) {
+		this.idubicacionespecifica = idubicacionespecifica;
 	}
 
 	public String getNombre() {
@@ -47,14 +46,6 @@ public class Incorporacion implements Serializable{
 		this.descripcion = descripcion;
 	}
 
-	public String getEstado() {
-		return estado;
-	}
-
-	public void setEstado(String estado) {
-		this.estado = estado;
-	}
-
 	public Date getFecha() {
 		return fecha;
 	}
@@ -71,17 +62,16 @@ public class Incorporacion implements Serializable{
 		this.fechacreacion = fechacreacion;
 	}
 
-	public Date getFechamodificado() {
-		return fechamodificado;
+	public Date getFechamodificacion() {
+		return fechamodificacion;
 	}
 
-	public void setFechamodificado(Date fechamodificado) {
-		this.fechamodificado = fechamodificado;
+	public void setFechamodificacion(Date fechamodificacion) {
+		this.fechamodificacion = fechamodificacion;
 	}
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
 }

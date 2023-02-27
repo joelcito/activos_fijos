@@ -3,32 +3,31 @@ package com.activo.fijos.models.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="incorporacion")
-public class Incorporacion implements Serializable{
-	
+@Table(name="ubicaciongeneral")
+public class UbicacionGeneral implements Serializable {
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@Column(length = 15)
+	private String idubicaciongeneral;
 	private String nombre;
 	private String descripcion;
-	private String estado;
+	@Column(columnDefinition = "DATE")
 	private Date fecha;
 	private Date fechacreacion;
-	private Date fechamodificado;
-	
-	public Long getId() {
-		return id;
+	private Date fechamodificaion;
+			
+	public String getIdubicaciongeneral() {
+		return idubicaciongeneral;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setIdubicaciongeneral(String idubicaciongeneral) {
+		this.idubicaciongeneral = idubicaciongeneral;
 	}
 
 	public String getNombre() {
@@ -47,14 +46,6 @@ public class Incorporacion implements Serializable{
 		this.descripcion = descripcion;
 	}
 
-	public String getEstado() {
-		return estado;
-	}
-
-	public void setEstado(String estado) {
-		this.estado = estado;
-	}
-
 	public Date getFecha() {
 		return fecha;
 	}
@@ -71,12 +62,12 @@ public class Incorporacion implements Serializable{
 		this.fechacreacion = fechacreacion;
 	}
 
-	public Date getFechamodificado() {
-		return fechamodificado;
+	public Date getFechamodificaion() {
+		return fechamodificaion;
 	}
 
-	public void setFechamodificado(Date fechamodificado) {
-		this.fechamodificado = fechamodificado;
+	public void setFechamodificaion(Date fechamodificaion) {
+		this.fechamodificaion = fechamodificaion;
 	}
 
 	/**

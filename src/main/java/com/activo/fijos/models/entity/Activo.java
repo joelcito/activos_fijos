@@ -5,6 +5,7 @@ import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -21,12 +22,14 @@ import jakarta.persistence.ManyToOne;
 //import javax.persistence.Id;
 
 @Entity
-@Table(name="activos")
+@Table(name="activo")
 public class Activo implements Serializable{
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	//@GeneratedValue(strategy = GenerationType.IDENTITY)
+	//private Long idactivo;
+	@Column(length = 15)
+	private String idactivo;
 	private String nombre;
 	private String descripcion;
 	
@@ -196,11 +199,17 @@ public class Activo implements Serializable{
 	public void setDeleteAt(Date deleteAt) {
 		this.deleteAt = deleteAt;
 	}
-	public Long getId() {
-		return id;
+	/*public Long getId() {
+		return idactivo;
 	}
 	public void setId(Long id) {
-		this.id = id;
+		this.idactivo = id;
+	}*/
+	public String getId() {
+		return idactivo;
+	}
+	public void setId(String id) {
+		this.idactivo = id;
 	}
 	public String getNombre() {
 		return nombre;
