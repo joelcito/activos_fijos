@@ -60,4 +60,5 @@ public class UbicacionGeneralRestController {
 		ubicacionGeneralService.delete(id);
 	}
 	
+	
 }
