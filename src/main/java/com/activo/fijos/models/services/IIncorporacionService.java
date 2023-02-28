@@ -10,8 +10,8 @@ public interface IIncorporacionService {
 
 	public Incorporacion save(Incorporacion incorporacion);
 	
-	public void delete(Long id);
+	public void delete(String id);
 	
-	public Incorporacion findById(Long id);
+	public Incorporacion findById(String id);
 	
 }

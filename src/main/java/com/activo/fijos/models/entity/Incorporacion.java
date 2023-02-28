@@ -3,9 +3,8 @@ package com.activo.fijos.models.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -14,21 +13,23 @@ import jakarta.persistence.Table;
 public class Incorporacion implements Serializable{
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@Column(length = 15)
+	private String idincorporacion;
 	private String nombre;
 	private String descripcion;
 	private String estado;
+	@Column(columnDefinition = "DATE")
 	private Date fecha;
 	private Date fechacreacion;
 	private Date fechamodificado;
+		
 	
-	public Long getId() {
-		return id;
+	public String getIdincorporacion() {
+		return idincorporacion;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setIdincorporacion(String idincorporacion) {
+		this.idincorporacion = idincorporacion;
 	}
 
 	public String getNombre() {

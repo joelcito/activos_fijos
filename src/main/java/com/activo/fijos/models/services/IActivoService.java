@@ -9,7 +9,7 @@ public interface IActivoService {
 	
 	public Activo save(Activo activo);
 	
-	public void delete(Long id);
+	public void delete(String id);
 	
-	public Activo findById(Long Id);
+	public Activo findById(String Id);
 }

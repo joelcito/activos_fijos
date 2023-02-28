@@ -29,13 +29,13 @@ public class GrupoServiceImpl implements IGrupoService{
 
 	@Override
 	@Transactional
-	public void delete(Long id) {
+	public void delete(String id) {
 		this.grupoDao.deleteById(id);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public Grupo findById(Long id) {
+	public Grupo findById(String id) {
 		return this.grupoDao.findById(id).orElse(null);
 	}
 

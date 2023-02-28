@@ -29,13 +29,13 @@ public class IncorporacionServiceImpl implements IIncorporacionService{
 
 	@Override
 	@Transactional
-	public void delete(Long id) {
+	public void delete(String id) {
 		this.incorporacionDao.deleteById(id);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public Incorporacion findById(Long id) {
+	public Incorporacion findById(String id) {
 		return this.incorporacionDao.findById(id).orElse(null);
 	}
 

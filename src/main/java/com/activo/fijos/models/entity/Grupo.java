@@ -3,43 +3,107 @@ package com.activo.fijos.models.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="grupos")
+@Table(name="grupo")
 public class Grupo implements Serializable{
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	//@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(length = 15)
+	private String idgrupo;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="subgrupo_id")
+	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
+	private SubGrupo subgrupo;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="cuenta_id")
+	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
+	private Cuenta cuenta;
+	
 	private String descripcion;
 	private int vidaUtil;
-	private String codCuenta;
 	private String estado;
-	private Long nroItems;
-	private Date creat_at;
-	
-	public Long getId() {
-		return id;
+	private int nroItems;
+	@Column(columnDefinition = "DATE")
+	private Date fecha;
+	private Date fechacreacion;
+	private Date fechamodificacion;
+			
+	public SubGrupo getSubgrupo() {
+		return subgrupo;
 	}
 
-
-
-	public void setId(Long id) {
-		this.id = id;
+	public void setSubgrupo(SubGrupo subgrupo) {
+		this.subgrupo = subgrupo;
 	}
 
+	public Cuenta getCuenta() {
+		return cuenta;
+	}
 
+	public void setCuenta(Cuenta cuenta) {
+		this.cuenta = cuenta;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public String getIdgrupo() {
+		return idgrupo;
+	}
+
+	public void setIdgrupo(String idgrupo) {
+		this.idgrupo = idgrupo;
+	}
+
+	public int getNroItems() {
+		return nroItems;
+	}
+
+	public void setNroItems(int nroItems) {
+		this.nroItems = nroItems;
+	}
+
+	public Date getFecha() {
+		return fecha;
+	}
+
+	public void setFecha(Date fecha) {
+		this.fecha = fecha;
+	}
+
+	public Date getFechacreacion() {
+		return fechacreacion;
+	}
+
+	public void setFechacreacion(Date fechacreacion) {
+		this.fechacreacion = fechacreacion;
+	}
+
+	public Date getFechamodificacion() {
+		return fechamodificacion;
+	}
+
+	public void setFechamodificacion(Date fechamodificacion) {
+		this.fechamodificacion = fechamodificacion;
+	}
 
 	public String getDescripcion() {
 		return descripcion;
 	}
-
-
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
@@ -58,51 +122,12 @@ public class Grupo implements Serializable{
 	}
 
 
-
-	public String getCodCuenta() {
-		return codCuenta;
-	}
-
-
-
-	public void setCodCuenta(String codCuenta) {
-		this.codCuenta = codCuenta;
-	}
-
-
-
 	public String getEstado() {
 		return estado;
 	}
 
-
-
 	public void setEstado(String estado) {
 		this.estado = estado;
-	}
-
-
-
-	public Long getNroItems() {
-		return nroItems;
-	}
-
-
-
-	public void setNroItems(Long nroItems) {
-		this.nroItems = nroItems;
-	}
-
-
-
-	public Date getCreat_at() {
-		return creat_at;
-	}
-
-
-
-	public void setCreat_at(Date creat_at) {
-		this.creat_at = creat_at;
 	}
 
 

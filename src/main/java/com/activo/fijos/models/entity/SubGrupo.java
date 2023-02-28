@@ -3,30 +3,55 @@ package com.activo.fijos.models.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="subgrupos")
+@Table(name="subgrupo")
 public class SubGrupo implements Serializable{
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@Column(length = 15)
+	private String idsubgrupo;
+	
 	private String descripcion;
-	private String estado;
-	private Date creat_at;
-	
-	
-	public Long getId() {
-		return id;
+	@Column(columnDefinition = "DATE")
+	private Date fecha;
+	private Date fechacreacion;
+	private Date fechamodificacion;
+		
+	public String getIdsubgrupo() {
+		return idsubgrupo;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setIdsubgrupo(String idsubgrupo) {
+		this.idsubgrupo = idsubgrupo;
+	}
+
+	public Date getFecha() {
+		return fecha;
+	}
+
+	public void setFecha(Date fecha) {
+		this.fecha = fecha;
+	}
+
+	public Date getFechacreacion() {
+		return fechacreacion;
+	}
+
+	public void setFechacreacion(Date fechacreacion) {
+		this.fechacreacion = fechacreacion;
+	}
+
+	public Date getFechamodificacion() {
+		return fechamodificacion;
+	}
+
+	public void setFechamodificacion(Date fechamodificacion) {
+		this.fechamodificacion = fechamodificacion;
 	}
 
 	public String getDescripcion() {
@@ -35,22 +60,6 @@ public class SubGrupo implements Serializable{
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
-	}
-
-	public String getEstado() {
-		return estado;
-	}
-
-	public void setEstado(String estado) {
-		this.estado = estado;
-	}
-
-	public Date getCreat_at() {
-		return creat_at;
-	}
-
-	public void setCreat_at(Date creat_at) {
-		this.creat_at = creat_at;
 	}
 
 	

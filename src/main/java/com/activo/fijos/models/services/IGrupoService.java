@@ -10,8 +10,8 @@ public interface IGrupoService {
 	
 	public Grupo save(Grupo grupo);
 	
-	public void delete(Long id);
+	public void delete(String id);
 	
-	public Grupo findById(Long id);
+	public Grupo findById(String id);
 
 }

@@ -3,41 +3,68 @@ package com.activo.fijos.models.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="regimen")
-public class Regimen implements Serializable{
+@Table(name="regional")
+public class Regional implements Serializable {
+
 	
 	@Id
 	@Column(length = 15)
-	private String idregimen;
+	private String idregional;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="departamento_id")
+	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
+	private Departamento departamento;
+	
 	private String nombre;
 	private String descripcion;
 	private String estado;
-	@Column(columnDefinition = "DATE")
 	private Date fecha;
 	private Date fechacreacion;
 	private Date fechamodificacion;
-		
-	public String getIdregimen() {
-		return idregimen;
+	
+	
+	
+	public String getIdregional() {
+		return idregional;
 	}
 
-	public void setIdregimen(String idregimen) {
-		this.idregimen = idregimen;
+
+
+	public void setIdregional(String idregional) {
+		this.idregional = idregional;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+
+
+	public Departamento getDepartamento() {
+		return departamento;
 	}
+
+
+
+	public void setDepartamento(Departamento departamento) {
+		this.departamento = departamento;
+	}
+
+
 
 	public String getNombre() {
 		return nombre;
 	}
+
+
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
@@ -109,4 +136,5 @@ public class Regimen implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
 }

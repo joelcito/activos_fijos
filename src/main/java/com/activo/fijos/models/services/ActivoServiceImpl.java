@@ -29,13 +29,13 @@ public class ActivoServiceImpl implements IActivoService{
 
 	@Override
 	@Transactional
-	public void delete(Long id) {
+	public void delete(String id) {
 		activoDao.deleteById(id);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public Activo findById(Long Id) {
+	public Activo findById(String Id) {
 		return activoDao.findById(Id).orElse(null);
 	}
 	

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -20,7 +21,7 @@ import com.activo.fijos.models.services.IGrupoService;
 @CrossOrigin(origins = {"http://localhost:4200/"})
 @RestController
 @RequestMapping("/api/grupo")
-public class GrupoRestController {
+public class GrupoRestController {	
 	
 	@Autowired
 	private IGrupoService grupoService;
@@ -31,14 +32,32 @@ public class GrupoRestController {
 	}
 	
 	@GetMapping("/{id}")
-	public Grupo show(@PathVariable Long id) {
+	public Grupo show(@PathVariable String id) {
 		return grupoService.findById(id);
 	}
 	
 	@PostMapping("/")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Grupo create(@RequestBody Grupo grupo) {
-		grupo.setCreat_at(new Date());
+		grupo.setFecha(new Date());
+		grupo.setFechacreacion(new Date());
 		return grupoService.save(grupo);
+	}
+	
+	@PutMapping("/{id}")
+	@ResponseStatus(HttpStatus.CREATED)
+	public Grupo update(@RequestBody Grupo grupo, @PathVariable String id) {
+		Grupo grupoActual = grupoService.findById(id);
+		
+		grupoActual.setSubgrupo(grupo.getSubgrupo());
+		grupoActual.setCuenta(grupo.getCuenta());
+		grupoActual.setDescripcion(grupo.getDescripcion());
+		grupoActual.setVidaUtil(grupo.getVidaUtil());
+		grupoActual.setEstado(grupo.getEstado());
+		grupoActual.setNroItems(grupo.getNroItems());
+		
+		grupoActual.setFechamodificacion(new Date());
+		
+		return this.grupoService.save(grupoActual);
 	}
 }
