@@ -47,9 +47,9 @@ public class CaracteristicaRestController {
 	
 	@PutMapping("/{id}")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Caracteristica update(@RequestBody Caracteristica caracteristica, @PathVariable String idString) {
+	public Caracteristica update(@RequestBody Caracteristica caracteristica, @PathVariable String id) {
 		
-		Caracteristica caracteristicaActual = this.caracteristicaService.findById(idString);
+		Caracteristica caracteristicaActual = this.caracteristicaService.findById(id);
 		
 		caracteristicaActual.setActivo(caracteristica.getActivo());
 		caracteristicaActual.setSubgrupo(caracteristica.getSubgrupo());
