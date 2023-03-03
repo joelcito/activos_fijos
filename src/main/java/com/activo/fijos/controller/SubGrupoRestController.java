@@ -49,8 +49,10 @@ public class SubGrupoRestController {
 	@PutMapping("/{id}")
 	@ResponseStatus(HttpStatus.CREATED)
 	public SubGrupo updare(@RequestBody SubGrupo subGrupo, @PathVariable String id) {
+		
 		SubGrupo subGrupoActual = subGrupoService.findById(id);
 		
+		subGrupoActual.setGrupo(subGrupo.getGrupo());
 		subGrupoActual.setDescripcion(subGrupo.getDescripcion());
 		subGrupoActual.setFechamodificacion(new Date());
 
@@ -61,5 +63,10 @@ public class SubGrupoRestController {
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable String id) {
 		subGrupoService.delete(id);
+	}
+	
+	@GetMapping("/byGrupo/{idgrupo}")
+	public List<SubGrupo> getSubGruposByIdGrupo(@PathVariable String idgrupo){
+		return this.subGrupoService.getSubGruposByGrupoId(idgrupo);
 	}
 }

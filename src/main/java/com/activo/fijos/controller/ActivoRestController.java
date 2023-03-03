@@ -40,6 +40,31 @@ public class ActivoRestController {
 	@PostMapping("/")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Activo create(@RequestBody Activo activo) {
+		
+		
+		//List<Activo> activoUltimo = activoService.getUltimoRegistroActivo();
+		String max = activoService.max();
+		
+		System.out.println(max);
+		int id = 0;
+		if(max==null) {
+			id = 1;
+		}else {
+			id = Integer.parseInt(max) + 1;
+		}
+		System.out.println(id);
+		/*
+		if(ultimoActivo == null) {
+			System.out.print("SI");
+		}else {
+			System.out.print("NO");
+		}
+		
+		System.out.print(ultimoActivo.getIdactivo());
+		
+		*/
+		String nuevoid = id+"";
+		activo.setIdactivo(nuevoid);
 		activo.setFecha(new Date());
 		activo.setFechacreacion(new Date());
 		return activoService.save(activo);
@@ -52,7 +77,8 @@ public class ActivoRestController {
 		Activo activoActual = activoService.findById(id);
 		
 		activoActual.setIncorporacion(activo.getIncorporacion());
-		activoActual.setGrupo(activo.getGrupo());
+		//activoActual.setGrupo(activo.getGrupo());
+		activoActual.setSubgrupo(activo.getSubgrupo());
 		activoActual.setRegimen(activo.getRegimen());
 		activoActual.setRegional(activo.getRegional());
 		activoActual.setUnidadmanejo(activo.getUnidadmanejo());

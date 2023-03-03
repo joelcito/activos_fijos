@@ -52,7 +52,7 @@ public class CaracteristicaRestController {
 		Caracteristica caracteristicaActual = this.caracteristicaService.findById(id);
 		
 		caracteristicaActual.setActivo(caracteristica.getActivo());
-		caracteristicaActual.setSubgrupo(caracteristica.getSubgrupo());
+		//caracteristicaActual.setSubgrupo(caracteristica.getSubgrupo());
 		caracteristicaActual.setDescripcion(caracteristica.getDescripcion());
 		caracteristicaActual.setFechamodificacion(new Date());
 		

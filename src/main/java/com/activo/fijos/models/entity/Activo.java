@@ -25,11 +25,16 @@ public class Activo implements Serializable{
 	@JoinColumn(name="incorporacion_id")
 	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 	private Incorporacion incorporacion;
-		
+	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="grupo_id")
 	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 	private Grupo grupo;
+	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="subgrupo_id")
+	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
+	private SubGrupo subgrupo;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="regimen_id")
@@ -56,15 +61,24 @@ public class Activo implements Serializable{
 	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 	private UbicacionEspecifica ubicacionespecifica;
 
+	//@Column(name="codigo")
 	private String codigo;
+	
+	//@Column(name="placa")
 	private String placa;
 	@Column(columnDefinition = "DATE")
 	private Date fecha;
+	//@Column(name="eficiencia")
 	private String eficiencia;
+	//@Column(name="codigoalterno")
 	private String codigoalterno;
+	//@Column(name="formainicial")
 	private String formainicial;
+	//@Column(name="descripcion")
 	private String descripcion;
+	//@Column(name="estadoregistro")
 	private String estadoregistro;
+	//@Column(name="estado")
 	private String estado;
 	
 	@Column(columnDefinition = "DATE")
@@ -79,8 +93,11 @@ public class Activo implements Serializable{
 	@Column(columnDefinition = "Decimal(3,2)")
 	private float ufvcompra;
 	
+	//@Column(name="vida_util")
 	private int vida_util;
+	//@Column(name="fechacreacion")
 	private Date fechacreacion;
+	//@Column(name="fechamodificacion")
 	private Date fechamodificacion;
 			
 	public String getIdactivo() {
@@ -104,24 +121,27 @@ public class Activo implements Serializable{
 	}
 
 
-
+	
 	public Grupo getGrupo() {
 		return grupo;
 	}
-
-
-
+	
 	public void setGrupo(Grupo grupo) {
 		this.grupo = grupo;
 	}
-
-
+	
 
 	public Regimen getRegimen() {
 		return regimen;
 	}
 
+	public SubGrupo getSubgrupo() {
+		return subgrupo;
+	}
 
+	public void setSubgrupo(SubGrupo subgrupo) {
+		this.subgrupo = subgrupo;
+	}
 
 	public void setRegimen(Regimen regimen) {
 		this.regimen = regimen;

@@ -14,77 +14,110 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="subgrupo")
-public class SubGrupo implements Serializable{
-
+@Table(name="componente")
+public class Componente implements Serializable {
 	@Id
 	@Column(length = 15)
-	private String idsubgrupo;
+	private String idcomponente;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="grupo_id")
+	@JoinColumn(name="subgrupo_id")
 	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
-	private Grupo grupo;
+	private SubGrupo subgrupo;
 	
-	private String descripcion;
-	@Column(columnDefinition = "DATE")
+	private String nombre;
+	private String estado;
 	private Date fecha;
 	private Date fechacreacion;
 	private Date fechamodificacion;
 	
-		
-	public Grupo getGrupo() {
-		return grupo;
+	public String getIdcomponente() {
+		return idcomponente;
 	}
 
-	public void setGrupo(Grupo grupo) {
-		this.grupo = grupo;
+
+
+	public void setIdcomponente(String idcomponente) {
+		this.idcomponente = idcomponente;
 	}
 
-	public String getIdsubgrupo() {
-		return idsubgrupo;
+
+
+	public SubGrupo getSubgrupo() {
+		return subgrupo;
 	}
 
-	public void setIdsubgrupo(String idsubgrupo) {
-		this.idsubgrupo = idsubgrupo;
+
+
+	public void setSubgrupo(SubGrupo subgrupo) {
+		this.subgrupo = subgrupo;
 	}
+
+
+
+	public String getNombre() {
+		return nombre;
+	}
+
+
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+
+
+	public String getEstado() {
+		return estado;
+	}
+
+
+
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+
+
 
 	public Date getFecha() {
 		return fecha;
 	}
 
+
+
 	public void setFecha(Date fecha) {
 		this.fecha = fecha;
 	}
+
+
 
 	public Date getFechacreacion() {
 		return fechacreacion;
 	}
 
+
+
 	public void setFechacreacion(Date fechacreacion) {
 		this.fechacreacion = fechacreacion;
 	}
+
+
 
 	public Date getFechamodificacion() {
 		return fechamodificacion;
 	}
 
+
+
 	public void setFechamodificacion(Date fechamodificacion) {
 		this.fechamodificacion = fechamodificacion;
 	}
 
-	public String getDescripcion() {
-		return descripcion;
-	}
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
 
-	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 }

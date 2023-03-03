@@ -27,10 +27,17 @@ public class Caracteristica implements Serializable {
 	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 	private Activo activo;
 	
+	/*
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="subgrupo_id")
 	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 	private SubGrupo subgrupo;
+	*/
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="componente_id")
+	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
+	private Componente componente;
 	
 	@Column(columnDefinition = "DATE")
 	private Date fecha;
@@ -64,7 +71,7 @@ public class Caracteristica implements Serializable {
 	}
 
 
-
+/*
 	public SubGrupo getSubgrupo() {
 		return subgrupo;
 	}
@@ -74,11 +81,26 @@ public class Caracteristica implements Serializable {
 	public void setSubgrupo(SubGrupo subgrupo) {
 		this.subgrupo = subgrupo;
 	}
+	*/
+	
+	
 
 
 
 	public Date getFecha() {
 		return fecha;
+	}
+
+
+
+	public Componente getComponente() {
+		return componente;
+	}
+
+
+
+	public void setComponente(Componente componente) {
+		this.componente = componente;
 	}
 
 

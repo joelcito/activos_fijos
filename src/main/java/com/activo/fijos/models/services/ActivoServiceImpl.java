@@ -38,5 +38,22 @@ public class ActivoServiceImpl implements IActivoService{
 	public Activo findById(String Id) {
 		return activoDao.findById(Id).orElse(null);
 	}
+
+	@Override
+	@Transactional
+	public String max() {
+		return activoDao.max();
+	}
+
+	
+	/*
+	@Override
+	@Transactional
+	public List<Activo> getUltimoRegistroActivo() {
+		return this.activoDao.getUltimoRegistroActivo();
+	}
+	*/
+	
+	
 	
 }

@@ -49,7 +49,7 @@ public class GrupoRestController {
 	public Grupo update(@RequestBody Grupo grupo, @PathVariable String id) {
 		Grupo grupoActual = grupoService.findById(id);
 		
-		grupoActual.setSubgrupo(grupo.getSubgrupo());
+		//grupoActual.setSubgrupo(grupo.getSubgrupo());
 		grupoActual.setCuenta(grupo.getCuenta());
 		grupoActual.setDescripcion(grupo.getDescripcion());
 		grupoActual.setVidaUtil(grupo.getVidaUtil());

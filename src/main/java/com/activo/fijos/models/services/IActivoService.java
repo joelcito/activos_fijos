@@ -5,6 +5,7 @@ import java.util.List;
 import com.activo.fijos.models.entity.Activo;
 
 public interface IActivoService {
+	
 	public List<Activo> findAll();
 	
 	public Activo save(Activo activo);
@@ -12,4 +13,7 @@ public interface IActivoService {
 	public void delete(String id);
 	
 	public Activo findById(String Id);
+	
+	//public List<Activo> getUltimoRegistroActivo();
+	public String  max();
 }

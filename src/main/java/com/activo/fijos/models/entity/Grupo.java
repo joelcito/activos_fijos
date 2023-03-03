@@ -22,10 +22,12 @@ public class Grupo implements Serializable{
 	@Column(length = 15)
 	private String idgrupo;
 	
+	/*
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="subgrupo_id")
 	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 	private SubGrupo subgrupo;
+	*/
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="cuenta_id")
@@ -40,7 +42,8 @@ public class Grupo implements Serializable{
 	private Date fecha;
 	private Date fechacreacion;
 	private Date fechamodificacion;
-			
+	
+	/*
 	public SubGrupo getSubgrupo() {
 		return subgrupo;
 	}
@@ -48,6 +51,7 @@ public class Grupo implements Serializable{
 	public void setSubgrupo(SubGrupo subgrupo) {
 		this.subgrupo = subgrupo;
 	}
+	*/
 
 	public Cuenta getCuenta() {
 		return cuenta;

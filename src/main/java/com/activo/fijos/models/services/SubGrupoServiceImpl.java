@@ -39,4 +39,10 @@ public class SubGrupoServiceImpl implements ISubGrupoService{
 		return this.subGrupoDao.findById(idsubgrupo).orElse(null);
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public List<SubGrupo> getSubGruposByGrupoId(String idgrupo) {
+		return this.subGrupoDao.getSubGruposByGrupoId(idgrupo);
+	}
+
 }
