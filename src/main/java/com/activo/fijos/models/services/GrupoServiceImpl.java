@@ -39,4 +39,10 @@ public class GrupoServiceImpl implements IGrupoService{
 		return this.grupoDao.findById(id).orElse(null);
 	}
 
+	@Override
+	@Transactional
+	public String maxId() {
+		return this.grupoDao.maxId();
+	}
+
 }

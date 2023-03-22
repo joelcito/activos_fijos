@@ -13,5 +13,7 @@ public interface IGrupoService {
 	public void delete(String id);
 	
 	public Grupo findById(String id);
+	
+	public String maxId();
 
 }

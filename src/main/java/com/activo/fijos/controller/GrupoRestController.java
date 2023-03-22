@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,6 +40,17 @@ public class GrupoRestController {
 	@PostMapping("/")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Grupo create(@RequestBody Grupo grupo) {
+		String maxId,idEnvio;
+		maxId = grupoService.maxId();
+		int id = 0;
+		
+		if(maxId==null)
+			id = 1;
+		else
+			id = Integer.parseInt(maxId)+1;
+		
+		idEnvio = id+"";		
+		grupo.setIdgrupo(idEnvio);			
 		grupo.setFecha(new Date());
 		grupo.setFechacreacion(new Date());
 		return grupoService.save(grupo);
@@ -59,5 +71,11 @@ public class GrupoRestController {
 		grupoActual.setFechamodificacion(new Date());
 		
 		return this.grupoService.save(grupoActual);
+	}
+	
+	@DeleteMapping("/{idgrupo}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void delete(@PathVariable String idgrupo) {
+		grupoService.delete(idgrupo);
 	}
 }
