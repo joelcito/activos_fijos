@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.activo.fijos.models.entity.Componente;
 import com.activo.fijos.models.services.IComponenteService;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 
 @CrossOrigin(origins = {"http://localhost:4200/"})
 @RestController
@@ -40,9 +41,12 @@ public class ComponenteController {
 	@PostMapping("/")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Componente create(@RequestBody Componente componente) {
+		
+		componente.setIdcomponente(sacaId());
 		componente.setFecha(new Date());
 		componente.setFechacreacion(new Date());
 		return this.componenteService.save(componente);
+		
 	}
 	
 	@PutMapping("/{id}")
@@ -51,6 +55,8 @@ public class ComponenteController {
 		
 		Componente componenteActual = componenteService.findById(id);
 		
+		//System.out.println(id);
+		
 		componenteActual.setNombre(componente.getNombre());
 		//activoActual.setGrupo(activo.getGrupo());
 		componenteActual.setSubgrupo(componente.getSubgrupo());
@@ -58,6 +64,7 @@ public class ComponenteController {
 		componenteActual.setFechamodificacion(new Date());
 				
 		return this.componenteService.save(componenteActual);
+		//return componenteActual;
 	}
 	
 	@DeleteMapping("/{id}")
@@ -70,5 +77,30 @@ public class ComponenteController {
 	public List<Componente> getComponeteByIdSubGrupo(@PathVariable String idsubgrupo){
 		return this.componenteService.getComponentesByIdSubGrupo(idsubgrupo);
 	} 
+	
+	@PostMapping("/jsonCreate")
+	@ResponseStatus(HttpStatus.CREATED)
+	public Componente jsonCreate(@RequestBody JSONPObject componente) {
+		
+		System.out.println(componente);
+		
+		//componente.setFecha(new Date());
+		//componente.setFechacreacion(new Date());
+		Componente componenteNew = new Componente();
+		
+		//return this.componenteService.save(componenteNew);
+		return componenteNew;
+	}
 
+	private String sacaId() {
+		String max = componenteService.maxId();
+		int id = 0;
+		
+		if(max==null)
+			id = 1;
+		else
+			id = Integer.parseInt(max) + 1;
+		
+		return id+"";
+	}
 }

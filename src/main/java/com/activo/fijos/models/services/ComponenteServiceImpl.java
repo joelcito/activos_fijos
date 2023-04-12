@@ -44,4 +44,10 @@ public class ComponenteServiceImpl implements IComponenteService{
 		return this.componenteDao.getComponentesByIdSubGrupo(idsubgrupo);
 	}
 
+	@Override
+	@Transactional
+	public String maxId() {
+		return this.componenteDao.maxId();
+	}
+
 }
