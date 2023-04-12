@@ -38,5 +38,17 @@ public class CaracteristicaServiceImpl implements ICaracteristicaService{
 	public Caracteristica findById(String idcaracteristica) {
 		return this.caracteristicaDao.findById(idcaracteristica).orElse(null);
 	}
+	
+	@Override
+	@Transactional
+	public String maxId() {
+		return caracteristicaDao.maxId();
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public List<Caracteristica> getCaracteristicasByIdActivo(String idactivo) {
+		return (List<Caracteristica>)this.caracteristicaDao.getCaracteristicasByIdActivo(idactivo);
+	}
 
 }

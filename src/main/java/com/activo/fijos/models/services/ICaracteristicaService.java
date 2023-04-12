@@ -12,4 +12,8 @@ public interface ICaracteristicaService {
 	public void delete(String idcaracteristica);
 	
 	public Caracteristica findById(String idcaracteristica);
+	
+	public String maxId();
+
+	List<Caracteristica> getCaracteristicasByIdActivo(String idactivo);
 }

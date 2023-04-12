@@ -10,7 +10,8 @@ import com.activo.fijos.models.entity.Activo;
 public interface IActivoDao extends CrudRepository<Activo, String> {
 	
 	//@Query(value="select  max(fechacreacion) as ultimo from activo", nativeQuery=true)
-	@Query(value="select  max(idactivo) as ultimo from activo", nativeQuery=true)
+	//@Query(value="select  max(idactivo) as ultimo from activo", nativeQuery=true)
+	@Query(value="select  max(TRY_CAST(idactivo AS BIGINT)) as ultimo from activo", nativeQuery=true)
 	String max();
 	//@Query(value="select * from activo", nativeQuery=true)
 	//List<Activo> getUltimoRegistroActivo();
