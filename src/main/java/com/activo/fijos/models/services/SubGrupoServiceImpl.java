@@ -45,4 +45,10 @@ public class SubGrupoServiceImpl implements ISubGrupoService{
 		return this.subGrupoDao.getSubGruposByGrupoId(idgrupo);
 	}
 
+	@Override
+	@Transactional
+	public String maxId() {
+		return this.subGrupoDao.maxId();
+	}
+
 }

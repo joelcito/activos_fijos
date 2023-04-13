@@ -40,6 +40,8 @@ public class SubGrupoRestController {
 	@PostMapping("/")
 	@ResponseStatus(HttpStatus.CREATED)
 	public SubGrupo create(@RequestBody SubGrupo subgrupo) {
+		
+		subgrupo.setIdsubgrupo(sacaId());
 		subgrupo.setFecha(new Date());
 		subgrupo.setFechacreacion(new Date());
 		
@@ -68,5 +70,17 @@ public class SubGrupoRestController {
 	@GetMapping("/byGrupo/{idgrupo}")
 	public List<SubGrupo> getSubGruposByIdGrupo(@PathVariable String idgrupo){
 		return this.subGrupoService.getSubGruposByGrupoId(idgrupo);
+	}
+	
+	private String sacaId() {
+		String max = this.subGrupoService.maxId();
+		int id = 0;
+		
+		if(max==null)
+			id = 1;
+		else
+			id = Integer.parseInt(max) + 1;
+		
+		return id+"";
 	}
 }

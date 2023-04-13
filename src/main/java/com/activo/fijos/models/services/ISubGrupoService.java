@@ -16,5 +16,7 @@ public interface ISubGrupoService {
 	public SubGrupo findById(String idsubgrupo);
 	
 	public List<SubGrupo> getSubGruposByGrupoId(String idgrupo);
+	
+	public String maxId();
 		
 }
