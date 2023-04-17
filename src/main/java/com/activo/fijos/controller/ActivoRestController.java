@@ -1,7 +1,13 @@
 package com.activo.fijos.controller;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +24,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.activo.fijos.models.entity.Activo;
 import com.activo.fijos.models.services.IActivoService;
+
+import org.json.JSONObject;
+import org.springframework.http.ResponseEntity;
 
 @CrossOrigin(origins = {"http://localhost:4200/"})
 @RestController
@@ -107,5 +116,52 @@ public class ActivoRestController {
 	public void delete(@PathVariable String id) {
 		activoService.delete(id);
 	}
+	
+	@GetMapping("/calculaDepre/{id}/{fecha}")
+	public Map<String, Object> calculaDepre(@PathVariable String id, @PathVariable String fecha){
+				
+		Map<String, Object> objeto = new HashMap();
+		
+		Activo activo = activoService.findById(id);
+		System.out.println(activo.getFechacompra());
+		//Float ufvIni 		= (float) 2.37352;//para el 36
+		Float ufvIni 		= (float) 2.35915;//para el 36
+		Float ufvFin 		= (float) 2.37376;
+		Float precio 		= activo.getPrecio();
+		Float Depre 		= activo.getPorcentaje_depreciacion();
+		Float PorDepre  	= Depre/100; 
+		Float costoActual 	= precio * (ufvFin/ufvIni);
+		Float DepAnio 		= costoActual * PorDepre ;
+		
+		DateTimeFormatter fdf2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+		LocalDateTime fechaCompra = LocalDateTime.parse(activo.getFechacompra().toString(),fdf2);
+		DateTimeFormatter fdf1 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		
+		//LocalDate fechaFin = LocalDate.parse("2021-12-31", fdf1);
+		LocalDate fechaFin = LocalDate.parse(fecha, fdf1);
+		
+		Long cantMes    	= (Period.between(fechaCompra.toLocalDate(), fechaFin)).toTotalMonths();
+		if(cantMes == 0) {
+			cantMes = 1L;
+		}
+		
+		Float DepMes	 	= DepAnio/12; 
+		Float DepGes	 	= DepMes * cantMes; 
+		Float ValorNeto  	= costoActual - DepGes; 
+		Float actGes	 	= costoActual - precio;
+		objeto.put("actGes",actGes);
+		objeto.put("costoActual",costoActual);
+		objeto.put("DepGes",DepGes);
+		objeto.put("ValorNeto",ValorNeto);
+		objeto.put("ufvIni",ufvIni);
+		objeto.put("ufvFin",ufvFin);
+		objeto.put("precio",precio);
+		objeto.put("cantMes",cantMes);
+		objeto.put("ValorNeto",ValorNeto);
+		objeto.put("costoActual",costoActual);
+		
+		return objeto;
+	}
+	
 	
 }
