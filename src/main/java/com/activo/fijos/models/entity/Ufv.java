@@ -9,36 +9,28 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="partida")
-public class Partida implements Serializable{
-
+@Table(name = "ufv")
+public class Ufv implements Serializable{
+	
 	@Id
-	@Column(length = 15)
-	private String idpartida;
-	private String nombre;
-	private String descripcion;
-	private String debe;
-	private String haber;
+	@Column
+	private String idufv;
+	
 	@Column(columnDefinition = "DATE")
 	private Date fecha;
+	
 	private Date fechacreacion;
+
 	private Date fechamodificacion;
 	
-	
-	public String getNombre() {
-		return nombre;
+	private float valor;
+
+	public String getIdufv() {
+		return idufv;
 	}
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-
-	public String getDescripcion() {
-		return descripcion;
-	}
-
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
+	public void setIdufv(String idufv) {
+		this.idufv = idufv;
 	}
 
 	public Date getFecha() {
@@ -64,36 +56,18 @@ public class Partida implements Serializable{
 	public void setFechamodificacion(Date fechamodificacion) {
 		this.fechamodificacion = fechamodificacion;
 	}
-	
-	
-
-	public String getIdpartida() {
-		return idpartida;
+		
+	public float getValor() {
+		return valor;
 	}
 
-	public void setIdpartida(String idpartida) {
-		this.idpartida = idpartida;
-	}
-
-	public String getDebe() {
-		return debe;
-	}
-
-	public void setDebe(String debe) {
-		this.debe = debe;
-	}
-
-	public String getHaber() {
-		return haber;
-	}
-
-	public void setHaber(String haber) {
-		this.haber = haber;
+	public void setValor(float valor) {
+		this.valor = valor;
 	}
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 }
