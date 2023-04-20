@@ -39,4 +39,10 @@ public class CuentaServiceImpl implements ICuentaService {
 		return cuentaDao.findById(idcuenta).orElse(null);
 	}
 
+	@Override
+	@Transactional
+	public String maxId() {
+		return this.cuentaDao.maxId();
+	}
+
 }

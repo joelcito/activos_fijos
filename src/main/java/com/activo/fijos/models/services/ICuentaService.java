@@ -13,4 +13,6 @@ public interface ICuentaService {
 	public void delete(String idcuenta);
 	
 	public Cuenta findById(String idcuenta);
+	
+	public String maxId();
 }

@@ -39,4 +39,10 @@ public class PartidaServiceImpl implements IPartidaService {
 		return partidaDao.findById(idpartida).orElse(null);
 	}
 
+	@Override
+	@Transactional
+	public String maxId() {
+		return this.partidaDao.maxId();
+	}
+
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.activo.fijos.models.entity.Cuenta;
+import com.activo.fijos.models.entity.Partida;
 import com.activo.fijos.models.services.ICuentaService;
 
 @CrossOrigin(origins = {"http://localhost:4200/"})
@@ -40,6 +41,19 @@ public class CuentaRestController {
 	@PostMapping("/")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Cuenta create(@RequestBody Cuenta cuenta) {
+		
+		Partida par = cuenta.getPartida();
+		
+		System.out.println("==============================");
+		System.out.println(par.getIdpartida());
+		System.out.println("==============================");
+		System.out.println(sacaId());
+		System.out.println("==============================");
+		System.out.println(par.getDescripcion());
+		System.out.println("==============================");
+		System.out.println(cuenta.getDescripcion());
+		System.out.println("==============================");
+		cuenta.setIdcuenta(sacaId());
 		cuenta.setFechacreacion(new Date());
 		cuenta.setFecha(new Date());
 		return this.cuentaService.save(cuenta);
@@ -52,6 +66,7 @@ public class CuentaRestController {
 		
 		cuentaActual.setDescripcion(cuenta.getDescripcion());
 		cuentaActual.setNombre(cuenta.getNombre());
+		cuentaActual.setPartida(cuenta.getPartida());
 		cuentaActual.setNroCuenta(cuenta.getNroCuenta());
 		cuentaActual.setFechamodificacion(new Date());
 		
@@ -62,5 +77,17 @@ public class CuentaRestController {
 	@DeleteMapping("{id}")
 	public  void delete(@PathVariable String id) {
 		cuentaService.delete(id);
+	}
+	
+	private String sacaId() {
+		String max = this.cuentaService.maxId();
+		int id = 0;
+		
+		if(max==null)
+			id = 1;
+		else
+			id = Integer.parseInt(max) + 1;
+		
+		return id+"";
 	}
 }
