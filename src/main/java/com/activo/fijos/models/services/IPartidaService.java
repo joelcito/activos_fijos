@@ -13,4 +13,6 @@ public interface IPartidaService {
 	public void delete(String idpartida);
 	
 	public Partida findById(String idpartida);
+	
+	public String maxId();
 }

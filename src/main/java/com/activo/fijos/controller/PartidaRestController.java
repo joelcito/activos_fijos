@@ -41,6 +41,7 @@ public class PartidaRestController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public Partida create (@RequestBody Partida partida) {
 		
+		partida.setIdpartida(sacaId());
 		partida.setFecha(new Date());
 		partida.setFechacreacion(new Date());
 		
@@ -62,6 +63,18 @@ public class PartidaRestController {
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable String id) {
 		partidaService.delete(id);
+	}
+	
+	private String sacaId() {
+		String max = partidaService.maxId();
+		int id = 0;
+		
+		if(max==null)
+			id = 1;
+		else
+			id = Integer.parseInt(max) + 1;
+		
+		return id+"";
 	}
 		
 }

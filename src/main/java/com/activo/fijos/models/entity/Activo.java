@@ -87,11 +87,13 @@ public class Activo implements Serializable{
 	@Column(columnDefinition = "Decimal(5,2)")
 	private float porcentaje_depreciacion;
 	
-	@Column(columnDefinition = "Decimal(3,2)")
+	@Column(columnDefinition = "Decimal(3,3)")
 	private float ufv;
 
-	@Column(columnDefinition = "Decimal(3,2)")
+	//@Column(columnDefinition = "Decimal(3,5)")
 	private float ufvcompra;
+	@Column(columnDefinition = "Decimal(12,2)")
+	private float precio;
 	
 	//@Column(name="vida_util")
 	private int vida_util;
@@ -108,19 +110,21 @@ public class Activo implements Serializable{
 		this.idactivo = idactivo;
 	}
 
+	public float getPrecio() {
+		return precio;
+	}
 
+	public void setPrecio(float precio) {
+		this.precio = precio;
+	}
 
 	public Incorporacion getIncorporacion() {
 		return incorporacion;
 	}
 
-
-
 	public void setIncorporacion(Incorporacion incorporacion) {
 		this.incorporacion = incorporacion;
 	}
-
-
 	
 	public Grupo getGrupo() {
 		return grupo;

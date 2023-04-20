@@ -76,6 +76,12 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
 		  <artifactId>jackson-databind</artifactId>
 		  <version>2.12.4</version>
 		</dependency>
+				
+		<dependency>
+		  <groupId>org.json</groupId>
+		  <artifactId>json</artifactId>
+		  <version>20210307</version>
+		</dependency>
 		
 	</dependencies>
 
