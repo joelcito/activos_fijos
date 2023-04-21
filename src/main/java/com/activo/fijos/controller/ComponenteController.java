@@ -2,9 +2,12 @@ package com.activo.fijos.controller;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,10 +27,10 @@ import com.fasterxml.jackson.databind.util.JSONPObject;
 @RestController
 @RequestMapping("/api/componente")
 public class ComponenteController {
-	
+
 	@Autowired
 	private IComponenteService componenteService;
-	
+		
 	@GetMapping("/listado")
 	public List<Componente> index() {
 		return this.componenteService.findAll();
@@ -91,7 +94,7 @@ public class ComponenteController {
 		//return this.componenteService.save(componenteNew);
 		return componenteNew;
 	}
-
+	
 	private String sacaId() {
 		String max = componenteService.maxId();
 		int id = 0;
