@@ -10,9 +10,9 @@ import com.activo.fijos.models.entity.Ufv;
 
 public interface IUfvDao extends CrudRepository<Ufv, String> {
 
-	@Query(value="select  max(TRY_CAST(idufv AS BIGINT)) as ultimo from ufv", nativeQuery=true)
+	@Query(value="select  max(TRY_CAST(idufv AS BIGINT)) as ultimo from afw_ufv", nativeQuery=true)
 	String max();
 	
-	@Query(value="select * from ufv where fecha = :fecha", nativeQuery=true)
+	@Query(value="select * from afw_ufv where fecha = :fecha", nativeQuery=true)
 	Ufv buscarPorFecha(@Param("fecha") LocalDate fecha);
 }

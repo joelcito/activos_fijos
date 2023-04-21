@@ -14,13 +14,15 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="grupo")
+@Table(name="afw_grupo")
 public class Grupo implements Serializable{
 
 	@Id
 	//@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(length = 15)
 	private String idgrupo;
+	
+	private String codanterior;
 	
 	/*
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -133,6 +135,19 @@ public class Grupo implements Serializable{
 	public void setEstado(String estado) {
 		this.estado = estado;
 	}
+	
+	
+
+
+	public String getCodanterior() {
+		return codanterior;
+	}
+
+	public void setCodanterior(String cod_anterior) {
+		this.codanterior = cod_anterior;
+	}
+
+
 
 
 	/**

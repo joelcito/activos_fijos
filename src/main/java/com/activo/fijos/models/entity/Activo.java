@@ -14,7 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-@Table(name="activo")
+@Table(name="afw_activo")
 public class Activo implements Serializable{
 	
 	@Id

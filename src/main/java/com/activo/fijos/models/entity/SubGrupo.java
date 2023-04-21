@@ -14,7 +14,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="subgrupo")
+@Table(name="afw_subgrupo")
 public class SubGrupo implements Serializable{
 
 	@Id

@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 
 @Entity
-@Table(name="clientes")
+@Table(name="afw_clientes")
 public class Cliente implements Serializable{
 	
 	@Id

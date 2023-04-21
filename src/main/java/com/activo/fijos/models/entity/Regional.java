@@ -14,7 +14,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="regional")
+@Table(name="afw_regional")
 public class Regional implements Serializable {
 
 	
