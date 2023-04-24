@@ -78,7 +78,7 @@ public class ExternoRestController {
 			
 			activoNew.setIdactivo(sacaIdActivo());
 			activoNew.setCodigo(act.get("cod").toString());
-			activoNew.setDescripcion(act.get("des").toString());			
+			activoNew.setDescripcion(act.get("des1").toString());			
 					
 			this.activoService.save(activoNew);
 			contador++;
