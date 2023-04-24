@@ -14,7 +14,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="componente")
+@Table(name="afw_componente")
 public class Componente implements Serializable {
 	@Id
 	@Column(length = 15)

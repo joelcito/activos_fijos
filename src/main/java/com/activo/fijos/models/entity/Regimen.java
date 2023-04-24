@@ -9,7 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="regimen")
+@Table(name="afw_regimen")
 public class Regimen implements Serializable{
 	
 	@Id

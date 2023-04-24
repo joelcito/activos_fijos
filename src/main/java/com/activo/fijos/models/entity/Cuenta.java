@@ -14,7 +14,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="cuenta")
+@Table(name="afw_cuenta")
 public class Cuenta implements Serializable {
 	
 	@Id

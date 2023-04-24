@@ -9,9 +9,9 @@ import com.activo.fijos.models.entity.Componente;
 
 public interface IComponenteDao extends CrudRepository<Componente, String>{
 
-	@Query(value="select * from componente where subgrupo_id = :idsubgrupo", nativeQuery=true)
+	@Query(value="select * from afw_componente where subgrupo_id = :idsubgrupo", nativeQuery=true)
     List<Componente> getComponentesByIdSubGrupo(String idsubgrupo);
 	
-	@Query(value="select  max(TRY_CAST(idcomponente AS BIGINT)) as ultimo from componente", nativeQuery=true)
+	@Query(value="select  max(TRY_CAST(idcomponente AS BIGINT)) as ultimo from afw_componente", nativeQuery=true)
 	String maxId();
 }
