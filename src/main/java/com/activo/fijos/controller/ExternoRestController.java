@@ -123,7 +123,7 @@ public class ExternoRestController {
 			
 			grpuNew.setCodanterior(grup.get("cod").toString());
 			grpuNew.setDescripcion(grup.get("des").toString());
-			grpuNew.setNroItems(Integer.parseInt(grup.get("num1").toString()));
+			grpuNew.setVidaUtil(Integer.parseInt(grup.get("num1").toString()));
 			
 			this.grupoService.save(grpuNew);
 			
