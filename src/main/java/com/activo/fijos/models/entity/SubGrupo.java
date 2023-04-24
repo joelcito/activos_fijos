@@ -21,6 +21,8 @@ public class SubGrupo implements Serializable{
 	@Column(length = 15)
 	private String idsubgrupo;
 	
+	private String codanterior;
+	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="grupo_id")
 	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
@@ -80,8 +82,19 @@ public class SubGrupo implements Serializable{
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
+		
+	public String getCodanterior() {
+		return codanterior;
+	}
 
-	
+	public void setCodanterior(String codanterior) {
+		this.codanterior = codanterior;
+	}
+
+
+
+
+
 	/**
 	 * 
 	 */

@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.activo.fijos.models.entity.Activo;
 import com.activo.fijos.models.entity.Grupo;
+import com.activo.fijos.models.entity.SubGrupo;
 import com.activo.fijos.models.services.IActivoService;
 import com.activo.fijos.models.services.IGrupoService;
+import com.activo.fijos.models.services.ISubGrupoService;
 
 @CrossOrigin(origins = {"http://localhost:4200/"})
 @RestController
@@ -30,6 +32,9 @@ public class ExternoRestController {
 	
 	@Autowired
 	private IGrupoService grupoService;
+	
+	@Autowired
+	private ISubGrupoService subGrupoService;
 	
 	public ExternoRestController(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
@@ -61,29 +66,36 @@ public class ExternoRestController {
 			Activo activoNew = new Activo();
 			
 			String idGrupo = act.get("codgrupo").toString();
-			
-			if(!idGrupo.equals("")) {
-				
-				
+			if(!idGrupo.equals("")) {				
 				String sql = "SELECT * FROM afw_grupo WHERE codanterior = ?";
 				List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql, idGrupo);
-											
-				System.out.println(rows+"|"+idGrupo+"|"+rows.size()+"|"+rows.get(0));
-				System.out.println("---------------------------");
-				
-				
-			}else {
-				System.out.println("************************");
+				if(rows.size() > 0) {
+					Grupo grupoNew = new Grupo();
+					grupoNew = this.grupoService.findById((rows.get(0).get("idgrupo")).toString());
+					activoNew.setGrupo(grupoNew);
+				}
 			}
 			
-			activoNew.setIdactivo(sacaIdActivo());
+			String idSubGrupo = act.get("codsubgrp").toString();
+			System.out.println(idSubGrupo);
+			if(!idSubGrupo.equals("")) {
+				String sql = "SELECT * FROM afw_subgrupo WHERE codanterior = ?";
+				List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql, idSubGrupo);
+				System.out.println(rows.size()+"|"+idSubGrupo);
+				if(rows.size() > 0) {
+					SubGrupo subgrupoNew = this.subGrupoService.findById((rows.get(0).get("idsubgrupo")).toString());
+					activoNew.setSubgrupo(subgrupoNew);
+				}
+			}
+			
+			activoNew.setIdactivo(sacaIdGenerico(1));
 			activoNew.setCodigo(act.get("cod").toString());
 			activoNew.setDescripcion(act.get("des1").toString());			
 					
 			this.activoService.save(activoNew);
 			contador++;
 			
-			if(contador > 100) {
+			if(contador > 500) {
 				break;	
 			}
 			
@@ -92,20 +104,7 @@ public class ExternoRestController {
 		
 		
 	}
-	
-	
-	private String sacaIdActivo() {
-		String max = activoService.max();
-		int id = 0;
 		
-		if(max==null)
-			id = 1;
-		else
-			id = Integer.parseInt(max) + 1;
-		
-		return id+"";
-	}
-	
 	@GetMapping("/migrationItemGrupo")
 	public void migracionGrupo() {
 		
@@ -118,9 +117,9 @@ public class ExternoRestController {
 			
 			System.out.print("<= | "+contador+" | => "+"ID: " + grup.get("cod")+" | Cog 1: " + grup.get("des")+" | Descr: " + grup.get("num1")+"\n");
 			
-						Grupo grpuNew = new Grupo();
-			grpuNew.setIdgrupo(sacaIdGrupo());
+			Grupo grpuNew = new Grupo();
 			
+			grpuNew.setIdgrupo(sacaIdGenerico(2));
 			grpuNew.setCodanterior(grup.get("cod").toString());
 			grpuNew.setDescripcion(grup.get("des").toString());
 			grpuNew.setVidaUtil(Integer.parseInt(grup.get("num1").toString()));
@@ -140,8 +139,64 @@ public class ExternoRestController {
 		
 	}
 	
-	private String sacaIdGrupo() {
-		String max = grupoService.maxId();
+		
+	@GetMapping("/migrationSubGrupo")
+	public void migrationSubGrupos() {
+		
+		List<Map<String, Object>> subgrupos = jdbcTemplate.queryForList("SELECT * FROM af_subgrupo");
+		
+		//System.out.println(grupos.size());
+		int contador = 0;		
+		
+		for (Map<String, Object> subGrupo : subgrupos) {
+			
+			System.out.print("<= | "+contador+" | => "+"ID: " + subGrupo.get("cod")+" | Cod Grupo: " + subGrupo.get("codgrupo")+" | Descr: " + subGrupo.get("des")+"\n");
+						
+			SubGrupo subGrupoNew = new SubGrupo();
+			
+			subGrupoNew.setIdsubgrupo(sacaIdGenerico(3));
+			subGrupoNew.setCodanterior(subGrupo.get("cod").toString());
+			subGrupoNew.setDescripcion(subGrupo.get("des").toString());	
+						
+			String sql = "SELECT * FROM afw_grupo WHERE codanterior = ?";
+			List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql, subGrupo.get("codgrupo"));
+			
+			//System.out.println(rows.size()+"|"+subGrupo.get("cod"));
+			
+			if(rows.size() > 0) {				
+				Grupo grupoNew = this.grupoService.findById(rows.get(0).get("idgrupo").toString());
+				subGrupoNew.setGrupo(grupoNew);
+			}
+			
+			this.subGrupoService.save(subGrupoNew);
+					
+			contador++;
+			
+			/*
+			if(contador > 100) {
+				break;	
+			}
+			*/
+			
+			
+		
+		}
+		
+	}
+	
+	
+	private String sacaIdGenerico(int tipo /*tipo de que tabla es*/) {
+		
+		String max = null;
+		
+		if(tipo == 1) {//activos
+			max = activoService.max();
+		}else if(tipo == 2) {//grupos
+			max = grupoService.maxId();
+		}else if(tipo == 3) {//sub grupos
+			max = subGrupoService.maxId();
+		}
+				
 		int id = 0;
 		
 		if(max==null)
