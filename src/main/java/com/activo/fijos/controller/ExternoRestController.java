@@ -89,13 +89,14 @@ public class ExternoRestController {
 			}
 			
 			activoNew.setIdactivo(sacaIdGenerico(1));
+			activoNew.setVida_util(Float.parseFloat(act.get("vidautil").toString()));
 			activoNew.setCodigo(act.get("cod").toString());
 			activoNew.setDescripcion(act.get("des1").toString());			
 					
 			this.activoService.save(activoNew);
 			contador++;
 			
-			if(contador > 500) {
+			if(contador > 100) {
 				break;	
 			}
 			
@@ -147,6 +148,7 @@ public class ExternoRestController {
 		
 		//System.out.println(grupos.size());
 		int contador = 0;		
+		
 		
 		for (Map<String, Object> subGrupo : subgrupos) {
 			

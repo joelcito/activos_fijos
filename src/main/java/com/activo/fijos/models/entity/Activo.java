@@ -92,11 +92,13 @@ public class Activo implements Serializable{
 
 	//@Column(columnDefinition = "Decimal(3,5)")
 	private float ufvcompra;
+	
 	@Column(columnDefinition = "Decimal(12,2)")
 	private float precio;
 	
 	//@Column(name="vida_util")
-	private int vida_util;
+	@Column(columnDefinition = "Decimal(12,2)")
+	private float vida_util;
 	//@Column(name="fechacreacion")
 	private Date fechacreacion;
 	//@Column(name="fechamodificacion")
@@ -357,13 +359,13 @@ public class Activo implements Serializable{
 
 
 
-	public int getVida_util() {
+	public float getVida_util() {
 		return vida_util;
 	}
 
 
 
-	public void setVida_util(int vida_util) {
+	public void setVida_util(float vida_util) {
 		this.vida_util = vida_util;
 	}
 
