@@ -14,64 +14,77 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="afw_cuenta")
-public class Cuenta implements Serializable {
-	
+@Table(name = "afw_asignacion")
+public class Asignacion implements Serializable{
+
 	@Id
 	@Column(length = 15)
-	private String idcuenta;
+	private String idasignacion;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="partida_id")
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="activo_id")
 	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
-	private Partida partida;
+	private Activo activo;
 	
-	private String nombre;
-	private String descripcion;
-	private String nroCuenta;
+	private String persona_id;
+	
+	private Date fechaasignacion;
+	
+	private String cargo;
+	
+	private String estadoRegistro;
+	
 	@Column(columnDefinition = "DATE")
 	private Date fecha;
 	private Date fechacreacion;
 	private Date fechamodificacion;
 	
-	public String getIdcuenta() {
-		return idcuenta;
+	public String getIdasignacion() {
+		return idasignacion;
 	}
 
-	public void setIdcuenta(String idcuenta) {
-		this.idcuenta = idcuenta;
+	public void setIdasignacion(String idasignacion) {
+		this.idasignacion = idasignacion;
 	}
 
-	public Partida getPartida() {
-		return partida;
+	public Activo getActivo() {
+		return activo;
 	}
 
-	public void setPartida(Partida partida) {
-		this.partida = partida;
+	public void setActivo(Activo activo) {
+		this.activo = activo;
 	}
 
-	public String getNombre() {
-		return nombre;
+	public String getPersona_id() {
+		return persona_id;
 	}
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
+	public void setPersona_id(String persona_id) {
+		this.persona_id = persona_id;
 	}
 
-	public String getDescripcion() {
-		return descripcion;
+	public Date getFechaasignacion() {
+		return fechaasignacion;
 	}
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
+	public void setFechaasignacion(Date fechaasignacion) {
+		this.fechaasignacion = fechaasignacion;
 	}
 
-	public String getNroCuenta() {
-		return nroCuenta;
+	public String getCargo() {
+		return cargo;
 	}
 
-	public void setNroCuenta(String nroCuenta) {
-		this.nroCuenta = nroCuenta;
+	public void setCargo(String cargo) {
+		this.cargo = cargo;
+	}
+
+	public String getEstadoRegistro() {
+		return estadoRegistro;
+	}
+
+	public void setEstadoRegistro(String estadoRegistro) {
+		this.estadoRegistro = estadoRegistro;
 	}
 
 	public Date getFecha() {
@@ -97,6 +110,8 @@ public class Cuenta implements Serializable {
 	public void setFechamodificacion(Date fechamodificacion) {
 		this.fechamodificacion = fechamodificacion;
 	}
+
+
 
 	/**
 	 * 
