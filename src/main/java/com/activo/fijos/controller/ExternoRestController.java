@@ -63,10 +63,15 @@ public class ExternoRestController {
 			String idGrupo = act.get("codgrupo").toString();
 			
 			if(!idGrupo.equals("")) {
+				
+				
 				String sql = "SELECT * FROM afw_grupo WHERE codanterior = ?";
 				List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql, idGrupo);
-				System.out.println(rows+"|"+idGrupo);
+											
+				System.out.println(rows+"|"+idGrupo+"|"+rows.size()+"|"+rows.get(0));
 				System.out.println("---------------------------");
+				
+				
 			}else {
 				System.out.println("************************");
 			}
