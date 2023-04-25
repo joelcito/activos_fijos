@@ -65,6 +65,7 @@ public class ExternoRestController {
 			
 			Activo activoNew = new Activo();
 			
+			
 			String idGrupo = act.get("codgrupo").toString();
 			if(!idGrupo.equals("")) {				
 				String sql = "SELECT * FROM afw_grupo WHERE codanterior = ?";
@@ -87,6 +88,7 @@ public class ExternoRestController {
 					activoNew.setSubgrupo(subgrupoNew);
 				}
 			}
+			
 			
 			activoNew.setIdactivo(sacaIdGenerico(1));
 			activoNew.setVida_util(Float.parseFloat(act.get("vidautil").toString()));
@@ -118,14 +120,27 @@ public class ExternoRestController {
 			
 			System.out.print("<= | "+contador+" | => "+"ID: " + grup.get("cod")+" | Cog 1: " + grup.get("des")+" | Descr: " + grup.get("num1")+"\n");
 			
+			String sql = "INSERT INTO afw_grupo (idgrupo, descripcion, nro_items , vida_util) VALUES(?,?,?,?)";
+		    jdbcTemplate.update(sql, grup.get("cod").toString(), grup.get("des").toString(), 0 , Integer.parseInt(grup.get("num1").toString()));
+						
+			/*
+			 * 
+			 					
+			this.grupoService.insertNewGrupo(grup.get("cod").toString(), grup.get("des").toString(), 0, Integer.parseInt(grup.get("num1").toString()));
+			* */
+					
+			/*
+			
 			Grupo grpuNew = new Grupo();
 			
-			grpuNew.setIdgrupo(sacaIdGenerico(2));
+			grpuNew.setIdgrupo(grup.get("cod").toString().trim());
 			grpuNew.setCodanterior(grup.get("cod").toString());
 			grpuNew.setDescripcion(grup.get("des").toString());
 			grpuNew.setVidaUtil(Integer.parseInt(grup.get("num1").toString()));
 			
 			this.grupoService.save(grpuNew);
+			
+			*/
 			
 			
 			contador++;
@@ -153,10 +168,17 @@ public class ExternoRestController {
 		for (Map<String, Object> subGrupo : subgrupos) {
 			
 			System.out.print("<= | "+contador+" | => "+"ID: " + subGrupo.get("cod")+" | Cod Grupo: " + subGrupo.get("codgrupo")+" | Descr: " + subGrupo.get("des")+"\n");
+			
+			String sql = "INSERT INTO afw_subgrupo (idsubgrupo, cod, descripcion, grupo_id) VALUES(?,?,?,?)";
+		    jdbcTemplate.update(sql, (subGrupo.get("codgrupo").toString().trim()+subGrupo.get("cod").toString().trim()),subGrupo.get("cod").toString().trim(), subGrupo.get("des").toString(), subGrupo.get("codgrupo").toString().trim());
+			
+			/*
+			 * 
+			 
 						
 			SubGrupo subGrupoNew = new SubGrupo();
 			
-			subGrupoNew.setIdsubgrupo(sacaIdGenerico(3));
+			subGrupoNew.setIdsubgrupo(subGrupo.get("cod").toString().trim());
 			subGrupoNew.setCodanterior(subGrupo.get("cod").toString());
 			subGrupoNew.setDescripcion(subGrupo.get("des").toString());	
 						
@@ -172,6 +194,8 @@ public class ExternoRestController {
 			
 			this.subGrupoService.save(subGrupoNew);
 					
+					
+			* */
 			contador++;
 			
 			/*

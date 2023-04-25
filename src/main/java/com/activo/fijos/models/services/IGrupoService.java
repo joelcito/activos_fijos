@@ -15,5 +15,7 @@ public interface IGrupoService {
 	public Grupo findById(String id);
 	
 	public String maxId();
+	
+	public void insertNewGrupo(String idgrupo, String descripcion, int nro_items, int vida_util);
 
 }

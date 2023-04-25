@@ -21,7 +21,7 @@ public class SubGrupo implements Serializable{
 	@Column(length = 15)
 	private String idsubgrupo;
 	
-	private String codanterior;
+	private String cod;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="grupo_id")
@@ -84,11 +84,11 @@ public class SubGrupo implements Serializable{
 	}
 		
 	public String getCodanterior() {
-		return codanterior;
+		return cod;
 	}
 
 	public void setCodanterior(String codanterior) {
-		this.codanterior = codanterior;
+		this.cod = codanterior;
 	}
 
 

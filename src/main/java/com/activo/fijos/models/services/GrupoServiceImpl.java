@@ -45,4 +45,9 @@ public class GrupoServiceImpl implements IGrupoService{
 		return this.grupoDao.maxId();
 	}
 
+	@Override
+	public void insertNewGrupo(String idgrupo, String descripcion, int nro_items, int vida_util) {	
+		this.grupoDao.insertNewGrupo(idgrupo, descripcion, nro_items,  vida_util);
+	}
+
 }
