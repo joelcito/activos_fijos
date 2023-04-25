@@ -121,7 +121,7 @@ public class ExternoRestController {
 			System.out.print("<= | "+contador+" | => "+"ID: " + grup.get("cod")+" | Cog 1: " + grup.get("des")+" | Descr: " + grup.get("num1")+"\n");
 			
 			String sql = "INSERT INTO afw_grupo (idgrupo, descripcion, nro_items , vida_util) VALUES(?,?,?,?)";
-		    jdbcTemplate.update(sql, grup.get("cod").toString(), grup.get("des").toString(), 0 , Integer.parseInt(grup.get("num1").toString()));
+		    jdbcTemplate.update(sql, grup.get("cod").toString().trim(), grup.get("des").toString(), 0 , Integer.parseInt(grup.get("num1").toString()));
 						
 			/*
 			 * 
