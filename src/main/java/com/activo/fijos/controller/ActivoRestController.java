@@ -80,7 +80,7 @@ public class ActivoRestController {
 		*/
 		String nuevoid = id+"";
 		activo.setIdactivo(nuevoid);
-		activo.setEstado("Aprobado");
+		activo.setEstadoregistro("Aprobado");
 		activo.setFecha(new Date());
 		activo.setFechacreacion(new Date());
 		return activoService.save(activo);

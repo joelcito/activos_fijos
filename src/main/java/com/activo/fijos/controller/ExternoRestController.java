@@ -1,5 +1,6 @@
 package com.activo.fijos.controller;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -63,6 +64,80 @@ public class ExternoRestController {
 		for (Map<String, Object> act : activos) {
 			System.out.print("<= | "+contador+" | => "+"ID: " + act.get("cod")+" | Cog 1: " + act.get("cod1")+" | Descr: " + act.get("des")+" | Grupo: " + act.get("codgrupo")+"\n");
 			
+			String codSubGrupo = act.get("codgrupo").toString();
+			
+			
+			//String sql = "INSERT INTO afw_activo (idgrupo, descripcion, nro_items , vida_util) VALUES(?,?,?,?)";
+			String sql = "INSERT INTO afw_activo ( "
+												+ "idactivo ,"
+												+ "codigo ,"
+												+ "codigoalterno ,"
+												+ "descripcion ,"
+												+ "eficiencia ,"
+												+ "estado ,"
+												+ "estadoregistro ,"
+												+ "fecha ,"
+												+ "fechacompra ,"
+												+ "fechacreacion ,"
+												+ "fechamodificacion ,"
+												+ "formainicial ,"
+												+ "placa ,"
+												+ "porcentaje_depreciacion ,"
+												+ "precio ,"
+												+ "ufv ,"
+												+ "ufvcompra ,"
+												+ "vida_util ,"
+												+ "grupo_id ,"
+												+ "incorporacion_id ,"
+												+ "regimen_id ,"
+												+ "regional_id ,"
+												+ "subgrupo_id ,"
+												+ "tipotransaccion_id ,"
+												+ "ubicacionespecifica_id ,"
+												+ "unidadmanejo_id"
+												+ ") VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+			
+			String idactivo 		= (act.get("cod") != null) ? act.get("cod").toString().trim() : null;
+			String codigo 			= (act.get("cod1") != null) ? act.get("cod1").toString().trim() : null;
+			String codigoalterno 	= (act.get("cod2") != null) ? act.get("cod2").toString().trim() : null;
+			String descripcion 		= (act.get("des1") != null) ? act.get("des1").toString().trim() : null;
+			String eficiencia 		= (act.get("refe1") != null) ? act.get("refe1").toString().trim() : null;
+			String subgrupo_id 		= act.get("codgrupo").toString().trim()+act.get("codsubgrp").toString().trim();
+
+						
+		    jdbcTemplate.update(sql,
+		    						idactivo, 
+		    						codigo, 
+		    						codigoalterno ,
+		    						descripcion,
+		    						eficiencia,
+		    						act.get("estado"),
+		    						act.get("registro"),
+		    						new Date(),
+		    						act.get("fcompra"),
+		    						new Date(),
+		    						new Date(),
+		    						act.get("num1"),
+		    						null,
+		    						25,
+		    						act.get("valcomprabs"),
+		    						0,
+		    						0.12,
+		    						act.get("vidautil"),
+		    						act.get("codgrupo"),
+		    						null,
+		    						act.get("refe2"),
+		    						act.get("codregion"),
+		    						subgrupo_id, //e
+		    						null,
+		    						null,
+		    						act.get("codumanejo")
+		    						);
+			
+			
+			
+			
+			/*
 			Activo activoNew = new Activo();
 			
 			
@@ -96,11 +171,13 @@ public class ExternoRestController {
 			activoNew.setDescripcion(act.get("des1").toString());			
 					
 			this.activoService.save(activoNew);
+			*/
 			contador++;
-			
-			if(contador > 100) {
+			/*
+			if(contador > 10000) {
 				break;	
 			}
+			*/
 			
 		
 		}

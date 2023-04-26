@@ -74,7 +74,8 @@ public class Activo implements Serializable{
 	private String codigoalterno;
 	//@Column(name="formainicial")
 	private String formainicial;
-	//@Column(name="descripcion")
+	
+	@Column(length = 1000)
 	private String descripcion;
 	//@Column(name="estadoregistro")
 	private String estadoregistro;
