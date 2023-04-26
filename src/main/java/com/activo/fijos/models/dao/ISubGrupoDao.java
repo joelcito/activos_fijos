@@ -15,4 +15,5 @@ public interface ISubGrupoDao extends CrudRepository<SubGrupo, String> {
 	@Query(value="select  max(TRY_CAST(idsubgrupo AS BIGINT)) as ultimo from afw_subgrupo", nativeQuery=true)
 	String maxId();
 
+	
 }
