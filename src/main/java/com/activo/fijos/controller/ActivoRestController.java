@@ -44,8 +44,16 @@ public class ActivoRestController {
 	
 	@GetMapping("/listado")
 	public List<Activo> index() {
-		return this.activoService.findAll();
+		return this.activoService.findAll();		
+		//return this.activoService.listaActivos();
 	}
+	
+	@GetMapping("/listadoPer")
+	public List<Map<String, Object>> listadoPer() {
+		return this.activoService.listaActivosPer();
+		
+	}
+	
 	
 	@GetMapping("/{id}")
 	public Activo show(@PathVariable String id) {
@@ -236,6 +244,13 @@ public class ActivoRestController {
 				
 		return objeto;
 	}
+	
+	/*
+	@PostMapping("/buscaActivo")
+	public List<Map<String, Object>> buscaActivo() {
+		
+	}
+	*/
 	
 	
 }

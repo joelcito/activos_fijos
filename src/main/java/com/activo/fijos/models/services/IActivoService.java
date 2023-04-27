@@ -1,6 +1,7 @@
 package com.activo.fijos.models.services;
 
 import java.util.List;
+import java.util.Map;
 
 import com.activo.fijos.models.entity.Activo;
 
@@ -16,4 +17,9 @@ public interface IActivoService {
 	
 	//public List<Activo> getUltimoRegistroActivo();
 	public String  max();
+	
+	public List<Activo> listaActivos();
+	
+	public List<Map<String, Object>> listaActivosPer();
+	
 }

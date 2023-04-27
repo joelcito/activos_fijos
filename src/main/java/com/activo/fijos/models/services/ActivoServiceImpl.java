@@ -1,6 +1,7 @@
 package com.activo.fijos.models.services;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,6 +44,18 @@ public class ActivoServiceImpl implements IActivoService{
 	@Transactional
 	public String max() {
 		return activoDao.max();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Activo> listaActivos() {
+		return (List<Activo>)this.activoDao.listaActivos();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Map<String, Object>> listaActivosPer() {
+		return this.activoDao.listaActivosPer();
 	}
 
 	
