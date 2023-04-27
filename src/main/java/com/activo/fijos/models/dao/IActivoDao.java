@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 import com.activo.fijos.models.entity.Activo;
 
@@ -20,11 +21,14 @@ public interface IActivoDao extends CrudRepository<Activo, String> {
 	public List<Activo> listaActivos();
 	
 	
-	//@Query(value="SELECT TOP 100 idactivo, descripcion, precio FROM afw_activo", nativeQuery=true)
-	@Query(value="SELECT idactivo, descripcion, precio FROM afw_activo", nativeQuery=true)
+	@Query(value="SELECT TOP 1000 idactivo, codigo, estado, fechacompra, regional_id, descripcion FROM afw_activo", nativeQuery=true)
+	//@Query(value="SELECT idactivo, descripcion, precio FROM afw_activo", nativeQuery=true)
 	public List<Map<String, Object>> listaActivosPer();
 	
 	
-	@Query(value="SELECT TOP 100 idactivo, descripcion, precio FROM afw_activo", nativeQuery=true)
-	public List<Map<String, Object>> buscaActivo();
+	@Query(value="SELECT idactivo, codigo, estado, fechacompra, regional_id, descripcion FROM afw_activo WHERE codigo = :codigo", nativeQuery=true)
+	public List<Map<String, Object>> buscaActivo(String codigo);
+	
+	@Query(value="SELECT idactivo, codigo, estado, fechacompra, regional_id, descripcion FROM afw_activo WHERE descripcion LIKE %:descripcion%", nativeQuery=true)
+	public List<Map<String, Object>> buscaActivoDescripcion(@Param("descripcion") String descripcion);
 }

@@ -58,6 +58,18 @@ public class ActivoServiceImpl implements IActivoService{
 		return this.activoDao.listaActivosPer();
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public List<Map<String, Object>> buscaActivo(String codigo) {
+		return this.activoDao.buscaActivo(codigo);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Map<String, Object>> buscaActivoDescripcion(String descripcion) {
+		return this.activoDao.buscaActivoDescripcion(descripcion);
+	}
+
 	
 	/*
 	@Override

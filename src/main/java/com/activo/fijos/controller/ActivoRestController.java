@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -245,12 +246,32 @@ public class ActivoRestController {
 		return objeto;
 	}
 	
-	/*
+	
 	@PostMapping("/buscaActivo")
-	public List<Map<String, Object>> buscaActivo() {
+	public List<Map<String, Object>> buscaActivo(@RequestBody String json) {
+				
+		ObjectMapper objectMapper = new ObjectMapper();
 		
+		List<Map<String, Object>> datos = new ArrayList<>();
+		
+		try {	
+			Map<String, Object> jsonMap = objectMapper.readValue(json, Map.class);
+			
+			if(!jsonMap.get("variable1").toString().equals(""))		
+				datos = this.activoService.buscaActivo(jsonMap.get("variable1").toString());
+			else if(!jsonMap.get("variable2").toString().equals(""))
+				datos = this.activoService.buscaActivoDescripcion(jsonMap.get("variable2").toString());
+			else if(jsonMap.get("variable2").toString().equals("") && jsonMap.get("variable2").toString().equals(""))
+				datos = this.activoService.listaActivosPer();
+			
+		} catch (JsonProcessingException e) {
+		    // Handle the exception
+		    e.printStackTrace();
+		}
+		
+		return datos;
 	}
-	*/
+	
 	
 	
 }

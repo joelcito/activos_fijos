@@ -22,4 +22,8 @@ public interface IActivoService {
 	
 	public List<Map<String, Object>> listaActivosPer();
 	
+	public List<Map<String, Object>> buscaActivo(String codigo);
+	
+	public List<Map<String, Object>> buscaActivoDescripcion(String descripcion);
+	
 }

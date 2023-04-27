@@ -69,71 +69,80 @@ public class ExternoRestController {
 			
 			//String sql = "INSERT INTO afw_activo (idgrupo, descripcion, nro_items , vida_util) VALUES(?,?,?,?)";
 			String sql = "INSERT INTO afw_activo ( "
-												+ "idactivo ,"
-												+ "codigo ,"
-												+ "codigoalterno ,"
-												+ "descripcion ,"
-												+ "eficiencia ,"
-												+ "estado ,"
-												+ "estadoregistro ,"
-												+ "fecha ,"
-												+ "fechacompra ,"
-												+ "fechacreacion ,"
-												+ "fechamodificacion ,"
-												+ "formainicial ,"
-												+ "placa ,"
-												+ "porcentaje_depreciacion ,"
-												+ "precio ,"
-												+ "ufv ,"
-												+ "ufvcompra ,"
-												+ "vida_util ,"
-												+ "grupo_id ,"
-												+ "incorporacion_id ,"
-												+ "regimen_id ,"
-												+ "regional_id ,"
-												+ "subgrupo_id ,"
-												+ "tipotransaccion_id ,"
-												+ "ubicacionespecifica_id ,"
-												+ "unidadmanejo_id"
-												+ ") VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-			
-			String idactivo 		= (act.get("cod") != null) ? act.get("cod").toString().trim() : null;
-			String codigo 			= (act.get("cod1") != null) ? act.get("cod1").toString().trim() : null;
-			String codigoalterno 	= (act.get("cod2") != null) ? act.get("cod2").toString().trim() : null;
-			String descripcion 		= (act.get("des1") != null) ? act.get("des1").toString().trim() : null;
-			String eficiencia 		= (act.get("refe1") != null) ? act.get("refe1").toString().trim() : null;
-			String subgrupo_id 		= act.get("codgrupo").toString().trim()+act.get("codsubgrp").toString().trim();
+					+ "idactivo ,"
+					+ "codigo ,"
+					+ "codigoalterno ,"
+					+ "descripcion ,"
+					+ "eficiencia ,"
+					+ "estado ,"
+					+ "estadoregistro ,"
+					+ "fecha ,"
+					+ "fechacompra ,"
+					+ "fechacreacion ,"
+					+ "fechamodificacion ,"
+					+ "formainicial ,"
+					+ "placa ,"
+					+ "porcentaje_depreciacion ,"
+					+ "precio ,"
+					+ "ufv ,"
+					+ "ufvcompra ,"
+					+ "vida_util ,"
+					+ "grupo_id ,"
+					+ "incorporacion_id ,"
+					+ "regimen_id ,"
+					+ "regional_id ,"
+					+ "subgrupo_id ,"
+					+ "tipotransaccion_id ,"
+					+ "ubicacionespecifica_id ,"
+					+ "unidadmanejo_id"
+					+ ") VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-						
-		    jdbcTemplate.update(sql,
-		    						idactivo, 
-		    						codigo, 
-		    						codigoalterno ,
-		    						descripcion,
-		    						eficiencia,
-		    						act.get("estado"),
-		    						act.get("registro"),
-		    						new Date(),
-		    						act.get("fcompra"),
-		    						new Date(),
-		    						new Date(),
-		    						act.get("num1"),
-		    						null,
-		    						25,
-		    						act.get("valcomprabs"),
-		    						0,
-		    						0.12,
-		    						act.get("vidautil"),
-		    						act.get("codgrupo"),
-		    						null,
-		    						act.get("refe2"),
-		    						act.get("codregion"),
-		    						subgrupo_id, //e
-		    						null,
-		    						null,
-		    						act.get("codumanejo")
-		    						);
-			
+					String idactivo 		= (act.get("cod") != null) ? act.get("cod").toString().trim() : null;
+					String codigo 			= (act.get("cod1") != null) ? act.get("cod1").toString().trim() : null;
+					String codigoalterno 	= (act.get("cod2") != null) ? act.get("cod2").toString().trim() : null;
+					String descripcion 		= (act.get("des1") != null) ? act.get("des1").toString().trim() : null;
+					String eficiencia 		= (act.get("refe1") != null) ? act.get("refe1").toString().trim() : null;
+					String subgrupo_id 		= act.get("codgrupo").toString().trim()+act.get("codsubgrp").toString().trim();
+					String estado 			= (act.get("estado") != null) ? act.get("estado").toString().trim() : null;
+					String estadoregistro 	= (act.get("registro") != null) ? act.get("registro").toString().trim() : null;
+					String formainicial 	= (act.get("num1") != null) ? act.get("num1").toString().trim() : null;
+					String precio 			= (act.get("valcomprabs") != null) ? act.get("valcomprabs").toString().trim() : null;
+					String vida_util 		= (act.get("vidautil") != null) ? act.get("vidautil").toString().trim() : null;
+					String grupo_id 		= (act.get("codgrupo") != null) ? act.get("codgrupo").toString().trim() : null;
+					String regimen_id 		= (act.get("refe2") != null) ? act.get("refe2").toString().trim() : null;
+					String regional_id 		= (act.get("codregion") != null) ? act.get("codregion").toString().trim() : null;
+					String unidadmanejo_id	= (act.get("codumanejo") != null) ? act.get("codumanejo").toString().trim() : null;
+
+
+
+					jdbcTemplate.update(sql,
+							idactivo,   				//idactivo
+							codigo,   					//codigo
+							codigoalterno ,  			//codigoalterno
+							descripcion,  				//descripcion
+							eficiencia,  				//eficiencia
+							estado,  					//estado
+							estadoregistro,  			//estadoregistro
+							new Date(),  				//fecha
+							act.get("fcompra"),			//fechacompra
+							new Date(),  				//fechacreacion
+							new Date(),  				//fechamodificacion
+							formainicial,  				//formainicial
+							null,  						//placa
+							act.get("porcdepre"),  		//porcentaje_depreciacion
+							precio,  					//precio
+							0,  						//ufv
+							act.get("tccompra"),  		//ufvcompra
+							vida_util,  				//vida_util
+							grupo_id,  					//grupo_id
+							null,  						//incorporacion_id
+							regimen_id,  				//regimen_id
+							regional_id,  				//regional_id
+							subgrupo_id,	  			//subgrupo_id
+							null,  						//tipotransaccion_id
+							null,  						//ubicacionespecifica_id
+							unidadmanejo_id  			//unidadmanejo_id
+							);
 			
 			
 			
