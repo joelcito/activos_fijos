@@ -1,10 +1,13 @@
 package com.activo.fijos.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -295,6 +298,38 @@ public class ExternoRestController {
 		}
 		
 	}
+	
+	@GetMapping("getCuentaPartidaByIdGrupo/{idgrupo}")
+	public Map<String, Object> getCuentaPartidaByIdGrupo(@PathVariable String idgrupo) {
+		/*
+		String sql = "select * "
+					+ "from af_grupo afg inner join e1 e "
+					+ "on afg.codcuenta = e.cod inner join e1 par	"
+					+ "on par.cod = e.cod1 "
+					+ "WHERE afg.cod = ?";
+		
+		*/
+		
+		
+		String sql = "select afw.cuenta_id, e.des as des1, e.cod1, pa.des as des2, afw.idgrupo"
+						+ " from afw_grupo afw inner join e1 e"
+						+ "	on afw.cuenta_id = e.cod inner join e1 pa"
+						+ "		on pa.cod = e.cod1"
+						+ " WHERE afw.idgrupo = ?";
+		
+		System.out.println(sql);
+		
+		List<Map<String, Object>>  Arrayobj = jdbcTemplate.queryForList(sql, idgrupo);
+		
+		Map<String, Object> obj = new HashMap();
+				
+		if(Arrayobj.size() > 0) 
+			obj = Arrayobj.get(0);
+		
+		return obj;
+	}
+
+
 	
 	
 	private String sacaIdGenerico(int tipo /*tipo de que tabla es*/) {
