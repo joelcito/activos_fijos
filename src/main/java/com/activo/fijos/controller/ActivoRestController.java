@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.activo.fijos.models.entity.Activo;
+import com.activo.fijos.models.entity.Regional;
 import com.activo.fijos.models.entity.Ufv;
 import com.activo.fijos.models.services.IActivoService;
 import com.activo.fijos.models.services.IUfvService;
@@ -65,6 +66,42 @@ public class ActivoRestController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public Activo create(@RequestBody Activo activo) {
 		
+		Regional regional = activo.getRegional();
+		String idregional = regional.getIdregional();
+		
+		String ultimoRegistroID = this.activoService.maxIdActivo(idregional);
+		
+		if(ultimoRegistroID != null) {
+			String[] partes =  ultimoRegistroID.split("-");
+			
+			int idNew = Integer.parseInt(partes[1])+1;
+			String idString = idNew+"";
+			
+			if(idString.length() == 1)
+				idString = idregional+"-000000"+idString;
+			else if(idString.length() == 2)
+				idString = idregional+"-00000"+idString;
+			else if(idString.length() == 3)
+				idString = idregional+"-0000"+idString;
+			else if(idString.length() == 4)
+				idString = idregional+"-000"+idString;
+			else if(idString.length() == 5)
+				idString = idregional+"-00"+idString;
+			else if(idString.length() == 6)
+				idString = idregional+"-0"+idString;
+						
+			activo.setIdactivo(idString);
+			activo.setEstadoregistro("APR");
+			activo.setFecha(new Date());
+			activo.setFechacreacion(new Date());
+			
+			System.out.println(idString);
+		}
+				
+		return activoService.save(activo);
+		
+		
+		/*
 		
 		//List<Activo> activoUltimo = activoService.getUltimoRegistroActivo();
 		String max = activoService.max();
@@ -77,22 +114,14 @@ public class ActivoRestController {
 			id = Integer.parseInt(max) + 1;
 		}
 		System.out.println(id);
-		/*
-		if(ultimoActivo == null) {
-			System.out.print("SI");
-		}else {
-			System.out.print("NO");
-		}
-		
-		System.out.print(ultimoActivo.getIdactivo());
-		
-		*/
 		String nuevoid = id+"";
 		activo.setIdactivo(nuevoid);
 		activo.setEstadoregistro("APR");
 		activo.setFecha(new Date());
 		activo.setFechacreacion(new Date());
-		return activoService.save(activo);
+		//return activoService.save(activo);
+		*/
+		//return activo;
 	}
 	
 	@PutMapping("/{id}")

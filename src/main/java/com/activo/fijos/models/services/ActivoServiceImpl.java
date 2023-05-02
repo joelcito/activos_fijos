@@ -70,6 +70,12 @@ public class ActivoServiceImpl implements IActivoService{
 		return this.activoDao.buscaActivoDescripcion(descripcion);
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public String maxIdActivo(String idregional) {
+		return this.activoDao.maxIdActivo(idregional);
+	}
+
 	
 	/*
 	@Override

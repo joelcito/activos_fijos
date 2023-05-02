@@ -26,4 +26,6 @@ public interface IActivoService {
 	
 	public List<Map<String, Object>> buscaActivoDescripcion(String descripcion);
 	
+	public String maxIdActivo(String idregional);
+	
 }
