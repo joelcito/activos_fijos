@@ -1,6 +1,7 @@
 package com.activo.fijos.controller;
 
 import java.util.ArrayList;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +25,14 @@ import com.activo.fijos.models.services.IActivoService;
 import com.activo.fijos.models.services.IGrupoService;
 import com.activo.fijos.models.services.ISubGrupoService;
 
+//import org.springframework.security.authentication.AuthenticationManager;
+//import com.example.security.JwtTokenUtil;
+//import io.jsonwebtoken.JwtBuilder;
+//import io.jsonwebtoken.Jwts;
+//import io.jsonwebtoken.SignatureAlgorithm;
+
+
+
 @CrossOrigin(origins = {"http://localhost:4200/"})
 @RestController
 @RequestMapping("/api/externo")
@@ -39,6 +48,13 @@ public class ExternoRestController {
 	
 	@Autowired
 	private ISubGrupoService subGrupoService;
+	
+	/*
+	@Autowired
+	private AuthenticationManager authenticationManager; 
+	*/
+	//@Autowired
+	//private JwtTokenUtil jwtTokenUtil; 
 	
 	public ExternoRestController(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
