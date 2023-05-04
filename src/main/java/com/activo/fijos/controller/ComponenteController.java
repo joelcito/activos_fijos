@@ -23,7 +23,8 @@ import com.activo.fijos.models.entity.Componente;
 import com.activo.fijos.models.services.IComponenteService;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 
-@CrossOrigin(origins = {"http://localhost:4200/"})
+//@CrossOrigin(origins = {"http://localhost:4200/"})
+@CrossOrigin(origins = {"http://10.150.10.13/activos/"})
 @RestController
 @RequestMapping("/api/componente")
 public class ComponenteController {

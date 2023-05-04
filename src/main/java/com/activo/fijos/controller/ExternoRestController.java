@@ -33,7 +33,8 @@ import com.activo.fijos.models.services.ISubGrupoService;
 
 
 
-@CrossOrigin(origins = {"http://localhost:4200/"})
+//@CrossOrigin(origins = {"http://localhost:4200/"})
+@CrossOrigin(origins = {"http://10.150.10.13/activos/"})
 @RestController
 @RequestMapping("/api/externo")
 public class ExternoRestController {
@@ -344,6 +345,28 @@ public class ExternoRestController {
 		
 		return obj;
 	}
+	
+	@GetMapping("getCuentas/")
+	public Map<String, Object> getCuentas(@PathVariable String idgrupo) {
+		
+		String sql = "select afw.cuenta_id, e.des as des1, e.cod1, pa.des as des2, afw.idgrupo"
+						+ " from afw_grupo afw inner join e1 e"
+						+ "	on afw.cuenta_id = e.cod inner join e1 pa"
+						+ "		on pa.cod = e.cod1"
+						+ " WHERE afw.idgrupo = ?";
+		
+		System.out.println(sql);
+		
+		List<Map<String, Object>>  Arrayobj = jdbcTemplate.queryForList(sql, idgrupo);
+		
+		Map<String, Object> obj = new HashMap();
+				
+		if(Arrayobj.size() > 0) 
+			obj = Arrayobj.get(0);
+		
+		return obj;
+	}
+
 
 
 	

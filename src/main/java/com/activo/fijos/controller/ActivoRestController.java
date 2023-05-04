@@ -34,7 +34,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 //import com.fasterxml.jackson.databind.JsonMappingException;
 
-@CrossOrigin(origins = {"http://localhost:4200/"})
+//@CrossOrigin(origins = {"http://localhost:4200/"})
+@CrossOrigin(origins = {"http://10.150.10.13/activos/"})
 @RestController
 @RequestMapping("/api/activo")
 public class ActivoRestController {

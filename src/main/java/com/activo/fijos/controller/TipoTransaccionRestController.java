@@ -19,7 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.activo.fijos.models.entity.TipoTransaccion;
 import com.activo.fijos.models.services.ITipoTransaccionService;
 
-@CrossOrigin(origins = {"http://localhost:4200/"})
+//@CrossOrigin(origins = {"http://localhost:4200/"})
+@CrossOrigin(origins = {"http://10.150.10.13/activos/"})
 @RestController
 @RequestMapping("/api/tipoTransaccion")
 public class TipoTransaccionRestController {

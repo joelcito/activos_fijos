@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.activo.fijos.models.entity.Cliente;
 import com.activo.fijos.models.services.IClienteService;
 
-@CrossOrigin(origins = {"http://localhost:4200/"})
+//@CrossOrigin(origins = {"http://localhost:4200/"})
+@CrossOrigin(origins = {"http://10.150.10.13/activos/"})
 @RestController
 @RequestMapping("/api/cliente")
 public class ClienteRestController {

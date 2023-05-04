@@ -19,7 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.activo.fijos.models.entity.Departamento;
 import com.activo.fijos.models.services.IDepartamentoService;
 
-@CrossOrigin(origins = {"http://localhost:4200/"})
+//@CrossOrigin(origins = {"http://localhost:4200/"})
+@CrossOrigin(origins = {"http://10.150.10.13/activos/"})
 @RestController
 @RequestMapping("/api/departamento")
 public class DepartamentoRestController {
