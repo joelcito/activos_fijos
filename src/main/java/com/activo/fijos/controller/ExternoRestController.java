@@ -34,7 +34,7 @@ import com.activo.fijos.models.services.ISubGrupoService;
 
 
 //@CrossOrigin(origins = {"http://localhost:4200/"})
-@CrossOrigin(origins = {"http://10.150.10.13/activos/"})
+@CrossOrigin(origins = {"http://10.150.10.13/"})
 @RestController
 @RequestMapping("/api/externo")
 public class ExternoRestController {

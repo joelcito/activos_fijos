@@ -20,7 +20,7 @@ import com.activo.fijos.models.entity.Regional;
 import com.activo.fijos.models.services.IRegionalService;
 
 //@CrossOrigin(origins = {"http://localhost:4200/"})
-@CrossOrigin(origins = {"http://10.150.10.13/activos/"})
+@CrossOrigin(origins = {"http://10.150.10.13/"})
 @RestController
 @RequestMapping("/api/regional")
 public class RegionalRestController {

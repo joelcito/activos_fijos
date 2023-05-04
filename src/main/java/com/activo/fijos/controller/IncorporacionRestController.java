@@ -13,7 +13,7 @@ import com.activo.fijos.models.services.IIncorporacionService;
 
 
 //@CrossOrigin(origins = {"http://localhost:4200/"})
-@CrossOrigin(origins = {"http://10.150.10.13/activos/"})
+@CrossOrigin(origins = {"http://10.150.10.13/"})
 @RestController
 @RequestMapping("/api/incorporacion")
 public class IncorporacionRestController {

@@ -20,7 +20,7 @@ import com.activo.fijos.models.entity.TipoTransaccion;
 import com.activo.fijos.models.services.ITipoTransaccionService;
 
 //@CrossOrigin(origins = {"http://localhost:4200/"})
-@CrossOrigin(origins = {"http://10.150.10.13/activos/"})
+@CrossOrigin(origins = {"http://10.150.10.13/"})
 @RestController
 @RequestMapping("/api/tipoTransaccion")
 public class TipoTransaccionRestController {
