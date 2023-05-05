@@ -64,6 +64,12 @@ public class Activo implements Serializable{
 	//@Column(name="codigo")
 	private String codigo;
 	
+	private String codprovedor;
+	
+	private String nuevocodigo;
+	
+	private String factura;
+	
 	//@Column(name="placa")
 	private String placa;
 	@Column(columnDefinition = "DATE")
@@ -392,6 +398,30 @@ public class Activo implements Serializable{
 
 	public void setFechamodificacion(Date fechamodificacion) {
 		this.fechamodificacion = fechamodificacion;
+	}
+	
+	public String getCodprovedor() {
+		return codprovedor;
+	}
+
+	public void setCodprovedor(String codprovedor) {
+		this.codprovedor = codprovedor;
+	}
+		
+	public String getFactura() {
+		return factura;
+	}
+
+	public void setFactura(String factura) {
+		this.factura = factura;
+	}
+		
+	public String getNuevocodigo() {
+		return nuevocodigo;
+	}
+
+	public void setNuevocodigo(String nuevocodigo) {
+		this.nuevocodigo = nuevocodigo;
 	}
 
 

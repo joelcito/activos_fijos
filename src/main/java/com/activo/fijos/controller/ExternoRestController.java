@@ -1,14 +1,11 @@
 package com.activo.fijos.controller;
 
-import java.util.ArrayList;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,9 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.activo.fijos.models.entity.Activo;
-import com.activo.fijos.models.entity.Grupo;
-import com.activo.fijos.models.entity.SubGrupo;
 import com.activo.fijos.models.services.IActivoService;
 import com.activo.fijos.models.services.IGrupoService;
 import com.activo.fijos.models.services.ISubGrupoService;
@@ -34,7 +28,10 @@ import com.activo.fijos.models.services.ISubGrupoService;
 
 
 //@CrossOrigin(origins = {"http://localhost:4200/"})
-@CrossOrigin(origins = {"http://10.150.10.13/"})
+@CrossOrigin(origins = {
+		"http://10.150.10.13/",
+		"http://localhost:4200/"
+		})
 @RestController
 @RequestMapping("/api/externo")
 public class ExternoRestController {
@@ -366,9 +363,38 @@ public class ExternoRestController {
 		
 		return obj;
 	}
-
-
-
+	
+	/**  PROVEDORES  **/
+	@GetMapping("/getProvedores")
+	public List<Map<String, Object>> getProvedores(){		
+		String sql = "select cod, des, dir, tel from a_prov";
+		List<Map<String, Object>>  ArrayProv = jdbcTemplate.queryForList(sql);		
+		return ArrayProv;
+	}
+	
+	@GetMapping("/getProvedor/{codprovedor}")
+	public Map<String, Object> getProvedor(@PathVariable String codprovedor){
+		
+		String sql = "select *  from a_prov where cod = ?";
+		
+		List<Map<String, Object>>  Arrayobj = jdbcTemplate.queryForList(sql, codprovedor);
+		
+		Map<String, Object> obj = new HashMap();
+				
+		if(Arrayobj.size() > 0) 
+			obj = Arrayobj.get(0);
+		
+		return obj;
+	}
+	
+	/**  END PROVEDORES  **/
+	
+	@GetMapping("/getProvedoresTodo")
+	public List<Map<String, Object>> getProvedoresTodo(){		
+		String sql = "select cod, des, dir, tel, fax, email from a_prov";
+		List<Map<String, Object>>  ArrayProv = jdbcTemplate.queryForList(sql);		
+		return ArrayProv;
+	}
 	
 	
 	private String sacaIdGenerico(int tipo /*tipo de que tabla es*/) {

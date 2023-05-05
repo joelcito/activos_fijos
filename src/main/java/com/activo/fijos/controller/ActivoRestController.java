@@ -35,7 +35,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 //import com.fasterxml.jackson.databind.JsonMappingException;
 
 //@CrossOrigin(origins = {"http://localhost:4200/"})
-@CrossOrigin(origins = {"http://10.150.10.13/"})
+@CrossOrigin(origins = {
+		"http://10.150.10.13/",
+		"http://localhost:4200/"
+		})
 @RestController
 @RequestMapping("/api/activo")
 public class ActivoRestController {
@@ -69,14 +72,16 @@ public class ActivoRestController {
 		
 		Regional regional = activo.getRegional();
 		String idregional = regional.getIdregional();
-		
+			
 		String ultimoRegistroID = this.activoService.maxIdActivo(idregional);
+		
+		String idString = "";
 		
 		if(ultimoRegistroID != null) {
 			String[] partes =  ultimoRegistroID.split("-");
 			
 			int idNew = Integer.parseInt(partes[1])+1;
-			String idString = idNew+"";
+			idString = idNew+"";
 			
 			if(idString.length() == 1)
 				idString = idregional+"-000000"+idString;
@@ -90,14 +95,16 @@ public class ActivoRestController {
 				idString = idregional+"-00"+idString;
 			else if(idString.length() == 6)
 				idString = idregional+"-0"+idString;
-						
-			activo.setIdactivo(idString);
-			activo.setEstadoregistro("APR");
-			activo.setFecha(new Date());
-			activo.setFechacreacion(new Date());
 			
-			System.out.println(idString);
+		}else {
+			idString = idregional+"-0000001";
 		}
+		
+		activo.setIdactivo(idString);
+		activo.setNuevocodigo("COS-"+idString);
+		activo.setEstadoregistro("APR");
+		activo.setFecha(new Date());
+		activo.setFechacreacion(new Date());
 				
 		return activoService.save(activo);
 		
@@ -279,13 +286,17 @@ public class ActivoRestController {
 	
 	@PostMapping("/buscaActivo")
 	public List<Map<String, Object>> buscaActivo(@RequestBody String json) {
-				
+		
+		
 		ObjectMapper objectMapper = new ObjectMapper();
 		
 		List<Map<String, Object>> datos = new ArrayList<>();
 		
 		try {	
 			Map<String, Object> jsonMap = objectMapper.readValue(json, Map.class);
+			
+			System.out.println("V1 => "+jsonMap.get("variable1"));
+			System.out.println("V2 => "+jsonMap.get("variable2"));			
 			
 			if(!jsonMap.get("variable1").toString().equals(""))		
 				datos = this.activoService.buscaActivo(jsonMap.get("variable1").toString());
