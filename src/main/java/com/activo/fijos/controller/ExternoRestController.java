@@ -111,8 +111,17 @@ public class ExternoRestController {
 					+ "subgrupo_id ,"
 					+ "tipotransaccion_id ,"
 					+ "ubicacionespecifica_id ,"
-					+ "unidadmanejo_id"
-					+ ") VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+					+ "unidadmanejo_id ,"
+					+ "codprovedor ,"
+					+ "factura ,"
+					+ "nuevocodigo ,"
+					+ "depacumulada ,"
+					+ "fechafin ,"
+					+ "fechaini ,"
+					+ "valactualizado ,"
+					+ "valpresente ,"
+					+ "vidautilres "
+					+ ") VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"; //35
 
 					String idactivo 		= (act.get("cod") != null) ? act.get("cod").toString().trim() : null;
 					String codigo 			= (act.get("cod1") != null) ? act.get("cod1").toString().trim() : null;
@@ -158,8 +167,17 @@ public class ExternoRestController {
 							subgrupo_id,	  			//subgrupo_id
 							null,  						//tipotransaccion_id
 							null,  						//ubicacionespecifica_id
-							unidadmanejo_id  			//unidadmanejo_id
-							);
+							unidadmanejo_id,  			//unidadmanejo_id
+							null,						//codprovedor
+							null,						//factura
+							null,						//nuevocodigo
+							act.get("depacumulada"),	//depacumulada
+							act.get("fecha2"),			//fechafin
+							act.get("fecha1"),			//fechaini
+							act.get("valactualizado"),  //valactualizado
+							act.get("valpresente"),		//valpresente
+							act.get("vidautilr")		//vidautilres
+							);//35
 			
 			
 			

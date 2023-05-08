@@ -110,6 +110,24 @@ public class Activo implements Serializable{
 	private Date fechacreacion;
 	//@Column(name="fechamodificacion")
 	private Date fechamodificacion;
+	
+	@Column(columnDefinition = "DATE")
+	private Date fechaini;
+	
+	@Column(columnDefinition = "DATE")
+	private Date fechafin;
+	
+	@Column(columnDefinition = "Decimal(12,3)")
+	private float valpresente;
+	
+	@Column(columnDefinition = "Decimal(12,3)")
+	private float valactualizado;
+	
+	@Column(columnDefinition = "Decimal(12,3)")
+	private float depacumulada;
+	
+	@Column(columnDefinition = "Decimal(12,3)")
+	private float vidautilres;
 			
 	public String getIdactivo() {
 		return idactivo;
