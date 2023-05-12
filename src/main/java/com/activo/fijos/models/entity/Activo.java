@@ -70,6 +70,8 @@ public class Activo implements Serializable{
 	
 	private String factura;
 	
+	private String estadoVigencia;
+	
 	//@Column(name="placa")
 	private String placa;
 	@Column(columnDefinition = "DATE")
@@ -441,6 +443,64 @@ public class Activo implements Serializable{
 	public void setNuevocodigo(String nuevocodigo) {
 		this.nuevocodigo = nuevocodigo;
 	}
+	
+	public String getEstadoVigencia() {
+		return estadoVigencia;
+	}
+
+	public void setEstadoVigencia(String estadoVigencia) {
+		this.estadoVigencia = estadoVigencia;
+	}
+
+	public Date getFechaini() {
+		return fechaini;
+	}
+
+	public void setFechaini(Date fechaini) {
+		this.fechaini = fechaini;
+	}
+
+	public Date getFechafin() {
+		return fechafin;
+	}
+
+	public void setFechafin(Date fechafin) {
+		this.fechafin = fechafin;
+	}
+
+	public float getValpresente() {
+		return valpresente;
+	}
+
+	public void setValpresente(float valpresente) {
+		this.valpresente = valpresente;
+	}
+
+	public float getValactualizado() {
+		return valactualizado;
+	}
+
+	public void setValactualizado(float valactualizado) {
+		this.valactualizado = valactualizado;
+	}
+
+	public float getDepacumulada() {
+		return depacumulada;
+	}
+
+	public void setDepacumulada(float depacumulada) {
+		this.depacumulada = depacumulada;
+	}
+
+	public float getVidautilres() {
+		return vidautilres;
+	}
+
+	public void setVidautilres(float vidautilres) {
+		this.vidautilres = vidautilres;
+	}
+
+
 
 
 

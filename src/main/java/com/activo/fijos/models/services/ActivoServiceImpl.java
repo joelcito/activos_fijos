@@ -76,6 +76,12 @@ public class ActivoServiceImpl implements IActivoService{
 		return this.activoDao.maxIdActivo(idregional);
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public List<Map<String, Object>> buscaActivoEstadoVigencia(String estado) {
+		return this.activoDao.buscaActivoEstadoVigencia(estado);
+	}
+
 	
 	/*
 	@Override

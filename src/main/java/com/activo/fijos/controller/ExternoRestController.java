@@ -1,5 +1,6 @@
 package com.activo.fijos.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.activo.fijos.models.services.IActivoService;
 import com.activo.fijos.models.services.IGrupoService;
 import com.activo.fijos.models.services.ISubGrupoService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 //import org.springframework.security.authentication.AuthenticationManager;
 //import com.example.security.JwtTokenUtil;
@@ -69,7 +72,7 @@ public class ExternoRestController {
 		//return usuarios;
 	}
 	
-	
+	// ******************* MIGRACIONES *******************
 	@GetMapping("/migrationItemActivo")
 	public void migracionActivo() {
 		
@@ -120,8 +123,9 @@ public class ExternoRestController {
 					+ "fechaini ,"
 					+ "valactualizado ,"
 					+ "valpresente ,"
-					+ "vidautilres "
-					+ ") VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"; //35
+					+ "vidautilres ,"
+					+ "estado_vigencia "
+					+ ") VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"; //36
 
 					String idactivo 		= (act.get("cod") != null) ? act.get("cod").toString().trim() : null;
 					String codigo 			= (act.get("cod1") != null) ? act.get("cod1").toString().trim() : null;
@@ -139,8 +143,19 @@ public class ExternoRestController {
 					String regional_id 		= (act.get("codregion") != null) ? act.get("codregion").toString().trim() : null;
 					String unidadmanejo_id	= (act.get("codumanejo") != null) ? act.get("codumanejo").toString().trim() : null;
 
-
-
+					Map<String, Object> ulMov = getUltimoMovActivo(idactivo);
+					String estado_vigencia = "";
+					
+					if(!ulMov.isEmpty()){
+						if(ulMov.get("estado") != null)
+							estado_vigencia = ulMov.get("estado").toString().trim();
+						else
+							estado_vigencia = null;
+					}
+					else{
+						estado_vigencia = null;
+					}
+						 
 					jdbcTemplate.update(sql,
 							idactivo,   				//idactivo
 							codigo,   					//codigo
@@ -176,9 +191,15 @@ public class ExternoRestController {
 							act.get("fecha1"),			//fechaini
 							act.get("valactualizado"),  //valactualizado
 							act.get("valpresente"),		//valpresente
-							act.get("vidautilr")		//vidautilres
-							);//35
+							act.get("vidautilr"),		//vidautilres
+							estado_vigencia				//estado_vigencia
+							);//36
 			
+
+
+
+
+
 			
 			
 			/*
@@ -217,16 +238,44 @@ public class ExternoRestController {
 			this.activoService.save(activoNew);
 			*/
 			contador++;
-			/*
-			if(contador > 10000) {
-				break;	
-			}
-			*/
 			
+			// if(contador > 5) 
+			// 	break;	
 		
 		}
 		
 		
+	}
+
+	@GetMapping("/migracionActivoMov")
+	public void migracionActivoMov() {
+		
+		List<Map<String, Object>> activos = jdbcTemplate.queryForList("SELECT cod FROM af_itemmov GROUP BY cod");
+		
+		// System.out.println(activos.size());
+		int contador = 0;		
+		
+		for (Map<String, Object> act : activos) {
+
+			System.out.println("-------- < "+contador+" > NUEVO ACTIVO --------");
+
+
+			List<Map<String, Object>> movActivo = jdbcTemplate.queryForList("SELECT * FROM af_itemmov WHERE cod = ? ORDER BY fecha ASC", act.get("cod"));
+			// List<Map<String, Object>> movActivo = jdbcTemplate.queryForList("SELECT * FROM af_itemmov WHERE cod = '10-0003325' ORDER BY fecha ASC");
+			int connuevoMov = 10000;
+
+			for(Map<String, Object> actMov : movActivo){
+				System.out.println(actMov.get("cod")+" <--> "+connuevoMov);
+				String sqlModMov = "UPDATE af_itemmov SET dr2 = ? WHERE cod = ? AND dr = ? AND fecha = ?";
+				jdbcTemplate.update(sqlModMov, connuevoMov, actMov.get("cod"), actMov.get("dr"), actMov.get("fecha"));
+				connuevoMov = connuevoMov + 10000;
+			}
+
+			// if(contador > 5)
+			// 	break;
+				
+			contador++;
+		}
 	}
 		
 	@GetMapping("/migrationItemGrupo")
@@ -275,16 +324,13 @@ public class ExternoRestController {
 		
 		
 	}
-	
 		
 	@GetMapping("/migrationSubGrupo")
 	public void migrationSubGrupos() {
 		
 		List<Map<String, Object>> subgrupos = jdbcTemplate.queryForList("SELECT * FROM af_subgrupo");
 		
-		//System.out.println(grupos.size());
 		int contador = 0;		
-		
 		
 		for (Map<String, Object> subGrupo : subgrupos) {
 			
@@ -293,55 +339,16 @@ public class ExternoRestController {
 			String sql = "INSERT INTO afw_subgrupo (idsubgrupo, cod, descripcion, grupo_id) VALUES(?,?,?,?)";
 		    jdbcTemplate.update(sql, (subGrupo.get("codgrupo").toString().trim()+subGrupo.get("cod").toString().trim()),subGrupo.get("cod").toString().trim(), subGrupo.get("des").toString(), subGrupo.get("codgrupo").toString().trim());
 			
-			/*
-			 * 
-			 
-						
-			SubGrupo subGrupoNew = new SubGrupo();
-			
-			subGrupoNew.setIdsubgrupo(subGrupo.get("cod").toString().trim());
-			subGrupoNew.setCodanterior(subGrupo.get("cod").toString());
-			subGrupoNew.setDescripcion(subGrupo.get("des").toString());	
-						
-			String sql = "SELECT * FROM afw_grupo WHERE codanterior = ?";
-			List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql, subGrupo.get("codgrupo"));
-			
-			//System.out.println(rows.size()+"|"+subGrupo.get("cod"));
-			
-			if(rows.size() > 0) {				
-				Grupo grupoNew = this.grupoService.findById(rows.get(0).get("idgrupo").toString());
-				subGrupoNew.setGrupo(grupoNew);
-			}
-			
-			this.subGrupoService.save(subGrupoNew);
-					
-					
-			* */
 			contador++;
-			
-			/*
-			if(contador > 100) {
-				break;	
-			}
-			*/
-			
-			
-		
 		}
 		
 	}
+	// ******************* END MIGRACIONES *******************
+
 	
+	// ******************* CUENTAS *******************
 	@GetMapping("getCuentaPartidaByIdGrupo/{idgrupo}")
 	public Map<String, Object> getCuentaPartidaByIdGrupo(@PathVariable String idgrupo) {
-		/*
-		String sql = "select * "
-					+ "from af_grupo afg inner join e1 e "
-					+ "on afg.codcuenta = e.cod inner join e1 par	"
-					+ "on par.cod = e.cod1 "
-					+ "WHERE afg.cod = ?";
-		
-		*/
-		
 		
 		String sql = "select afw.cuenta_id, e.des as des1, e.cod1, pa.des as des2, afw.idgrupo"
 						+ " from afw_grupo afw inner join e1 e"
@@ -381,8 +388,10 @@ public class ExternoRestController {
 		
 		return obj;
 	}
+	// ******************* END CUENTAS *******************
+
 	
-	/**  PROVEDORES  **/
+	// ******************* PROVEDORES *******************
 	@GetMapping("/getProvedores")
 	public List<Map<String, Object>> getProvedores(){		
 		String sql = "select cod, des, dir, tel from a_prov";
@@ -404,17 +413,285 @@ public class ExternoRestController {
 		
 		return obj;
 	}
-	
-	/**  END PROVEDORES  **/
-	
+
 	@GetMapping("/getProvedoresTodo")
 	public List<Map<String, Object>> getProvedoresTodo(){		
 		String sql = "select cod, des, dir, tel, fax, email from a_prov";
 		List<Map<String, Object>>  ArrayProv = jdbcTemplate.queryForList(sql);		
 		return ArrayProv;
 	}
+	// ******************* END PROVEDORES *******************
 	
 	
+	// ******************* MOVIMIENTOS *******************
+	@GetMapping("/listaMovimientosActivoById/{idactivo}")
+	public List<Map<String, Object>> listaMovimientosActivoById(@PathVariable String idactivo){
+		
+		String sql = "SELECT afm.fecha, p.des, p.des1, p.des2, ubi.des as ubiAct, ubig.des as ubicG, afm.estado "
+					+ "FROM af_itemmov afm INNER JOIN persona p "
+					+ "ON afm.ci = p.ci INNER JOIN af_ubicesp ubi "
+					+ "ON afm.codubic = ubi.cod INNER JOIN af_ubicgral ubig "
+					+ "ON ubi.codubicgral = ubig.codubicgral "
+					+ "WHERE afm.cod = ? AND ubi.codregion = ubig.codregion "
+					+ "ORDER BY afm.dr DESC";
+		List<Map<String, Object>>  ArrayProv = jdbcTemplate.queryForList(sql, idactivo);		
+		return ArrayProv;
+		
+	}
+	
+	@GetMapping("/getUltimoMovActivo/{idactivo}")
+	public Map<String, Object> getUltimoMovActivo(@PathVariable String idactivo){
+		
+		String sql = "SELECT *  "
+					+ "FROM af_itemmov afm "
+					+ "WHERE afm.cod = ? "
+					+ "ORDER BY afm.dr DESC ";
+		
+		List<Map<String, Object>>  ArrayProv = jdbcTemplate.queryForList(sql, idactivo);	
+		
+		Map<String, Object> obj = new HashMap();
+		
+		if(ArrayProv.size() > 0) 
+			obj = ArrayProv.get(0);
+		
+		return obj;
+	}
+
+	@PostMapping("/guardaLiberacionActivo")
+	public Map<String, Object> guardaLiberacionActivo(@RequestBody String json) {
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		Map<String, Object> obj = new HashMap();
+		
+		try {	
+			Map<String, Object> jsonMap = objectMapper.readValue(json, Map.class);
+			
+			/*
+			System.out.println("==========");
+			System.out.println(jsonMap);
+			System.out.println("==========");
+		
+			System.out.println("fecha		 => "+jsonMap.get("fecha"));
+			System.out.println("cargo		 => "+jsonMap.get("cargo"));	
+			System.out.println("reparticion	 => "+jsonMap.get("reparticion"));
+			System.out.println("ubicacion	 => "+jsonMap.get("ubicacion"));
+			System.out.println("descgeneral	 => "+jsonMap.get("descgeneral"));
+			System.out.println("destino		 => "+jsonMap.get("destino"));
+			System.out.println("observacion	 => "+jsonMap.get("observacion"));
+			System.out.println("nombre		 => "+jsonMap.get("nombre"));
+			System.out.println("cedula		 => "+jsonMap.get("cedula"));
+			System.out.println("activo		 => "+jsonMap.get("activo"));
+			System.out.println("ultimoMov	 => "+jsonMap.get("ultimoMov"));
+			*/
+		
+			// PARA EL JSON DE ULTIMO ACTIVO
+			Map<String, Object> jsonUltMov = objectMapper.readValue(jsonMap.get("ultimoMov").toString(), Map.class);
+			System.out.println("V2 => "+jsonUltMov.get("dr"));
+			
+			String sql = "INSERT INTO af_itemmov ( "
+						+"cod ,"
+						+"dr ,"
+			            +"fecha ,"
+			            +"codcargoresp ,"
+			            +"codrepart ,"
+			            +"codubic ,"
+			            +"refe1 ,"
+			            +"refe2 ,"
+			            +"refe3 ,"
+			            +"refe4 ,"
+			            +"codant ,"
+			            +"codnue ,"
+			            +"plaant ,"
+			            +"planue ,"
+			            +"i1 ,"
+			            +"i2 ,"
+			            +"i3 ,"
+			            +"i4 ,"
+			            +"usuarioi ,"
+			            +"fechai ,"
+			            +"usuariou ,"
+			            +"fechau ,"
+			            +"registro ,"
+			            +"estado ,"
+			            +"ci ,"
+			            +"refe1a ,"
+			            +"tipotr ,"
+			            +"codregori ,"
+			            +"codregdes ,"
+			            +"dr1 ,"
+			            +"dr2 "
+					+ ") VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"; //31
+
+					String cod 			= jsonMap.get("activo").toString();
+					int dr 				= Integer.parseInt(jsonUltMov.get("dr").toString()) + 10000;
+					String codcargoresp = jsonMap.get("cargo").toString(); 
+					String codrepart 	= "";
+					String codubic 		= jsonMap.get("ubicacion").toString();
+					String refe1 		= jsonMap.get("descgeneral").toString();
+					String refe2 		= jsonMap.get("nombre").toString();
+					String refe3 		= jsonMap.get("destino").toString();
+					String refe4 		= jsonMap.get("observacion").toString();
+					String codant 		= null;
+					String codnue 		= null;
+					String plaant 		= null;
+					String planue 		= null;
+					String i1 			= "";
+					String i2 			= "";
+					String i3 			= "";
+					String i4 			= "";
+					String usuarioi 	= null;
+					String fechai 		= null;
+					String usuariou 	= null;
+					String fechau 		= null;
+					String registro 	= jsonMap.get("estadoregistro").toString();
+					String estado 		= "";
+
+					if(jsonMap.get("tipo").toString().equals("ASI")){
+						obj.put("mensaje", "asignó");
+						estado 		= "1";
+					}
+					else{
+						obj.put("mensaje", "liberó");
+						estado 		= "0";
+					}
+
+					String ci 			= jsonMap.get("cedula").toString();
+					String refe1a 		= null;
+					String tipotr 		= null;
+					String codregori 	= null;
+					String codregdes 	= null;
+					String dr1 			= null;
+					String dr2 			= null;
+
+
+					/*
+					System.out.println(cod);
+					System.out.println(dr);
+					System.out.println(codcargoresp);
+					System.out.println(codrepart);
+					System.out.println(codubic);
+					System.out.println(refe1);
+					System.out.println(refe2);
+					System.out.println(refe3);
+					System.out.println(refe4);
+					System.out.println(codant);
+					System.out.println(codnue);
+					System.out.println(plaant);
+					System.out.println(planue);
+					System.out.println(i1);
+					System.out.println(i2);
+					System.out.println(i3);
+					System.out.println(i4);
+					System.out.println(usuarioi);
+					System.out.println(fechai);
+					System.out.println(usuariou);
+					System.out.println(fechau);
+					System.out.println(registro);
+					System.out.println(estado);
+					System.out.println(ci);
+					System.out.println(refe1a);
+					System.out.println(tipotr);
+					System.out.println(codregori);
+					System.out.println(codregdes);
+					System.out.println(dr1);
+					System.out.println(dr2);
+					*/
+
+
+					jdbcTemplate.update(sql,
+										cod,         	// cod
+							            dr,         	// dr
+							            new Date(),		// fecha
+							            codcargoresp, 	// codcargoresp
+							            codrepart, 	    // codrepart
+							            codubic, 	    // codubic
+							            refe1, 	       	// refe1
+							            refe2, 	       	// refe2
+							            refe3, 	       	// refe3
+							            refe4, 	       	// refe4
+							            codant, 	    // codant
+							            codnue, 	    // codnue
+							            plaant, 	    // plaant
+							            planue, 	    // planue
+							            i1, 	       	// i1
+							            i2, 	       	// i2
+							            i3, 	       	// i3
+							            i4, 	       	// i4
+							            usuarioi, 	    // usuarioi
+							            fechai, 	    // fechai
+							            usuariou, 	    // usuariou
+							            fechau, 	    // fechau
+							            registro, 	    // registro
+							            estado, 	    // estado
+							            ci, 	       	// ci
+							            refe1a, 	    // refe1a
+							            tipotr, 	    // tipotr
+							            codregori, 	    // codregori
+							            codregdes, 	    // codregdes
+							            dr1, 	       	// dr1
+							            dr2  	       	// dr2
+										);//31	
+			obj.put("estado", "success");
+			obj.put("cod", cod);
+			
+		} catch (JsonProcessingException e) {
+		    // Handle the exception
+		    e.printStackTrace();
+			obj.put("estado", "error");
+		}
+		
+		return obj;
+		
+	}
+	// ******************* END MOVIMIENTOS *******************
+
+	
+	// ******************* CARGOS *******************
+	@GetMapping("/getCargos")
+	public List<Map<String, Object>> getCargos(){		
+		String sql = "select * from p_cargos ORDER BY cod";
+		List<Map<String, Object>>  ArrayProv = jdbcTemplate.queryForList(sql);		
+		return ArrayProv;
+	}
+	// ******************* END CARGOS *******************
+	
+
+	// ******************* UBICACION ESPECIFICA *******************
+	@GetMapping("/getUbiEsp")
+	public List<Map<String, Object>> getUbiEsp(){		
+		String sql = "select * from af_ubicesp ORDER BY cod";
+		List<Map<String, Object>>  ArrayProv = jdbcTemplate.queryForList(sql);		
+		return ArrayProv;
+	}
+	// ******************* END UBICACION ESPECIFICA *******************
+
+
+	// ******************* PERSONAS *******************
+	@GetMapping("/getPersonaByCi/{cipersona}")
+	public Map<String, Object> getPersonaByCi(@PathVariable String cipersona){		
+		String sql = "select * from persona WHERE ci = ?";
+		List<Map<String, Object>>  ArrayProv = jdbcTemplate.queryForList(sql, cipersona);		
+		
+		Map<String, Object> obj = new HashMap();
+		
+		if(ArrayProv.size() > 0) 
+			obj = ArrayProv.get(0);
+		
+		return obj;
+	}
+	// ******************* END PERSONAS *******************
+
+		// ******************* REPARTICIONES *******************
+	@GetMapping("/getReparticiones")
+	public List<Map<String, Object>> getReparticiones(){		
+		String sql = "SELECT cod, des FROM e2 WHERE tipo = 'RPT'";
+		List<Map<String, Object>>  ArrayProv = jdbcTemplate.queryForList(sql);		
+		return ArrayProv;
+	}
+	// ******************* END REPARTICIONES *******************
+
+
 	private String sacaIdGenerico(int tipo /*tipo de que tabla es*/) {
 		
 		String max = null;
@@ -435,6 +712,7 @@ public class ExternoRestController {
 			id = Integer.parseInt(max) + 1;
 		
 		return id+"";
+
 	}
 	
 }

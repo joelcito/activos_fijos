@@ -296,13 +296,16 @@ public class ActivoRestController {
 			Map<String, Object> jsonMap = objectMapper.readValue(json, Map.class);
 			
 			System.out.println("V1 => "+jsonMap.get("variable1"));
-			System.out.println("V2 => "+jsonMap.get("variable2"));			
+			System.out.println("V2 => "+jsonMap.get("variable2"));	
+			System.out.println("V2 => "+jsonMap.get("variable3"));			
 			
 			if(!jsonMap.get("variable1").toString().equals(""))		
 				datos = this.activoService.buscaActivo(jsonMap.get("variable1").toString());
 			else if(!jsonMap.get("variable2").toString().equals(""))
 				datos = this.activoService.buscaActivoDescripcion(jsonMap.get("variable2").toString());
-			else if(jsonMap.get("variable2").toString().equals("") && jsonMap.get("variable2").toString().equals(""))
+			else if(!jsonMap.get("variable3").toString().equals(""))
+				datos = this.activoService.buscaActivoEstadoVigencia(jsonMap.get("variable3").toString());
+			else if(jsonMap.get("variable2").toString().equals("") && jsonMap.get("variable2").toString().equals("") && jsonMap.get("variable3").toString().equals(""))
 				datos = this.activoService.listaActivosPer();
 			
 		} catch (JsonProcessingException e) {
