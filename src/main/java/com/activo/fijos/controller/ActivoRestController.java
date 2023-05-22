@@ -105,6 +105,7 @@ public class ActivoRestController {
 		activo.setEstadoregistro("APR");
 		activo.setFecha(new Date());
 		activo.setFechacreacion(new Date());
+		// activo.setEstadoVigencia("0");
 				
 		return activoService.save(activo);
 		

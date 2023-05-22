@@ -90,6 +90,8 @@ public class Activo implements Serializable{
 	//@Column(name="estado")
 	private String estado;
 	
+	private Long estadoactivo;
+	
 	@Column(columnDefinition = "DATE")
 	private Date fechacompra;
 	

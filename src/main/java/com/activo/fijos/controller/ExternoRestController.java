@@ -124,8 +124,9 @@ public class ExternoRestController {
 					+ "valactualizado ,"
 					+ "valpresente ,"
 					+ "vidautilres ,"
-					+ "estado_vigencia "
-					+ ") VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"; //36
+					+ "estado_vigencia ,"
+					+ "estadoactivo "
+					+ ") VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"; //37
 
 					String idactivo 		= (act.get("cod") != null) ? act.get("cod").toString().trim() : null;
 					String codigo 			= (act.get("cod1") != null) ? act.get("cod1").toString().trim() : null;
@@ -136,6 +137,7 @@ public class ExternoRestController {
 					String estado 			= (act.get("estado") != null) ? act.get("estado").toString().trim() : null;
 					String estadoregistro 	= (act.get("registro") != null) ? act.get("registro").toString().trim() : null;
 					String formainicial 	= (act.get("num1") != null) ? act.get("num1").toString().trim() : null;
+					String estadoactivo 	= (act.get("num2") != null) ? act.get("num2").toString().trim() : null;
 					String precio 			= (act.get("valcomprabs") != null) ? act.get("valcomprabs").toString().trim() : null;
 					String vida_util 		= (act.get("vidautil") != null) ? act.get("vidautil").toString().trim() : null;
 					String grupo_id 		= (act.get("codgrupo") != null) ? act.get("codgrupo").toString().trim() : null;
@@ -192,7 +194,8 @@ public class ExternoRestController {
 							act.get("valactualizado"),  //valactualizado
 							act.get("valpresente"),		//valpresente
 							act.get("vidautilr"),		//vidautilres
-							estado_vigencia				//estado_vigencia
+							estado_vigencia,			//estado_vigencia
+							estadoactivo				//estadoactivo
 							);//36
 			
 
@@ -419,6 +422,30 @@ public class ExternoRestController {
 		String sql = "select cod, des, dir, tel, fax, email from a_prov";
 		List<Map<String, Object>>  ArrayProv = jdbcTemplate.queryForList(sql);		
 		return ArrayProv;
+	}
+
+	@PostMapping("/guardarProvedor")
+	public Map<String, Object> guardarProvedor(@RequestBody String json){
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		Map<String, Object> obj = new HashMap();
+
+		
+		try {	
+			Map<String, Object> jsonMap = objectMapper.readValue(json, Map.class);+
+			
+			System.out.println("fecha		 => "+jsonMap.get("fecha"));
+			System.out.println("cargo		 => "+jsonMap.get("cargo"));	
+			
+		} catch (JsonProcessingException e) {
+		    // Handle the exception
+		    e.printStackTrace();
+			obj.put("estado", "error");
+		}
+		
+		return obj;
+
 	}
 	// ******************* END PROVEDORES *******************
 	
@@ -682,7 +709,7 @@ public class ExternoRestController {
 	}
 	// ******************* END PERSONAS *******************
 
-		// ******************* REPARTICIONES *******************
+	// ******************* REPARTICIONES *******************
 	@GetMapping("/getReparticiones")
 	public List<Map<String, Object>> getReparticiones(){		
 		String sql = "SELECT cod, des FROM e2 WHERE tipo = 'RPT'";
@@ -690,6 +717,60 @@ public class ExternoRestController {
 		return ArrayProv;
 	}
 	// ******************* END REPARTICIONES *******************
+
+
+
+
+	// ******************* REFACCIONES *******************
+	@PostMapping("/guardaRefaccion")
+	public Map<String, Object> guardaRefaccion(@RequestBody String json){
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		Map<String, Object> obj = new HashMap();
+		
+		try {	
+			Map<String, Object> jsonMap = objectMapper.readValue(json, Map.class);
+
+			if(jsonMap.get("activo") != null && jsonMap.get("descripcion") != null){
+
+				String sql = "INSERT INTO afw_refaccion ( "
+													+ "codactivo ,"
+													+ "descripcion ,"
+													+ "fecha ,"
+													+ "fechacreacion ,"
+													+ "fechamodificacion "
+													+ ") VALUES(?,?,?,?,?)"; //5
+				String codactivo		= jsonMap.get("activo").toString().trim();
+				String descripcion		= jsonMap.get("descripcion").toString().trim();
+																	
+				jdbcTemplate.update(sql,
+									codactivo,   	//	codactivo
+									descripcion, 	//	descripcion
+									new Date(),  	//	fecha
+									new Date(),  	//	fechacreacion
+									null  			//	fechamodificacion
+									);//5
+			}
+
+			obj = jsonMap;
+
+			obj.put("estado", "success");
+			
+		} catch (JsonProcessingException e) {
+		    // Handle the exception
+		    e.printStackTrace();
+			obj.put("estado", "error");
+		}
+		return obj;
+	}
+
+	@GetMapping("getRefaccionesByIdActivo/{codactivo}")
+	public List<Map<String, Object>> getRefaccionesByIdActivo(@PathVariable String codactivo){
+		String sql = "SELECT * FROM afw_refaccion WHERE codactivo = ? ORDER BY fechacreacion DESC";
+		List<Map<String, Object>>  ArrayProv = jdbcTemplate.queryForList(sql, codactivo);		
+		return ArrayProv;
+	}
+	// ******************* END REFACCIONES *******************
 
 
 	private String sacaIdGenerico(int tipo /*tipo de que tabla es*/) {
