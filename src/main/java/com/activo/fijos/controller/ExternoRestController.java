@@ -433,8 +433,8 @@ public class ExternoRestController {
 
 		
 		try {	
-			Map<String, Object> jsonMap = objectMapper.readValue(json, Map.class);+
-			
+			Map<String, Object> jsonMap = objectMapper.readValue(json, Map.class);
+
 			System.out.println("fecha		 => "+jsonMap.get("fecha"));
 			System.out.println("cargo		 => "+jsonMap.get("cargo"));	
 			
