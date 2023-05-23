@@ -20,7 +20,7 @@ public interface IActivoDao extends CrudRepository<Activo, String> {
 	@Query(value="select idactivo from afw_activo", nativeQuery=true)
 	public List<Activo> listaActivos();
 		
-	@Query(value="SELECT TOP 1000 af.idactivo, af.codigo, af.estado, af.fechacompra, af.descripcion, re.nombre, af.estado_vigencia FROM afw_activo af INNER JOIN afw_regional re ON af.regional_id = re.idregional ORDER BY af.fechacreacion DESC", nativeQuery=true)
+	@Query(value="SELECT TOP 1000 af.idactivo, af.codigo, af.estado, af.fechacompra, af.descripcion, re.nombre, af.estado_vigencia, pn.cod FROM afw_activo af INNER JOIN afw_regional re ON af.regional_id = re.idregional INNER JOIN parnum pn ON pn.cod = af.estadoactivo and pn.atributo = 'NUM2' ORDER BY af.fechacreacion DESC", nativeQuery=true)
 	//@Query(value="SELECT idactivo, descripcion, precio FROM afw_activo", nativeQuery=true)
 	public List<Map<String, Object>> listaActivosPer();
 		
