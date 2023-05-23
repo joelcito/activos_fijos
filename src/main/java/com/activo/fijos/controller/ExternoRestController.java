@@ -137,14 +137,24 @@ public class ExternoRestController {
 					String estado 			= (act.get("estado") != null) ? act.get("estado").toString().trim() : null;
 					String estadoregistro 	= (act.get("registro") != null) ? act.get("registro").toString().trim() : null;
 					String formainicial 	= (act.get("num1") != null) ? act.get("num1").toString().trim() : null;
-					String estadoactivo 	= (act.get("num2") != null) ? act.get("num2").toString().trim() : null;
+
+					Integer estadoactivo;
+
+					if(act.get("num2") != null){
+						 estadoactivo 	= (int) Double.parseDouble(act.get("num2").toString());
+						//estadoactivo = null;
+					}else{
+						estadoactivo = null;
+					}
+
 					String precio 			= (act.get("valcomprabs") != null) ? act.get("valcomprabs").toString().trim() : null;
 					String vida_util 		= (act.get("vidautil") != null) ? act.get("vidautil").toString().trim() : null;
 					String grupo_id 		= (act.get("codgrupo") != null) ? act.get("codgrupo").toString().trim() : null;
 					String regimen_id 		= (act.get("refe2") != null) ? act.get("refe2").toString().trim() : null;
 					String regional_id 		= (act.get("codregion") != null) ? act.get("codregion").toString().trim() : null;
 					String unidadmanejo_id	= (act.get("codumanejo") != null) ? act.get("codumanejo").toString().trim() : null;
-
+					
+					
 					Map<String, Object> ulMov = getUltimoMovActivo(idactivo);
 					String estado_vigencia = "";
 					
