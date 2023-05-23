@@ -32,6 +32,8 @@ import com.activo.fijos.models.services.IUfvService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
+
+import org.springframework.jdbc.core.JdbcTemplate;
 //import com.fasterxml.jackson.databind.JsonMappingException;
 
 //@CrossOrigin(origins = {"http://localhost:4200/"})
@@ -43,10 +45,16 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 @RequestMapping("/api/activo")
 public class ActivoRestController {
 	
+	private final JdbcTemplate jdbcTemplate;
+	
 	@Autowired
 	private IActivoService activoService;
 	@Autowired
 	private IUfvService ufvService;
+	
+	public ActivoRestController(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
 	
 	@GetMapping("/listado")
 	public List<Activo> index() {
@@ -298,16 +306,53 @@ public class ActivoRestController {
 			
 			System.out.println("V1 => "+jsonMap.get("variable1"));
 			System.out.println("V2 => "+jsonMap.get("variable2"));	
-			System.out.println("V2 => "+jsonMap.get("variable3"));			
+			System.out.println("V3 => "+jsonMap.get("variable3"));
+			System.out.println("V4 => "+jsonMap.get("variable4"));	
 			
+			String query = "SELECT TOP 1000 af.idactivo, af.codigo, af.estado, af.fechacompra, af.descripcion, re.nombre, af.estado_vigencia, pn.cod FROM afw_activo af INNER JOIN afw_regional re ON af.regional_id = re.idregional LEFT JOIN parnum pn ON pn.cod = af.estadoactivo and pn.atributo = 'NUM2' WHERE 1 = 1";
+			
+			if(!jsonMap.get("variable1").toString().equals("")) {
+				query += " AND af.codigo = '"+jsonMap.get("variable1").toString()+"'";
+			}
+			
+			if(!jsonMap.get("variable2").toString().equals("")) {
+				query += " AND af.descripcion LIKE '%"+jsonMap.get("variable2").toString()+"%'";
+			}
+			
+			if(!jsonMap.get("variable3").toString().equals("")) {
+				if(jsonMap.get("variable3").toString().equals("1")) {
+					query += " AND ( af.estadoactivo = '"+jsonMap.get("variable3").toString()+"' OR af.estadoactivo is null ) ";
+				}else {
+					query += " AND af.estadoactivo = '"+jsonMap.get("variable3").toString()+"' ";
+				}
+			}
+			
+			if(!jsonMap.get("variable4").toString().equals("")) {
+				if(jsonMap.get("variable4").toString().equals("-1")) {
+					query += " AND af.estado_vigencia is null";
+				}else {
+					query += " AND af.estado_vigencia = '"+jsonMap.get("variable4").toString()+"'";
+				}
+			}
+			
+			query += " ORDER BY af.fechacreacion DESC";
+			
+			datos = jdbcTemplate.queryForList(query);
+			
+			System.out.println(query);
+						
+			/*
 			if(!jsonMap.get("variable1").toString().equals(""))		
 				datos = this.activoService.buscaActivo(jsonMap.get("variable1").toString());
 			else if(!jsonMap.get("variable2").toString().equals(""))
 				datos = this.activoService.buscaActivoDescripcion(jsonMap.get("variable2").toString());
+			else if(true) 			
+				System.out.println("s");
 			else if(!jsonMap.get("variable3").toString().equals(""))
 				datos = this.activoService.buscaActivoEstadoVigencia(jsonMap.get("variable3").toString());
 			else if(jsonMap.get("variable2").toString().equals("") && jsonMap.get("variable2").toString().equals("") && jsonMap.get("variable3").toString().equals(""))
 				datos = this.activoService.listaActivosPer();
+			*/
 			
 		} catch (JsonProcessingException e) {
 		    // Handle the exception
