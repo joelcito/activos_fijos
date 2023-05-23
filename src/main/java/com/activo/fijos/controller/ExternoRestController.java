@@ -548,11 +548,11 @@ public class ExternoRestController {
 		try {	
 			Map<String, Object> jsonMap = objectMapper.readValue(json, Map.class);
 			
-			/*
+			
 			System.out.println("==========");
 			System.out.println(jsonMap);
 			System.out.println("==========");
-		
+			/*
 			System.out.println("fecha		 => "+jsonMap.get("fecha"));
 			System.out.println("cargo		 => "+jsonMap.get("cargo"));	
 			System.out.println("reparticion	 => "+jsonMap.get("reparticion"));
@@ -605,9 +605,15 @@ public class ExternoRestController {
 					+ ") VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"; //31
 
 					String cod 			= jsonMap.get("activo").toString();
-					int dr 				= Integer.parseInt(jsonUltMov.get("dr").toString()) + 10000;
+					int dr;
+					if(jsonUltMov.get("dr") != null) {
+						dr 				= Integer.parseInt(jsonUltMov.get("dr").toString()) + 10000;
+					}else {
+						dr = 10000;
+					}
+					//dr 				= Integer.parseInt(jsonUltMov.get("dr").toString()) + 10000;
 					String codcargoresp = jsonMap.get("cargo").toString(); 
-					String codrepart 	= "";
+					String codrepart 	= jsonMap.get("reparticion").toString();
 					String codubic 		= jsonMap.get("ubicacion").toString();
 					String refe1 		= jsonMap.get("descgeneral").toString();
 					String refe2 		= jsonMap.get("nombre").toString();
@@ -679,7 +685,7 @@ public class ExternoRestController {
 					System.out.println(dr2);
 					*/
 
-
+					
 					jdbcTemplate.update(sql,
 										cod,         	// cod
 							            dr,         	// dr
@@ -713,6 +719,14 @@ public class ExternoRestController {
 							            dr1, 	       	// dr1
 							            dr2  	       	// dr2
 										);//31	
+										
+					
+				//cambiamos al activo
+					
+				String sqla = "UPDATE afw_activo SET estado_vigencia = ? WHERE idactivo = ?";
+				jdbcTemplate.update(sqla, estado, cod);
+					
+					
 			obj.put("estado", "success");
 			obj.put("cod", cod);
 			
@@ -825,6 +839,8 @@ public class ExternoRestController {
 		return ArrayProv;
 	}
 	// ******************* END REFACCIONES *******************
+	
+	
 
 
 	private String sacaIdGenerico(int tipo /*tipo de que tabla es*/) {
