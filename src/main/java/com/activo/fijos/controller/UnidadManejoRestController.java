@@ -1,5 +1,6 @@
 package com.activo.fijos.controller;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -33,7 +34,9 @@ public class UnidadManejoRestController {
 	
 	@GetMapping("/listado")
 	public List<UnididadManejo> index() {
-		return this.unidadManejoService.findAll();
+		List<UnididadManejo> unidades = this.unidadManejoService.findAll();
+		unidades.sort(Comparator.comparing(UnididadManejo::getDescripcion));
+		return unidades;
 	}
 	
 	@GetMapping("/{id}")

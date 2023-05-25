@@ -407,7 +407,7 @@ public class ExternoRestController {
 	// ******************* PROVEDORES *******************
 	@GetMapping("/getProvedores")
 	public List<Map<String, Object>> getProvedores(){		
-		String sql = "select cod, des, dir, tel from a_prov";
+		String sql = "select cod, des, dir, tel from a_prov ORDER BY REPLACE(REPLACE(des, ' ', ''), '\"', '')";
 		List<Map<String, Object>>  ArrayProv = jdbcTemplate.queryForList(sql);		
 		return ArrayProv;
 	}
@@ -795,8 +795,6 @@ public class ExternoRestController {
 		return ArrayProv;
 	}
 	// ******************* END REPARTICIONES *******************
-
-
 
 
 	// ******************* REFACCIONES *******************

@@ -1,5 +1,6 @@
 package com.activo.fijos.controller;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -32,8 +33,12 @@ public class GrupoRestController {
 	private IGrupoService grupoService;
 	
 	@GetMapping("/listado")
-	public List<Grupo> index(){
-		return this.grupoService.findAll();
+	public List<Grupo> index(){		
+		List<Grupo> grupos = this.grupoService.findAll();
+		// Ordenar la lista en orden ascendente por una propiedad específica
+	    grupos.sort(Comparator.comparing(Grupo::getDescripcion));
+		return grupos ;
+		//return this.grupoService.findAll();
 	}
 	
 	@GetMapping("/{id}")

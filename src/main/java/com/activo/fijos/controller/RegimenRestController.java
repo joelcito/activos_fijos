@@ -1,5 +1,6 @@
 package com.activo.fijos.controller;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -32,7 +33,9 @@ public class RegimenRestController {
 	
 	@GetMapping("/listado")
 	public List<Regimen> index() {
-		return this.regimenService.findAll();
+		List<Regimen> regimenes = this.regimenService.findAll();
+		regimenes.sort(Comparator.comparing(Regimen::getDescripcion));
+		return regimenes;
 	}
 	
 	@GetMapping("/{id}")

@@ -78,6 +78,8 @@ public class ActivoRestController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public Activo create(@RequestBody Activo activo) {
 		
+		//System.out.println("cod => "+activo.getCodigo());
+		
 		Regional regional = activo.getRegional();
 		String idregional = regional.getIdregional();
 			
@@ -114,31 +116,9 @@ public class ActivoRestController {
 		activo.setFecha(new Date());
 		activo.setFechacreacion(new Date());
 		// activo.setEstadoVigencia("0");
-				
-		return activoService.save(activo);
-		
-		
-		/*
-		
-		//List<Activo> activoUltimo = activoService.getUltimoRegistroActivo();
-		String max = activoService.max();
-		
-		System.out.println(max);
-		int id = 0;
-		if(max==null) {
-			id = 1;
-		}else {
-			id = Integer.parseInt(max) + 1;
-		}
-		System.out.println(id);
-		String nuevoid = id+"";
-		activo.setIdactivo(nuevoid);
-		activo.setEstadoregistro("APR");
-		activo.setFecha(new Date());
-		activo.setFechacreacion(new Date());
-		//return activoService.save(activo);
-		*/
+					
 		//return activo;
+		return activoService.save(activo);
 	}
 	
 	@PutMapping("/{id}")
@@ -360,6 +340,51 @@ public class ActivoRestController {
 		}
 		
 		return datos;
+	}
+	
+	@GetMapping("getActivoMaximoByIdRegional/{idregional}")
+	public Map<String, Object> getActivoMaximoByIdRegional(@PathVariable String idregional) {
+		
+		String sql = "SELECT af.* " +
+			        "FROM afw_activo af " +
+			        "INNER JOIN ( " +
+			        "   SELECT MAX(SUBSTRING(idactivo, 4, LEN(idactivo))) AS maximo " +
+			        "   FROM afw_activo " +
+			        "   WHERE LEFT(idactivo, 2) = ? " +
+			        ") sub ON RIGHT(af.idactivo, (LEN(af.idactivo) - 3)) LIKE CONCAT('%', sub.maximo, '%') " +
+			        "WHERE LEFT(idactivo, 2) = ?";
+		
+		List<Map<String, Object>>  ArrayProv = jdbcTemplate.queryForList(sql, idregional,idregional);		
+		
+		Map<String, Object> obj = new HashMap();
+		int incrementedValue = 1;
+		String formattedValue;
+		
+		if(ArrayProv.size() > 0) {
+			
+			Map<String, Object> aux = new HashMap();
+			aux = ArrayProv.get(0);
+			
+			String codigoactivo = aux.get("codigo").toString();
+			String parts[] = codigoactivo.split("-");  
+			
+			// Increment the value by one
+			incrementedValue = Integer.parseInt(parts[2]) + 1;
+
+			// Format the incremented value with leading zeros
+			formattedValue = String.format("%05d", incrementedValue);
+
+			//System.out.println(formattedValue); // Output: 0007476
+			
+			//System.out.println(aux.get("idactivo"));
+			
+			obj.put("activo", aux);
+			
+		}else {
+			formattedValue = String.format("%07d", incrementedValue);
+		}
+		obj.put("siguiente", formattedValue);
+		return obj;
 	}
 	
 	
