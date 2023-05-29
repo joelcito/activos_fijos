@@ -443,7 +443,7 @@ public class ExternoRestController {
 		
 		try {	
 		 	Map<String, Object> jsonMap = objectMapper.readValue(json, Map.class);
-			String provedor = jsonMap.get("provedor").toString();
+			String provedor 	= jsonMap.get("provedor").toString();
 			String cod			= jsonMap.get("nit").toString();
 			String cod1		 	= ""; 
 			String des		 	= jsonMap.get("nombre").toString(); 
@@ -454,54 +454,63 @@ public class ExternoRestController {
 			String fax		 	= jsonMap.get("fax").toString();
 			String email		= jsonMap.get("email").toString();
 			String casilla		= "";
-
-			if(provedor.equals("0")){
-
-				String sql = "INSERT INTO a_prov ( "
-											+"cod ,"
-											+"cod1 ,"
-											+"des ,"
-											+"estado ,"
-											+"tipo ,"
-											+"dir ,"
-											+"tel ,"
-											+"fax ,"
-											+"email ,"
-											+"casilla "
-										+ ") VALUES(?,?,?,?,?,?,?,?,?,?)"; //31
-
-				jdbcTemplate.update(sql,
-									cod,			//cod        	
-									cod1,			//cod1        	
-									des,			//des	
-									estado,			//estado 	  	
-									tipo,			//tipo 	  	
-									dir,			//dir 	      	
-									tel,			//tel 	      	
-									fax,			//fax 	      	
-									email,			//email 	      	
-									casilla 	  	//casilla
-									);//10
-
-			}else{
-				String sql = "UPDATE a_prov SET "
-											+"des = ?, "
-											+"dir = ?, "
-											+"tel = ?, "
-											+"fax = ?, "
-											+"email = ? "
-											+"WHERE cod = ?";
-				jdbcTemplate.update(sql, 
-									des,	//des
-									dir,	//dir
-									tel,	//tel
-									fax,	//fax
-									email,  //email
-									cod); //cod
-			}
-
-			obj.put("estado", "success");
-			obj.put("cod", cod);
+			
+			//verificamos si ya existe el nit
+			String sqlv = "SELECT * FROM a_prov WHERE cod = ?";
+			List<Map<String, Object>>  ArrayProv = jdbcTemplate.queryForList(sqlv, cod);
+			
+			System.out.println(ArrayProv.size());
+			if(ArrayProv.size() > 0) {
+				obj.put("estado", "error_cod");
+			}else {
+						
+				if(provedor.equals("0")){
+	
+					String sql = "INSERT INTO a_prov ( "
+												+"cod ,"
+												+"cod1 ,"
+												+"des ,"
+												+"estado ,"
+												+"tipo ,"
+												+"dir ,"
+												+"tel ,"
+												+"fax ,"
+												+"email ,"
+												+"casilla "
+											+ ") VALUES(?,?,?,?,?,?,?,?,?,?)"; //31
+	
+					jdbcTemplate.update(sql,
+										cod,			//cod        	
+										cod1,			//cod1        	
+										des,			//des	
+										estado,			//estado 	  	
+										tipo,			//tipo 	  	
+										dir,			//dir 	      	
+										tel,			//tel 	      	
+										fax,			//fax 	      	
+										email,			//email 	      	
+										casilla 	  	//casilla
+										);//10
+	
+				}else{
+					String sql = "UPDATE a_prov SET "
+												+"des = ?, "
+												+"dir = ?, "
+												+"tel = ?, "
+												+"fax = ?, "
+												+"email = ? "
+												+"WHERE cod = ?";
+					jdbcTemplate.update(sql, 
+										des,	//des
+										dir,	//dir
+										tel,	//tel
+										fax,	//fax
+										email,  //email
+										cod); //cod
+				}
+				obj.put("estado", "success");
+				obj.put("cod", cod);
+			}			
 			
 		 } catch (JsonProcessingException e) {
 		     // Handle the exception
