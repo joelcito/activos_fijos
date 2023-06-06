@@ -132,6 +132,8 @@ public class Activo implements Serializable{
 	
 	@Column(columnDefinition = "Decimal(12,3)")
 	private float vidautilres;
+	
+	private Date fechabaja;
 			
 	public String getIdactivo() {
 		return idactivo;
@@ -500,6 +502,22 @@ public class Activo implements Serializable{
 
 	public void setVidautilres(float vidautilres) {
 		this.vidautilres = vidautilres;
+	}
+
+	public Long getEstadoactivo() {
+		return estadoactivo;
+	}
+
+	public void setEstadoactivo(Long estadoactivo) {
+		this.estadoactivo = estadoactivo;
+	}
+
+	public Date getFechabaja() {
+		return fechabaja;
+	}
+
+	public void setFechabaja(Date fechabaja) {
+		this.fechabaja = fechabaja;
 	}
 
 

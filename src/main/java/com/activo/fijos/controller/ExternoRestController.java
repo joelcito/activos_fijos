@@ -125,8 +125,9 @@ public class ExternoRestController {
 					+ "valpresente ,"
 					+ "vidautilres ,"
 					+ "estado_vigencia ,"
-					+ "estadoactivo "
-					+ ") VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"; //37
+					+ "estadoactivo ,"
+					+ "fechabaja "
+					+ ") VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"; //38
 
 					String idactivo 		= (act.get("cod") != null) ? act.get("cod").toString().trim() : null;
 					String codigo 			= (act.get("cod1") != null) ? act.get("cod1").toString().trim() : null;
@@ -205,8 +206,9 @@ public class ExternoRestController {
 							act.get("valpresente"),		//valpresente
 							act.get("vidautilr"),		//vidautilres
 							estado_vigencia,			//estado_vigencia
-							estadoactivo				//estadoactivo
-							);//36
+							estadoactivo,				//estadoactivo
+							act.get("fbaja")			//estadoactivo
+							);//38
 			
 
 
@@ -758,6 +760,175 @@ public class ExternoRestController {
 		return obj;
 		
 	}
+	
+	@PostMapping("/guardaBajaActivo")
+	public Map<String, Object> guardaBajaActivo(@RequestBody String json){
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		Map<String, Object> obj = new HashMap();
+		
+		try {	
+			Map<String, Object> jsonMap = objectMapper.readValue(json, Map.class);
+			
+			
+			System.out.println("==========");
+			System.out.println(jsonMap);
+			System.out.println("==========");	
+		
+			// PARA EL JSON DE ULTIMO ACTIVO
+			Map<String, Object> jsonUltMov = objectMapper.readValue(jsonMap.get("ultimoMov").toString(), Map.class);
+			System.out.println("V2 => "+jsonUltMov.get("dr"));
+						
+			String sql = "INSERT INTO af_itemmov ( "
+						+"cod ,"
+						+"dr ,"
+			            +"fecha ,"
+			            +"codcargoresp ,"
+			            +"codrepart ,"
+			            +"codubic ,"
+			            +"refe1 ,"
+			            +"refe2 ,"
+			            +"refe3 ,"
+			            +"refe4 ,"
+			            +"codant ,"
+			            +"codnue ,"
+			            +"plaant ,"
+			            +"planue ,"
+			            +"i1 ,"
+			            +"i2 ,"
+			            +"i3 ,"
+			            +"i4 ,"
+			            +"usuarioi ,"
+			            +"fechai ,"
+			            +"usuariou ,"
+			            +"fechau ,"
+			            +"registro ,"
+			            +"estado ,"
+			            +"ci ,"
+			            +"refe1a ,"
+			            +"tipotr ,"
+			            +"codregori ,"
+			            +"codregdes ,"
+			            +"dr1 ,"
+			            +"dr2 "
+					+ ") VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"; //31
+
+					
+					String cod 			= jsonMap.get("activo").toString();
+					int dr;
+					if(jsonUltMov.get("dr") != null) {
+						dr 				= Integer.parseInt(jsonUltMov.get("dr").toString()) + 10000;
+					}else {
+						dr = 10000;
+					}
+					//dr 				= Integer.parseInt(jsonUltMov.get("dr").toString()) + 10000;
+					//String codcargoresp = jsonMap.get("cargo").toString();
+					
+					String codcargoresp = "999"; 
+					String codrepart 	= "";
+					if(jsonUltMov.get("codrepart") != null){
+						codrepart 	= jsonUltMov.get("codrepart").toString();
+					}
+										
+					String codubic 		= "";
+					if(jsonUltMov.get("codubic") != null) {
+						codubic 		= jsonUltMov.get("codubic").toString();	
+					}
+					
+					String refe1 		= jsonMap.get("docRespaldo").toString();
+					String refe2 		= "";
+					String refe3 		= "";
+					String refe4 		= jsonMap.get("observacion").toString();
+					String codant 		= jsonMap.get("codigo").toString();
+					String codnue 		= null;
+					String plaant 		= null;
+					String planue 		= null;
+					String i1 			= "B";
+					String i2 			= "A";
+					String i3 			= "B";
+					String i4 			= "C";
+					String usuarioi 	= null;
+					String usuariou 	= null;
+					String fechau 		= null;
+					String registro 	= "";
+					if(jsonUltMov.get("registro") != null) {
+						registro 	= jsonUltMov.get("registro").toString();
+					}
+					String estado 		= null;		
+					String ci 			= null;
+					String refe1a 		= null;
+					String tipotr 		= "BAJ";
+					String codregori 	= null;
+					String codregdes 	= null;
+					String dr1 			= null;
+					String dr2 			= null;
+					
+					
+					System.out.println("v1 > "+jsonMap.get("activo"));
+					System.out.println("v2 > "+jsonMap.get("dr"));
+					System.out.println("v3 > "+jsonMap.get("reparticion"));
+					System.out.println("v4 > "+jsonMap.get("ubicacion"));
+					System.out.println("v5 > "+jsonMap.get("docRespaldo"));
+					System.out.println("v6 > "+jsonMap.get("observacion"));
+					System.out.println("v7 > "+jsonMap.get("codigo"));
+					System.out.println("v8 > "+jsonMap.get("estadoregistro"));
+					System.out.println("v9 > "+jsonMap.get("cedula"));
+					
+					
+					jdbcTemplate.update(sql,
+										cod,         	// cod
+							            dr,         	// dr
+							            new Date(),		// fecha
+							            codcargoresp, 	// codcargoresp
+							            codrepart, 	    // codrepart
+							            codubic, 	    // codubic
+							            refe1, 	       	// refe1
+							            refe2, 	       	// refe2
+							            refe3, 	       	// refe3
+							            refe4, 	       	// refe4
+							            codant, 	    // codant
+							            codnue, 	    // codnue
+							            plaant, 	    // plaant
+							            planue, 	    // planue
+							            i1, 	       	// i1
+							            i2, 	       	// i2
+							            i3, 	       	// i3
+							            i4, 	       	// i4
+							            usuarioi, 	    // usuarioi
+							            new Date(),     // fechai
+							            usuariou, 	    // usuariou
+							            fechau, 	    // fechau
+							            registro, 	    // registro
+							            estado, 	    // estado
+							            ci, 	       	// ci
+							            refe1a, 	    // refe1a
+							            tipotr, 	    // tipotr
+							            codregori, 	    // codregori
+							            codregdes, 	    // codregdes
+							            dr1, 	       	// dr1
+							            dr2  	       	// dr2
+										);//31	
+										
+					
+				//cambiamos al activo
+					
+				String sqla = "UPDATE afw_activo SET fechabaja = ?, estadoactivo = ?  WHERE idactivo = ?";
+				jdbcTemplate.update(sqla, new Date(), 13, cod);					
+					
+			obj.put("estado", "success");
+			obj.put("cod", cod);
+						
+			
+		} catch (JsonProcessingException e) {
+		    // Handle the exception
+		    e.printStackTrace();
+			obj.put("estado", "error");
+		}
+		
+		return obj;
+	}
+	
+	
 	// ******************* END MOVIMIENTOS *******************
 
 	
