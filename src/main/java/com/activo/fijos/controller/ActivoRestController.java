@@ -1,5 +1,12 @@
 package com.activo.fijos.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
@@ -11,8 +18,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.ResourceUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,8 +33,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.activo.fijos.models.entity.Activo;
 import com.activo.fijos.models.entity.Regional;
@@ -46,6 +60,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 public class ActivoRestController {
 	
 	private final JdbcTemplate jdbcTemplate;
+	//private static final String IMAGE_UPLOAD_PATH = "/src/main/resources/images/";
+	private static final String IMAGE_UPLOAD_PATH = "classpath:images";
+	
+
 	
 	@Autowired
 	private IActivoService activoService;
@@ -387,6 +405,113 @@ public class ActivoRestController {
 		return obj;
 	}
 	
+	@PostMapping("/uploadImage")//public ResponseEntity<String> uploadImage(@RequestParam("image") MultipartFile image) {
+	public Map<String, Object> uploadImage(@RequestParam("image") MultipartFile image) throws IOException {
+		
+		Map<String, Object> obj = new HashMap();		
+		
+		String fileName = StringUtils.cleanPath(image.getOriginalFilename());
+        Path uploadPath = Path.of("src/main/resources/images");
+
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+        
+        try {
+            Path filePath = uploadPath.resolve(fileName);
+            Files.copy(image.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new IOException("Failed to save image " + fileName, e);
+        }
+		
+		System.out.println("entere chee");
+		obj.put("estado", "entere chee");
+
+		return obj;
+	  }
 	
+	@GetMapping("/images/{fileName}")
+    //public ResponseEntity<Resource> getImage(@PathVariable String fileName) throws MalformedURLException {
+	public Map<String, Object> getImage(@PathVariable String fileName){
+		
+		Map<String, Object> obj = new HashMap();	
+		System.out.println(fileName);
+	
+		try {
+			
+			
+			if (StringUtils.hasText(fileName)) {
+                String imageUrl = "/images/" + fileName; // Ruta relativa a la carpeta de imágenes
+
+                obj.put("success", true);
+                obj.put("message", "Imagen encontrada");
+                obj.put("imageUrl", imageUrl);
+            } else {
+            	obj.put("success", false);
+            	obj.put("message", "Nombre de imagen inválido");
+            }
+			
+			
+			
+			
+			/*
+			
+			Path imagePath = Paths.get(IMAGE_UPLOAD_PATH, fileName);
+            Resource resource = new UrlResource(imagePath.toUri());
+            
+            System.out.println(imagePath+" "+resource+" "+" "+IMAGE_UPLOAD_PATH+" "+fileName);
+
+            if (resource.exists() && resource.isReadable()) {            	
+            	obj.put("success", true);
+            	obj.put("message", "Imagen encontrada");
+            	obj.put("image", resource);
+            }
+            else {
+            	obj.put("success", false);
+            	obj.put("message", "Imagen no encontrada");
+            }
+            */
+            
+            
+            
+            
+            
+			
+			/*
+	        Path filePath = Paths.get(IMAGE_UPLOAD_PATH).resolve(fileName).normalize();
+	                
+	        Resource resource = new UrlResource(filePath.toUri());
+	        System.out.println(resource+" "+filePath);
+	
+	        if (resource.exists() && resource.isReadable()) {
+	        	
+	        	obj.put("resource", resource);
+	        	
+	            //return ResponseEntity.ok()
+	            //       .header(HttpHeaders.CONTENT_TYPE, "image/*")
+	            //        .body(resource);
+	        } else {
+	            //return ResponseEntity.notFound().build();
+	        	System.out.println("este es el if chee pero por else");
+	        }
+	        */
+        
+        //} catch (MalformedURLException e) {
+        	
+        } catch (Exception  e) {
+        	
+            //throw new RuntimeException("Failed to retrieve image: " + e.getMessage(), e);
+            //obj.put("estado", "error che");
+            //obj.put("msg_1", e);
+            //obj.put("msg_1", e.getMessage());
+        	
+        	obj.put("success", false);
+        	obj.put("message", "Error al recuperar la imagen");
+            e.printStackTrace();
+        }
+        
+        
+        return obj;
+    }
 	
 }
