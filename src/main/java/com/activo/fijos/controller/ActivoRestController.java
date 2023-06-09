@@ -414,14 +414,33 @@ public class ActivoRestController {
 		if(!image.isEmpty()) {
 			String nombreArchivo = UUID.randomUUID().toString()+"_"+image.getOriginalFilename().replace(" ", "");
 			Path rutaArchivo = Paths.get("images").resolve(nombreArchivo).toAbsolutePath();
+			//Path rutaArchivo = Paths.get("src/main/resources/images").resolve(nombreArchivo).toAbsolutePath();
 			
 			try {
+				
+				if (!Files.exists(rutaArchivo)) {
+					
+					Path rutaDirectorio = Paths.get("images");
+			        // Crear la carpeta "images"
+			        //Files.createDirectories(Paths.get(rutaArchivo));
+					System.out.println("No hay el direcrotio");
+					try {
+				        // Crear el directorio y los directorios padres si no existen
+				        Files.createDirectories(rutaDirectorio);
+				        System.out.println("El directorio se creó correctamente: " + rutaArchivo);
+				    } catch (Exception e) {
+				        System.out.println("Error al crear el directorio: " + e.getMessage());
+				    }
+			    }
+				
 				Files.copy(image.getInputStream(), rutaArchivo);
 				obj.put("estado", "success");
 			} catch (Exception e) {
 				// TODO: handle exception
 				obj.put("estado", "error");
 				obj.put("msg", e.getMessage());
+				obj.put("msg1", "error del baj dche al subir chee");
+				obj.put("msg1", e);
 			}
 			
 			//esto elimina la foto anteriror
@@ -448,6 +467,8 @@ public class ActivoRestController {
 	public ResponseEntity<Resource> verFoto(@PathVariable String nombreFoto) {
 		
 		Path rutaArchivo = Paths.get("images").resolve(nombreFoto).toAbsolutePath();
+		//Path rutaArchivo = Paths.get("src/main/resources/images").resolve(nombreFoto).toAbsolutePath();
+		
 		Resource recurso = null;
 		
 		try {
