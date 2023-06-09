@@ -133,6 +133,8 @@ public class Activo implements Serializable{
 	@Column(columnDefinition = "Decimal(12,3)")
 	private float vidautilres;
 	
+	private String foto;
+	
 	private Date fechabaja;
 			
 	public String getIdactivo() {
@@ -519,10 +521,14 @@ public class Activo implements Serializable{
 	public void setFechabaja(Date fechabaja) {
 		this.fechabaja = fechabaja;
 	}
+	
+	public String getFoto() {
+		return foto;
+	}
 
-
-
-
+	public void setFoto(String foto) {
+		this.foto = foto;
+	}
 
 	/**
 	 * 
