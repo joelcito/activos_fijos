@@ -82,8 +82,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
 		  <artifactId>json</artifactId>
 		  <version>20210307</version>
 		</dependency>
-		
-		
+				
 		<!-- 
 		<dependency>
 		    <groupId>org.springframework.security</groupId>
@@ -117,17 +116,13 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
 	  <artifactId>spring-boot-starter-security</artifactId>
 	</dependency>
   -->
-
-		
-	</dependencies>
+  	</dependencies>
 
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				
-				 
+				<artifactId>spring-boot-maven-plugin</artifactId>		 
 			</plugin>
 		</plugins>
 	</build>
