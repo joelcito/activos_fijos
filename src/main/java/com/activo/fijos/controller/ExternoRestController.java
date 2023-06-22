@@ -935,7 +935,7 @@ public class ExternoRestController {
 	// ******************* CARGOS *******************
 	@GetMapping("/getCargos")
 	public List<Map<String, Object>> getCargos(){		
-		String sql = "select * from p_cargos ORDER BY cod";
+		String sql = "select * from p_cargos ORDER BY des";
 		List<Map<String, Object>>  ArrayProv = jdbcTemplate.queryForList(sql);		
 		return ArrayProv;
 	}
@@ -945,7 +945,7 @@ public class ExternoRestController {
 	// ******************* UBICACION ESPECIFICA *******************
 	@GetMapping("/getUbiEsp")
 	public List<Map<String, Object>> getUbiEsp(){		
-		String sql = "select * from af_ubicesp ORDER BY cod";
+		String sql = "select * from af_ubicesp ORDER BY des";
 		List<Map<String, Object>>  ArrayProv = jdbcTemplate.queryForList(sql);		
 		return ArrayProv;
 	}
@@ -965,12 +965,48 @@ public class ExternoRestController {
 		
 		return obj;
 	}
+	
+	@PostMapping("/getPersonasNombre")
+	public List<Map<String, Object>> getPersonasNombre(@RequestBody String nombre){	
+		
+		
+		
+		String[] palabras = nombre.split(" ");
+		
+		String query = "SELECT TOP 15 p.des,p.des1, p.des2, p.ci FROM persona p WHERE 1 = 1 ";
+		
+		System.out.println(nombre+" "+palabras.length);
+		if(palabras.length <= 3) {
+			if(palabras.length == 1) {
+				query += " AND p.des LIKE '%"+palabras[0].toString()+"%'";
+			}
+			
+			if(palabras.length == 2) {
+				query += " AND p.des LIKE '%"+palabras[0].toString()+"%' AND p.des1 LIKE '%"+palabras[1].toString()+"%'";
+			}
+			
+			if(palabras.length == 3) {
+				query += " AND p.des LIKE '%"+palabras[0].toString()+"%' AND p.des1 LIKE '%"+palabras[1].toString()+"%' AND p.des2 LIKE '%"+palabras[2].toString()+"%'";
+			}
+		}
+		
+		//String sql = "select * from persona WHERE ci = ?";
+		
+		//query += " ORDER BY af.fechacreacion DESC";
+		
+		//datos = jdbcTemplate.queryForList(query);
+		
+		List<Map<String, Object>>  ArrayProv = jdbcTemplate.queryForList(query) ;
+		
+		return ArrayProv;
+		
+	}
 	// ******************* END PERSONAS *******************
 
 	// ******************* REPARTICIONES *******************
 	@GetMapping("/getReparticiones")
 	public List<Map<String, Object>> getReparticiones(){		
-		String sql = "SELECT cod, des FROM e2 WHERE tipo = 'RPT'";
+		String sql = "SELECT cod, des FROM e2 WHERE tipo = 'RPT' order by des";
 		List<Map<String, Object>>  ArrayProv = jdbcTemplate.queryForList(sql);		
 		return ArrayProv;
 	}

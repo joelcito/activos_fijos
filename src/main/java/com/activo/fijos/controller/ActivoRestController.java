@@ -13,12 +13,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import javax.management.RuntimeErrorException;
 
+import org.apache.catalina.filters.ExpiresFilter.XServletOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -51,6 +53,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 //import com.fasterxml.jackson.databind.JsonMappingException;
+import java.time.temporal.ChronoUnit;
 
 //@CrossOrigin(origins = {"http://localhost:4200/"})
 @CrossOrigin(origins = {
@@ -252,7 +255,10 @@ public class ActivoRestController {
 			Float ufvIni 		= (float) Float.parseFloat(jsonMap.get("depreUfvIni").toString());
 			Float ufvFin		= (float) Float.parseFloat(jsonMap.get("depreUfvFin").toString());
 			Float precio 		= activoDepre.getPrecio();
-			Float Depre 		= activoDepre.getPorcentaje_depreciacion();
+			//Float Depre 		= activoDepre.getPorcentaje_depreciacion();
+			//Float Depre 		= (float) 25;
+			Float Depre 		= (float) Math.round(activoDepre.getPorcentaje_depreciacion()*12);
+			//System.out.println(Depre+"=> "+ Math.round(activoDepre.getPorcentaje_depreciacion()*12)+" => "+activoDepre.getPorcentaje_depreciacion());
 			Float PorDepre  	= Depre/100; 
 			Float costoActual 	= precio * (ufvFin/ufvIni);
 			Float DepAnio 		= costoActual * PorDepre ;
@@ -281,6 +287,142 @@ public class ActivoRestController {
 			System.out.println(jsonMap.get("depreFechaFin"));
 			System.out.println(jsonMap.get("depreUfvFin"));
 			*/
+			
+			//============================= CALCULO DE OTRO CHEE =============================
+			System.out.println("-----------| NEUVO DEPREEE |--------");
+			
+			LocalDate fechaFinDeAnio = LocalDate.of(fechaIni.getYear(), 12, 31);
+	        long mesesFaltantes = ChronoUnit.MONTHS.between(fechaIni, fechaFinDeAnio);
+	        
+	        //System.out.println("Meses faltantes: " + mesesFaltantes);
+	        //System.out.println("1: " + Depre);
+	        //System.out.println("1: " + (100 / (int) Math.floor(Depre))+1);
+	        
+	        Map<String, Object> gestiones 	= new HashMap();
+	        int cantidadBucles;
+	        if(mesesFaltantes < 12) {
+	        	cantidadBucles =  (100 / (int) Math.floor(Depre))+1; 
+	        	
+	        	//------------ PARA LA ACTUALIZACION ------------
+	        	int  gestion 			=  fechaFinDeAnio.getYear();
+	        	Float valorActivo 		= activoDepre.getPrecio();
+	        	float ufvAdquiridoIni 	= 0;
+				float ufvAdquiridoFin 	= 0;
+				float actualizacion 	= 0;
+				float valorActualizado  = 0;
+				LocalDate fechaFinDeAnioSigueinteIni 	= fechaIni;
+				Map<String, Object> ufvI = new HashMap();
+				
+				String sql = "select * from tcambio1 where fecha = ?";
+				List<Map<String, Object>>  ArrayobjUfvIni = jdbcTemplate.queryForList(sql, fechaFinDeAnioSigueinteIni);
+				if(ArrayobjUfvIni.size() > 0){
+					ufvI = ArrayobjUfvIni.get(0);
+					ufvAdquiridoIni = Float.parseFloat(ufvI.get("tc").toString());
+				}
+
+				//------------PARA LA DEPRECIACION------------
+				float depreAcumulado 		= 0;
+				float depreActualizacion 	= 0;
+				float porcentajeDepre		= Depre/100;
+				float depreEjerPerio        = 0;
+				Long  cantMesD 				= (long) 0;
+				float totalDepre	        = 0;
+				float valorResidual 		= 0;
+				
+	        	for (int i = 1; i<=cantidadBucles ; i++) {
+	        	        		
+	        		Map<String, Object> datosdepre 	= new HashMap();	        		
+	        			        		
+	        		LocalDate fechaFinDeAnioSigueinteFin 	= LocalDate.of(gestion, 12, 31);	        		
+	        		      
+	        		List<Map<String, Object>>  ArrayobjUfvFin;
+					sql 			= "select * from tcambio1 where fecha = ?";
+					
+	        		if(i == cantidadBucles) {
+	        			ArrayobjUfvFin 				= jdbcTemplate.queryForList(sql, fechaFin);
+	        			fechaFinDeAnioSigueinteFin 	= LocalDate.of(gestion, fechaFin.getMonthValue() - 1, fechaFin.getDayOfMonth());
+	        		}else {
+	        			ArrayobjUfvFin 				= jdbcTemplate.queryForList(sql, fechaFinDeAnioSigueinteFin);
+	        		}	
+					
+					Map<String, Object> ufvF = new HashMap();
+					//System.out.println(fechaFinDeAnioSigueinteIni+" | "+fechaFinDeAnioSigueinteFin+ " | "+ArrayobjUfvIni+" | "+ArrayobjUfvFin+" | ");
+									
+					if(ArrayobjUfvFin.size() > 0) {
+						ufvF 				= ArrayobjUfvFin.get(0);	
+						ufvAdquiridoFin 	= Float.parseFloat(ufvF.get("tc").toString());
+						actualizacion 		= ((valorActivo * ufvAdquiridoFin)/ufvAdquiridoIni)-valorActivo;
+						valorActualizado 	= valorActivo + actualizacion;						
+						
+						//********* PARA LA DEPRECIACION********* 
+						cantMesD    		= ((Period.between(fechaFinDeAnioSigueinteIni, fechaFinDeAnioSigueinteFin)).toTotalMonths()) + 1;
+						depreEjerPerio 		= ((valorActualizado*porcentajeDepre)/12)*cantMesD;
+						depreActualizacion	= ((depreAcumulado*ufvAdquiridoFin)/ufvAdquiridoIni)-depreAcumulado;
+						totalDepre			= depreActualizacion + depreAcumulado + depreEjerPerio; 
+						valorResidual		= valorActualizado - totalDepre;
+						
+						datosdepre.put("gestion", gestion);
+						datosdepre.put("ufv_Adq", ufvAdquiridoIni);
+		        		datosdepre.put("valor_activo", valorActivo);
+		        		datosdepre.put("actualizacion", actualizacion);
+		        		datosdepre.put("valor_actualizado", valorActualizado);
+		        		datosdepre.put("depre_acumulado", depreAcumulado);
+		        		datosdepre.put("depre_actualizacion", depreActualizacion);
+		        		datosdepre.put("depreciacion", Depre);
+		        		datosdepre.put("depreciacion_periodo", depreEjerPerio);
+		        		datosdepre.put("cant_meses", cantMesD);
+		        		datosdepre.put("total_depre", totalDepre);
+		        		datosdepre.put("valor_residual", valorResidual);
+		        		
+						
+						
+						System.out.println(	i+" | "+
+    							gestion+" | "+
+    							fechaFinDeAnioSigueinteIni+" | "+
+    							ufvAdquiridoIni+" | "+
+    							ufvAdquiridoFin+" | "+
+    							valorActivo +" | "+
+    							actualizacion +" | "+
+    							valorActualizado+" |<>| "+
+    							depreAcumulado+" | "+
+    							depreActualizacion+" | "+
+    							Depre+" | " +
+    							depreEjerPerio+" | "+
+    							cantMesD+" | "+
+    							totalDepre +" | "+
+    							valorResidual+" | "+
+    							fechaFinDeAnioSigueinteFin
+    							);
+						
+						
+						
+						//********* PARA LA ACTUALIZACION ********* 
+						ufvAdquiridoIni 	= ufvAdquiridoFin;
+						valorActivo 		= valorActualizado;
+						//********* PARA LA DEPRECIACION********* 
+						depreAcumulado 		= totalDepre;
+						
+						
+					}        		
+	        		
+	        		//gestiones.put(gestion+"", gestion);
+	        		gestiones.put(i-1+"", datosdepre);
+	        		gestion++;
+	        		
+	        		fechaFinDeAnioSigueinteIni 	= LocalDate.of(gestion, 01, 01);
+	        	}
+	        }else {
+	        	
+	        }
+	        
+	        objeto.put("depre", gestiones);
+	        
+			//System.out.println(fechaIni);
+			
+			
+			
+			
+			System.out.println("*********** ESTE SI  ***********");
 		} catch (JsonProcessingException e) {
 		    // Handle the exception
 		    e.printStackTrace();
