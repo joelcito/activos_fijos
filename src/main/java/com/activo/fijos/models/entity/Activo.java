@@ -133,6 +133,15 @@ public class Activo implements Serializable{
 	@Column(columnDefinition = "Decimal(12,3)")
 	private float vidautilres;
 	
+	@Column(columnDefinition = "Decimal(12,3)")
+	private float actGestion;
+	
+	@Column(columnDefinition = "Decimal(12,3)")
+	private float depGestion;
+	
+	@Column(columnDefinition = "Decimal(12,3)")
+	private float actDepAcumulado;
+	
 	private String foto;
 	
 	private Date fechabaja;
@@ -529,6 +538,32 @@ public class Activo implements Serializable{
 	public void setFoto(String foto) {
 		this.foto = foto;
 	}
+	
+	public float getActGestion() {
+		return actGestion;
+	}
+
+	public void setActGestion(float actGestion) {
+		this.actGestion = actGestion;
+	}
+
+	public float getDepGestion() {
+		return depGestion;
+	}
+
+	public void setDepGestion(float depGestion) {
+		this.depGestion = depGestion;
+	}
+
+	public float getActDepAcumulado() {
+		return actDepAcumulado;
+	}
+
+	public void setActDepAcumulado(float actDepAcumulado) {
+		this.actDepAcumulado = actDepAcumulado;
+	}
+
+
 
 	/**
 	 * 

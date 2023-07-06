@@ -100,6 +100,10 @@ public class ActivoRestController {
 		
 		//System.out.println("cod => "+activo.getCodigo());
 		
+		//System.out.println(activo.getPorcentaje_depreciacion());
+		//System.out.println(activo.getVida_util());
+		//System.out.println(activo.getPorcentaje_depreciacion()/12);		
+		
 		Regional regional = activo.getRegional();
 		String idregional = regional.getIdregional();
 			
@@ -135,10 +139,17 @@ public class ActivoRestController {
 		activo.setEstadoregistro("APR");
 		activo.setFecha(new Date());
 		activo.setFechacreacion(new Date());
+		
+		if(activo.getVida_util() == 0)
+			activo.setPorcentaje_depreciacion(0);
+		else
+			activo.setPorcentaje_depreciacion(activo.getPorcentaje_depreciacion()/12);	
+			
 		// activo.setEstadoVigencia("0");
-					
-		//return activo;
+				
 		return activoService.save(activo);
+		
+		//return activo;
 	}
 	
 	@PutMapping("/{id}")
