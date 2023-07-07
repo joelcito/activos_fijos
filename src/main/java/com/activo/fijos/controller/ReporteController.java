@@ -81,7 +81,7 @@ public class ReporteController {
 				+ " from afw_activo "
 				//+ " where left(fechacompra,4) > 2015 and estadoactivo in(0,1,15) or estadoactivo is null";
 				+ " where (estadoactivo in(0,1,15) or estadoactivo is null) AND grupo_id NOT IN('01','15','08')";
-				//+ " where codigo = 'COS-10-34207' AND ( estadoactivo in(0,1,15) or estadoactivo is null)";
+				//+ " where codigo = 'COS-10-00678' AND ( estadoactivo in(0,1,15) or estadoactivo is null)";
 				
 			
 			//ArrayActivo = jdbcTemplate.queryForList(sql,fechaIni,fechaFin);
@@ -149,7 +149,14 @@ public class ReporteController {
 				//int gestion 				 			= fechaFinDeAnioSigueinteFin.getYear();
 				int gestion 				 			= 2023;
 				boolean caso 							= false;
-				//System.out.println(mesesYaDepreciado+" | "+aniosdepreciados+" <= "+cantidadAniosVidaUtil);
+				System.out.println(mesesYaDepreciado+" | "+
+									aniosdepreciados+" <= "+
+									cantidadAniosVidaUtil+" | "+
+									fechaFinDeAnioSigueinteIni+" | "+
+									fechaFinEnvia+" | "+
+									(aniosdepreciados <= cantidadAniosVidaUtil)+" | "+
+									(fechaFinDeAnioSigueinteIni.isBefore(fechaFinEnvia))
+									);
 
 				//for(int i = aniosdepreciados; i <= cantidadAniosVidaUtil; i++) {				
 					//while(aniosdepreciados <= cantidadAniosVidaUtil && fechaFinEnvia.isBefore(fechaFinDeAnioSigueinteFin)) {
@@ -261,31 +268,42 @@ public class ReporteController {
 						
 						aniosdepreciados++;
 				}
-				
-				Map<String, Object> activoDevuelo = new HashMap();				
-				
-				activoDevuelo.put("idactivo", 					activo.get("idactivo"));
-				activoDevuelo.put("codigo", 					activo.get("codigo"));
-				activoDevuelo.put("descripcion", 				activo.get("descripcion"));
-				activoDevuelo.put("fechacompra", 				activo.get("fechacompra"));
-				activoDevuelo.put("precio", 					activo.get("precio"));
-				//activoDevuelo.put("datos", 						datos);
-				
-
-				activoDevuelo.put("valorActivo", 				datos.get("valorActivo"));
-				activoDevuelo.put("actualizacion", 				datos.get("actualizacion"));
-				activoDevuelo.put("valorActualizado", 			datos.get("valorActualizado"));
-				activoDevuelo.put("depreciacionAcumuladaIni", 	datos.get("depreciacionAcumuladaIni"));
-				activoDevuelo.put("actualzaiconDepre", 			datos.get("actualzaiconDepre"));
-				activoDevuelo.put("Depre", 						datos.get("Depre"));
-				activoDevuelo.put("fechaFinDeAnioSigueinteIni", datos.get("fechaFinDeAnioSigueinteIni"));
-				activoDevuelo.put("fechaFinDeAnioSigueinteFin", datos.get("fechaFinDeAnioSigueinteFin"));
-				activoDevuelo.put("deprePeriodo", 				datos.get("deprePeriodo"));
-				activoDevuelo.put("cantMesD", 					datos.get("cantMesD"));
-				activoDevuelo.put("depreciacionAcumulada", 		datos.get("depreciacionAcumulada"));
-				activoDevuelo.put("valorResidual", 				datos.get("valorResidual"));
-
-				
+					Map<String, Object> activoDevuelo = new HashMap();
+					
+					activoDevuelo.put("idactivo", 					activo.get("idactivo"));
+					activoDevuelo.put("codigo", 					activo.get("codigo"));
+					activoDevuelo.put("descripcion", 				activo.get("descripcion"));
+					activoDevuelo.put("fechacompra", 				activo.get("fechacompra"));
+					activoDevuelo.put("precio", 					activo.get("precio"));
+					
+					if(aniosdepreciados <= cantidadAniosVidaUtil) {
+						activoDevuelo.put("valorActivo", 				datos.get("valorActivo"));
+						activoDevuelo.put("actualizacion", 				datos.get("actualizacion"));
+						activoDevuelo.put("valorActualizado", 			datos.get("valorActualizado"));
+						activoDevuelo.put("depreciacionAcumuladaIni", 	datos.get("depreciacionAcumuladaIni"));
+						activoDevuelo.put("actualzaiconDepre", 			datos.get("actualzaiconDepre"));
+						activoDevuelo.put("Depre", 						datos.get("Depre"));
+						activoDevuelo.put("fechaFinDeAnioSigueinteIni", datos.get("fechaFinDeAnioSigueinteIni"));
+						activoDevuelo.put("fechaFinDeAnioSigueinteFin", datos.get("fechaFinDeAnioSigueinteFin"));
+						activoDevuelo.put("deprePeriodo", 				datos.get("deprePeriodo"));
+						activoDevuelo.put("cantMesD", 					datos.get("cantMesD"));
+						activoDevuelo.put("depreciacionAcumulada", 		datos.get("depreciacionAcumulada"));
+						activoDevuelo.put("valorResidual", 				datos.get("valorResidual"));
+					}else {
+						Depre 				= (float) Math.round(Float.parseFloat(activo.get("porcentaje_depreciacion").toString())*12);				
+						activoDevuelo.put("valorActivo", 				"JOELCITO");
+						activoDevuelo.put("actualizacion", 				activo.get("valactualizado"));
+						activoDevuelo.put("valorActualizado", 			activo.get("valactualizado"));
+						activoDevuelo.put("depreciacionAcumuladaIni", 	activo.get("act_dep_acumulado"));
+						activoDevuelo.put("actualzaiconDepre", 			activo.get("act_dep_acumulado"));
+						activoDevuelo.put("Depre", 						Depre);
+						activoDevuelo.put("fechaFinDeAnioSigueinteIni", "JOELCITO");
+						activoDevuelo.put("fechaFinDeAnioSigueinteFin", "JOELCITO");
+						activoDevuelo.put("deprePeriodo", 				activo.get("dep_gestion"));
+						activoDevuelo.put("cantMesD", 					0);
+						activoDevuelo.put("depreciacionAcumulada", 		activo.get("depacumulada"));
+						activoDevuelo.put("valorResidual", 				activo.get("valpresente"));
+					}				
 				
 				ArrayProv.add(activoDevuelo);				
 								
