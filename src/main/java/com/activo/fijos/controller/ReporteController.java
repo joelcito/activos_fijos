@@ -73,16 +73,36 @@ public class ReporteController {
 			Map<String, Object> jsonMap = objectMapper.readValue(json, Map.class);
 			String fechaIniEnviado = jsonMap.get("fechaInicio").toString();
 			String fechaFinEnviado = jsonMap.get("fechaFin").toString();
+			
+			sql = " SELECT * "
+					+ " from afw_activo "
+					+" WHERE 1=1 ";
+			
+			Object placaValue = jsonMap.get("placa");
+			if(placaValue != null && !placaValue.toString().isEmpty()) {
+				sql = sql + " AND codigo = '"+jsonMap.get("placa").toString()+"' ";
+			}
+			
+			Object regional = jsonMap.get("regional");
+			if(regional != null && !regional.toString().isEmpty()) {
+				sql = sql + " AND regional_id = '"+jsonMap.get("regional").toString()+"' ";
+			}
+		
+			//System.out.println(jsonMap);
+			
+			sql = sql + " AND (estadoactivo in(0,1,15) or estadoactivo is null) AND grupo_id NOT IN('01','15','08')"; 
+					
+					//+ " where left(fechacompra,4) > 2015 and estadoactivo in(0,1,15) or estadoactivo is null";
+					//+ " where (estadoactivo in(0,1,15) or estadoactivo is null) AND grupo_id NOT IN('01','15','08')";
+					//+ " where codigo = 'COS-10-00678' AND ( estadoactivo in(0,1,15) or estadoactivo is null)";
+					
+			
+			
 			//String regional = jsonMap.get("regional").toString();
 			//sql = "select * from afw_activo WHERE fechacompra BETWEEN ? AND ? ";
 			//ArrayProv = jdbcTemplate.queryForList(sql,fechaIni,fechaFin);
 			
-			sql = " SELECT * "
-				+ " from afw_activo "
-				//+ " where left(fechacompra,4) > 2015 and estadoactivo in(0,1,15) or estadoactivo is null";
-				+ " where (estadoactivo in(0,1,15) or estadoactivo is null) AND grupo_id NOT IN('01','15','08')";
-				//+ " where codigo = 'COS-10-00678' AND ( estadoactivo in(0,1,15) or estadoactivo is null)";
-				
+			
 			
 			//ArrayActivo = jdbcTemplate.queryForList(sql,fechaIni,fechaFin);
 			ArrayActivo = jdbcTemplate.queryForList(sql);
@@ -148,7 +168,7 @@ public class ReporteController {
 				LocalDate fechaFinDeAnioSigueinteFin	;				
 				//int gestion 				 			= fechaFinDeAnioSigueinteFin.getYear();
 				int gestion 				 			= 2023;
-				boolean caso 							= false;
+				boolean entro 							= false;
 				System.out.println(mesesYaDepreciado+" | "+
 									aniosdepreciados+" <= "+
 									cantidadAniosVidaUtil+" | "+
@@ -160,7 +180,9 @@ public class ReporteController {
 
 				//for(int i = aniosdepreciados; i <= cantidadAniosVidaUtil; i++) {				
 					//while(aniosdepreciados <= cantidadAniosVidaUtil && fechaFinEnvia.isBefore(fechaFinDeAnioSigueinteFin)) {
-					while(aniosdepreciados <= cantidadAniosVidaUtil && fechaFinDeAnioSigueinteIni.isBefore(fechaFinEnvia)) {								
+					while(aniosdepreciados <= cantidadAniosVidaUtil && fechaFinDeAnioSigueinteIni.isBefore(fechaFinEnvia)) {
+						
+						entro = true ; 
 					
 						//ACTUALZIACION
 						valorActivo 		= valorActualizado;
@@ -276,7 +298,7 @@ public class ReporteController {
 					activoDevuelo.put("fechacompra", 				activo.get("fechacompra"));
 					activoDevuelo.put("precio", 					activo.get("precio"));
 					
-					if(aniosdepreciados <= cantidadAniosVidaUtil) {
+					if(entro) {
 						activoDevuelo.put("valorActivo", 				datos.get("valorActivo"));
 						activoDevuelo.put("actualizacion", 				datos.get("actualizacion"));
 						activoDevuelo.put("valorActualizado", 			datos.get("valorActualizado"));
