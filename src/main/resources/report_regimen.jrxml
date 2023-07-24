@@ -72,6 +72,7 @@
 	<parameter name="fechaFin" class="java.lang.String"/>
 	<parameter name="fechaIni" class="java.lang.String"/>
 	<parameter name="tableActivos" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
+	<parameter name="logo" class="java.io.InputStream"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -84,7 +85,7 @@
 		<band height="114" splitType="Stretch">
 			<image>
 				<reportElement x="50" y="8" width="59" height="59" uuid="e581af5a-c65e-461c-bd5e-7aee6282a0c0"/>
-				<imageExpression><![CDATA["C:/Users/jfloresq/Pictures/soliz1.png"]]></imageExpression>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="12" y="58" width="135" height="30" uuid="b44ae324-e083-4a81-abdc-8abb64c951f0"/>

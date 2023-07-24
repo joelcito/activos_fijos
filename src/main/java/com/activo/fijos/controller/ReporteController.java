@@ -1,6 +1,8 @@
 package com.activo.fijos.controller;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 //import java.net.http.HttpHeaders;
 import java.time.LocalDate;
 import java.time.Month;
@@ -39,6 +41,8 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
+import org.springframework.core.io.ClassPathResource;
+import java.util.Collections;
 
 @CrossOrigin(origins = {
 		"http://10.150.10.13/",
@@ -55,7 +59,7 @@ public class ReporteController {
 		this.jdbcTemplate = jdbcTemplate;
 	}	
 	
-	public JasperPrint getReport(List<Map<String, Object>> List, String archivo, Map<String, Object> datosAux)  throws FileNotFoundException, JRException{
+	public JasperPrint getReport(List<Map<String, Object>> List, String archivo, Map<String, Object> datosAux)  throws JRException, IOException{
 		
 		Map<String, Object> params  = new HashMap();
 		
@@ -63,23 +67,38 @@ public class ReporteController {
 		params.put("fechaIni", datosAux.get("fechaIni"));
 		params.put("fechaFin", datosAux.get("fechaFin"));
 		
-		System.out.println("1: "+archivo);
+		// Cargar la imagen "logocossmil.png" desde el classpath utilizando ClassPathResource
+	    ClassPathResource imageResource = new ClassPathResource("logocoosmil.png");
+	    InputStream imageStream = imageResource.getInputStream();
+	    // Agregar la imagen al mapa de parámetros
+	    params.put("logo", imageStream);
 		
+		System.out.println("1: "+archivo);		
+		
+		// Cargar el archivo JRXML desde el classpath utilizando ClassPathResource
+	    ClassPathResource resource = new ClassPathResource(archivo + ".jrxml");
+			InputStream jrxmlInput = resource.getInputStream();
+			JasperPrint report = JasperFillManager.fillReport(
+			        JasperCompileManager.compileReport(jrxmlInput), params, new JREmptyDataSource()
+			    );
+		
+		/*
 		JasperPrint report = JasperFillManager.fillReport(JasperCompileManager.compileReport(
 					ResourceUtils.getFile("classpath:"+archivo+".jrxml")
 					.getAbsolutePath()), params, new JREmptyDataSource());
+		 */	
 		
 		return report;	
 		
 	}
 	
-	public byte[] exporToPdf(List<Map<String, Object>> list, String archivo, Map<String, Object> datos) throws JRException,  FileNotFoundException {
+	public byte[] exporToPdf(List<Map<String, Object>> list, String archivo, Map<String, Object> datos) throws JRException,  IOException {
 		System.out.println("2: "+archivo);
 		return JasperExportManager.exportReportToPdf( getReport(list, archivo, datos));
 	}
 	
 	@GetMapping("/reportGeneralPDFPrueba")
-	public ResponseEntity<byte[]> exportPDFPrueba() throws JRException, FileNotFoundException{
+	public ResponseEntity<byte[]> exportPDFPrueba() throws JRException, IOException{
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_PDF);
 		headers.setContentDispositionFormData("det_gen", "det_gen.pdf");
@@ -107,7 +126,7 @@ public class ReporteController {
 	
 	
 	@PostMapping("/reportGeneralPDF")
-	public ResponseEntity<byte[]> reportGeneralPDF(@RequestBody String json) throws JRException, FileNotFoundException{
+	public ResponseEntity<byte[]> reportGeneralPDF(@RequestBody String json) throws JRException, IOException{
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_PDF);
 		headers.setContentDispositionFormData("det_gen", "det_gen.pdf");
@@ -758,7 +777,7 @@ public class ReporteController {
 	
 	
 	@PostMapping("/reportePorRegimen")
-	public ResponseEntity<byte[]> reportePorRegimen(@RequestBody String json) throws JRException, FileNotFoundException{
+	public ResponseEntity<byte[]> reportePorRegimen(@RequestBody String json) throws JRException, IOException{
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_PDF);
 		headers.setContentDispositionFormData("report_regimen", "report_regimen.pdf");
