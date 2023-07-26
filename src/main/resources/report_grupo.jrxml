@@ -66,6 +66,7 @@
 		<variable name="sumaValorNeto" class="java.lang.Float" calculation="Sum">
 			<variableExpression><![CDATA[$F{valor_neto}]]></variableExpression>
 		</variable>
+		<variable name="cantidad" class="java.lang.Float"/>
 		<group name="Group1"/>
 	</subDataset>
 	<parameter name="fechaFin" class="java.lang.String"/>
@@ -97,7 +98,7 @@ La Paz - Bolivia]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="150" y="48" width="499" height="18" uuid="0f0104fc-c25c-4cfc-b247-fa6d28e4f4cc"/>
-				<text><![CDATA[DETALLE INVENTARIADO GENERAL DE ACTUALIZACION Y DEPRECIACION DE ACTIVOS FIJOS]]></text>
+				<text><![CDATA[RESUMEN INVENTARIO GENERAL DE ACTUALIZACION Y DEPRECIACION DE ACTIVOS FIJOS]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="600" y="22" width="100" height="21" uuid="917fec0f-6b6c-4492-9d86-709faaaf3bd8"/>
@@ -142,10 +143,10 @@ UFV Final:]]></text>
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="287" splitType="Stretch">
+		<band height="260" splitType="Stretch">
 			<componentElement>
 				<reportElement x="1" y="10" width="750" height="250" uuid="d9fed7f7-6d11-4d74-8bef-504a831c3b0d">
-					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
 					<property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
@@ -186,7 +187,7 @@ UFV Final:]]></text>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font size="8"/>
 								</textElement>
-								<text><![CDATA[Nombre / Descripcion]]></text>
+								<text><![CDATA[Grupo Contable]]></text>
 							</staticText>
 						</jr:tableHeader>
 						<jr:groupFooter groupName="Group1">
@@ -210,7 +211,7 @@ UFV Final:]]></text>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font size="8"/>
 								</textElement>
-								<text><![CDATA[Fecha Adq.]]></text>
+								<text><![CDATA[Cant.]]></text>
 							</staticText>
 						</jr:tableHeader>
 						<jr:groupFooter groupName="Group1">
@@ -568,16 +569,32 @@ UFV Final:]]></text>
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="81" splitType="Stretch">
+		<band height="89" splitType="Stretch">
 			<staticText>
-				<reportElement x="60" y="35" width="90" height="10" uuid="9d5fc623-0838-4a8c-9a64-ddb09775d07c"/>
+				<reportElement x="333" y="72" width="86" height="9" uuid="cb5b653e-f5b2-4140-8e68-5e495ea68a1a"/>
+				<textElement textAlignment="Center">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[GERENTE GENERAL]]></text>
+			</staticText>
+			<line>
+				<reportElement x="297" y="70" width="159" height="1" uuid="12fa944f-b706-4b68-9fed-01aeb29f04f1">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="39" y="20" width="90" height="10" uuid="c6dd6dfd-df75-464e-94ce-373d384c82e1"/>
 				<textElement textAlignment="Center">
 					<font size="5"/>
 				</textElement>
 				<text><![CDATA[ENCARGADO DE ACTIVOS FIJOS]]></text>
 			</staticText>
 			<line>
-				<reportElement x="65" y="32" width="86" height="1" uuid="f30baeb3-fc04-4597-939f-69e08e09f97a">
+				<reportElement x="44" y="17" width="86" height="1" uuid="5e1795ec-d288-4bbb-b8f9-de47430600f4">
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -586,14 +603,14 @@ UFV Final:]]></text>
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement x="320" y="35" width="90" height="18" uuid="4adc6aa1-7ddc-455a-bd7c-a2668fe1208c"/>
+				<reportElement x="210" y="20" width="90" height="18" uuid="54648e01-5e15-4304-8fbb-6599ebd88fbf"/>
 				<textElement textAlignment="Center">
 					<font size="5"/>
 				</textElement>
 				<text><![CDATA[JEFE DE LA UNIDAD DE MANEJO Y DISPOSICION DE BIENES]]></text>
 			</staticText>
 			<line>
-				<reportElement x="318" y="31" width="97" height="1" uuid="fa845e42-927b-4e17-9fe2-1b7fb5e1c5f7">
+				<reportElement x="208" y="16" width="97" height="1" uuid="1c549c4b-f7cb-4556-a664-7f6be71500d5">
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -602,14 +619,30 @@ UFV Final:]]></text>
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement x="570" y="35" width="110" height="10" uuid="a6b02500-b564-45c5-938c-ff4adc328ba6"/>
+				<reportElement x="410" y="20" width="110" height="10" uuid="60928f8c-3bde-4c86-9479-695cd67c4f07"/>
 				<textElement textAlignment="Center">
 					<font size="5"/>
 				</textElement>
-				<text><![CDATA[MAXIMO EJECUTIVO UNIDAD]]></text>
+				<text><![CDATA[JEFE DEPARTAMENTO ADMINISTRATIVO]]></text>
 			</staticText>
 			<line>
-				<reportElement x="571" y="32" width="110" height="1" uuid="622ea6ed-6bb5-4512-8c4d-3d86e55d310b">
+				<reportElement x="411" y="17" width="110" height="1" uuid="89c5c124-0dcf-4213-8778-851f0e8b0254">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="630" y="20" width="70" height="10" uuid="0d18bb0d-ecd9-4e84-a1d5-c8f716f81402"/>
+				<textElement textAlignment="Center">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[GERENTE DE FINANZAS]]></text>
+			</staticText>
+			<line>
+				<reportElement x="627" y="17" width="73" height="1" uuid="b700f031-d568-4b20-b09f-b2c22edddb36">
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
