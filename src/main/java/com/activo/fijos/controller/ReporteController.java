@@ -1400,6 +1400,59 @@ public class ReporteController {
 		/*===========	AQUI TERMINA EL REPORTE CHEEEE	=========*/
 		return ResponseEntity.ok().headers(headers).body(exporToPdf(listadoActivosReporte, nombreArchivoReporte, datosAux));
 	}
+	
+	@PostMapping("/buscarPersona")
+	 public List<Map<String, Object>> buscarPersona(@RequestBody String json){
+		List<Map<String, Object>>  ArrayActivo  = new ArrayList();
+		
+		
+		ObjectMapper objectMapper 				= new ObjectMapper();
+		
+		try {	
+			Map<String, Object> jsonMap = objectMapper.readValue(json, Map.class);
+			String sql = " SELECT TOP 10 * FROM persona WHERE 1 = 1  ";
+			
+			if(jsonMap.get("cedula") != null && jsonMap.get("cedula") != "")
+				sql = sql + " AND ci LIKE '%"+jsonMap.get("cedula").toString()+"%' ";
+			
+			if(jsonMap.get("ap_paterno") != null && jsonMap.get("ap_paterno") != "")
+				sql = sql + " AND des LIKE '%"+jsonMap.get("ap_paterno").toString()+"%' ";
+						
+			if(jsonMap.get("ap_materno") != null && jsonMap.get("ap_materno") != "")
+				sql = sql + " AND des1 LIKE '%"+jsonMap.get("ap_materno").toString()+"%' ";
+			
+			if(jsonMap.get("nombre") != null && jsonMap.get("nombre") != "")
+				sql = sql + " AND des2 LIKE '%"+jsonMap.get("nombre").toString()+"%' ";
+			
+			System.out.println(sql);
+			
+			ArrayActivo = jdbcTemplate.queryForList(sql);
+			
+			/*
+			String cedula 		= jsonMap.get("cedula").toString();
+			String ap_paterno 	= jsonMap.get("ap_paterno").toString();
+			String ap_materno 	= jsonMap.get("ap_materno").toString();
+			String nombre 		= jsonMap.get("nombre").toString();
+			
+			System.out.println(cedula);
+			System.out.println(ap_paterno);
+			System.out.println(ap_materno);
+			System.out.println(nombre);
+			
+			
+			String fechaIni = jsonMap.get("fechaInicio").toString();
+			String fechaFin = jsonMap.get("fechaFin").toString();
+			String regional = jsonMap.get("regional").toString();
+			String sql = "select * from afw_activo WHERE fechacompra BETWEEN ? AND ? AND regional_id = ?";
+			ArrayProv = jdbcTemplate.queryForList(sql,fechaIni,fechaFin,regional);
+			*/
+		} catch (JsonProcessingException e) {
+		     e.printStackTrace();
+		 }
+		
+		return ArrayActivo;
+		 
+	 }
 
 
 }
