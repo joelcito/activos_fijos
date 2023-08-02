@@ -2,10 +2,8 @@ package com.activo.fijos.controller;
 
 import java.time.LocalDate;
 import java.time.Period;
-import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -26,13 +24,6 @@ import com.activo.fijos.models.services.IGrupoService;
 import com.activo.fijos.models.services.ISubGrupoService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-//import org.springframework.security.authentication.AuthenticationManager;
-//import com.example.security.JwtTokenUtil;
-//import io.jsonwebtoken.JwtBuilder;
-//import io.jsonwebtoken.Jwts;
-//import io.jsonwebtoken.SignatureAlgorithm;
-
 
 
 //@CrossOrigin(origins = {"http://localhost:4200/"})
