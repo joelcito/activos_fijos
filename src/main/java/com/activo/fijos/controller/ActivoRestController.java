@@ -13,20 +13,15 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.management.RuntimeErrorException;
-
-import org.apache.catalina.filters.ExpiresFilter.XServletOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -459,7 +454,11 @@ public class ActivoRestController {
 			System.out.println("V3 => "+jsonMap.get("variable3"));
 			System.out.println("V4 => "+jsonMap.get("variable4"));	
 			
-			String query = "SELECT TOP 1000 af.idactivo, af.codigo, af.estado, af.fechacompra, af.descripcion, re.nombre, af.estado_vigencia, pn.cod FROM afw_activo af INNER JOIN afw_regional re ON af.regional_id = re.idregional LEFT JOIN parnum pn ON pn.cod = af.estadoactivo and pn.atributo = 'NUM2' WHERE 1 = 1";
+			String query = "SELECT TOP 1000 af.idactivo, af.codigo, af.estado, af.fechacompra, af.descripcion, re.nombre, af.estado_vigencia, pn.cod "
+							+ "FROM afw_activo af INNER JOIN afw_regional re "
+							+ "	ON af.regional_id = re.idregional LEFT JOIN parnum pn "
+							+ " ON pn.cod = af.estadoactivo and pn.atributo = 'NUM2'"
+							+ " WHERE 1 = 1 ";
 			
 			if(!jsonMap.get("variable1").toString().equals("")) {
 				query += " AND af.codigo = '"+jsonMap.get("variable1").toString()+"'";
