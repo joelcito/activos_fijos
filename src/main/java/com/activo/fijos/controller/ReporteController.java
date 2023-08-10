@@ -806,7 +806,8 @@ public class ReporteController {
 			
 			datosAux.put("fechaIni", fechaIniEnviado);
 			datosAux.put("fechaFin", fechaFinEnviado);
-			Object regimen = jsonMap.get("regimen");			
+			Object regimen 	= jsonMap.get("regimen");		
+			Object grupo 	= jsonMap.get("grupo");	
 			
 			slqAntes = " SELECT r.idregimen, r.descripcion "
 					+ " from afw_activo a inner join afw_regimen r "
@@ -817,7 +818,13 @@ public class ReporteController {
 				slqAntes = slqAntes + " AND a.regimen_id = '"+jsonMap.get("regimen").toString()+"' ";
 			}
 			
+			if(grupo != null && !grupo.toString().isEmpty()) {
+				slqAntes = slqAntes + " AND a.grupo_id = '"+jsonMap.get("grupo").toString()+"' ";
+			}
+			
 			slqAntes = slqAntes + " group by r.idregimen, r.descripcion ORDER BY r.idregimen";
+			
+			System.out.println(slqAntes);
 			
 			ArrayRegimen = jdbcTemplate.queryForList(slqAntes);
 			
@@ -835,7 +842,7 @@ public class ReporteController {
 				//ArrayActivo = jdbcTemplate.queryForList(sql,fechaIni,fechaFin);
 				ArrayActivo = jdbcTemplate.queryForList(sql);
 				int contador = 1;
-				System.out.println(ArrayActivo.size()+" | "+jsonMap.get("regimen")+" | "+sql);
+				//System.out.println(ArrayActivo.size()+" | "+jsonMap.get("regimen")+" | "+sql);
 				
 				float sumaTotalCostoHistorico 		= 0;
 				float sumaTotalCostoActualizado 	= 0;
@@ -896,7 +903,7 @@ public class ReporteController {
 					}
 					aniosdepreciados++;
 					
-					System.out.println("["+contador+"]"+activo.get("idactivo")+" | "+fechaCompra+" | "+fechaFin+" | "+mesesFaltantes+" | > "+mesesYaDepreciado + " | "+aniosdepreciados);
+					//System.out.println("["+contador+"]"+activo.get("idactivo")+" | "+fechaCompra+" | "+fechaFin+" | "+mesesFaltantes+" | > "+mesesYaDepreciado + " | "+aniosdepreciados);
 								
 					depreciacionAcumulada 	= (activo.get("depacumulada") != null)? Float.parseFloat(activo.get("depacumulada").toString() ): 0 ;
 					actualzaiconDepre 		= (activo.get("act_dep_acumulado") != null)? Float.parseFloat(activo.get("act_dep_acumulado").toString()) : 0;
@@ -909,6 +916,7 @@ public class ReporteController {
 					//int gestion 				 			= fechaFinDeAnioSigueinteFin.getYear();
 					int gestion 				 			= 2023;
 					boolean entro 							= false;
+					/*
 					System.out.println(mesesYaDepreciado+" | "+
 										aniosdepreciados+" <= "+
 										cantidadAniosVidaUtil+" | "+
@@ -917,6 +925,7 @@ public class ReporteController {
 										(aniosdepreciados <= cantidadAniosVidaUtil)+" | "+
 										(fechaFinDeAnioSigueinteIni.isBefore(fechaFinEnvia))
 										);
+					*/
 					while(aniosdepreciados <= cantidadAniosVidaUtil && fechaFinDeAnioSigueinteIni.isBefore(fechaFinEnvia)) {
 						entro = true ; 
 					
