@@ -11,6 +11,7 @@ import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -92,10 +93,50 @@ public class ReporteController {
 		
 	}
 	
+	public JasperPrint getReportGroup(List<Map<String, Object>> List, String archivo, Map<String, Object> datosAux)  throws JRException, IOException{
+		
+		Map<String, Object> params  = new HashMap();
+		
+		//params.put("tableActivos", new JRBeanCollectionDataSource(List));
+		params.put("fechaIni", datosAux.get("fechaIni"));
+		params.put("fechaFin", datosAux.get("fechaFin"));
+		
+		// Cargar la imagen "logocossmil.png" desde el classpath utilizando ClassPathResource
+	    ClassPathResource imageResource = new ClassPathResource("logocoosmil.png");
+	    InputStream imageStream = imageResource.getInputStream();
+	    // Agregar la imagen al mapa de parámetros
+	    params.put("logo", imageStream);
+		
+		System.out.println("1: "+archivo);		
+		
+		// Cargar el archivo JRXML desde el classpath utilizando ClassPathResource
+	    ClassPathResource resource = new ClassPathResource(archivo + ".jrxml");
+			InputStream jrxmlInput = resource.getInputStream();
+			JasperPrint report = JasperFillManager.fillReport(
+			        //JasperCompileManager.compileReport(jrxmlInput), params, new JREmptyDataSource()
+			        JasperCompileManager.compileReport(jrxmlInput), params, new JRBeanCollectionDataSource(List)
+			    );
+		
+		/*
+		JasperPrint report = JasperFillManager.fillReport(JasperCompileManager.compileReport(
+					ResourceUtils.getFile("classpath:"+archivo+".jrxml")
+					.getAbsolutePath()), params, new JREmptyDataSource());
+		 */	
+		
+		return report;	
+		
+	}
+	
 	public byte[] exporToPdf(List<Map<String, Object>> list, String archivo, Map<String, Object> datos) throws JRException,  IOException {
 		System.out.println("2: "+archivo);
 		return JasperExportManager.exportReportToPdf( getReport(list, archivo, datos));
 	}
+	
+	public byte[] exporToPdfGroup(List<Map<String, Object>> list, String archivo, Map<String, Object> datos) throws JRException,  IOException {
+		System.out.println("2: "+archivo);
+		return JasperExportManager.exportReportToPdf( getReportGroup(list, archivo, datos));
+	}
+	
 	
 	@GetMapping("/reportGeneralPDFPrueba")
 	public ResponseEntity<byte[]> exportPDFPrueba() throws JRException, IOException{
@@ -1413,7 +1454,7 @@ public class ReporteController {
 	}
 	
 	@PostMapping("/buscarPersona")
-	 public List<Map<String, Object>> buscarPersona(@RequestBody String json){
+	public List<Map<String, Object>> buscarPersona(@RequestBody String json){
 		List<Map<String, Object>>  ArrayActivo  = new ArrayList();
 		
 		
@@ -1464,6 +1505,321 @@ public class ReporteController {
 		return ArrayActivo;
 		 
 	 }
+		
 
+	@PostMapping("/reporteAsignacion")
+	public ResponseEntity<byte[]> reporteAsignacion(@RequestBody String json) throws JRException, IOException{
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_PDF);
+		headers.setContentDispositionFormData("asignacion", "asignacion.pdf");
+		
+		List<Map<String, Object>> listadoActivosReporte = new ArrayList<>();
+		String nombreArchivoReporte = "asignacion";		
+		
+		
+		/*===========	DE AQUI COMIENZA EL REPORTE CHEEEE	=========*/
+		ObjectMapper objectMapper 						= new ObjectMapper();
+		List<Map<String, Object>>  ArrayAsignaciones 	= new ArrayList();
+		//List<Map<String, Object>>  ArrayActivo  	= new ArrayList();
+		//List<Map<String, Object>>  ArrayGrupo  		= new ArrayList();
+		
+		//Map<String, Object> obj 		= new HashMap();
+		//Map<String, Object> datos 		= new HashMap();		
+		Map<String, Object> datosAux 	= new HashMap();
+				
+		String sql, slqAntes;
+		
+		try {	
+			Map<String, Object> jsonMap = objectMapper.readValue(json, Map.class);
+			
+			String cedula = jsonMap.get("cedula").toString();
+			String nombre = jsonMap.get("nombre").toString();	
+			
+			sql = "select a.grupo_id, a.codigo, ag.descripcion, a.descripcion as desAct "
+				+ "from persona p inner join af_itemmov mov "
+				+ "	ON p.ci = mov.ci inner join afw_activo a "
+				+ "		ON mov.cod = a.idactivo inner join afw_grupo ag "
+				+ "			ON ag.idgrupo = a.grupo_id "
+				+ "WHERE p.ci = '"+cedula+"' "
+				+ "ORDER BY a.grupo_id ";
+			
+			ArrayAsignaciones = jdbcTemplate.queryForList(sql);
+			
+			int contador = 0;
+			
+			for(Map<String, Object> asignacion : ArrayAsignaciones) {
+				
+				contador ++;
+				System.out.println(contador+" "+asignacion.get("grupo_id") +" "+asignacion.get("codigo"));
+				Map<String, Object> asignacionS  = new HashMap();
+				asignacionS.put("nro",		contador+"" );
+				asignacionS.put("grupo",	asignacion.get("grupo_id"));
+				asignacionS.put("codigo",	asignacion.get("codigo"));
+				asignacionS.put("nameGrupo",	asignacion.get("descripcion"));
+				asignacionS.put("descripcion",	asignacion.get("desAct"));
+			
+				listadoActivosReporte.add(asignacionS);
+			}
+			
+			/*
+			for(Map<String, Object> itemgrupo : ArrayGrupo) {
+				
+				String valGrupo = itemgrupo.get("idgrupo").toString();
+				String nomGrupo = itemgrupo.get("descripcion").toString();
+				
+				sql = " SELECT a.*, r.descripcion as regDes, r.idregimen as regId"
+						+ " from afw_activo a INNER JOIN afw_regimen r"
+						+ " on a.regimen_id = r.idregimen "
+						+" WHERE a.grupo_id = '"+valGrupo+"' ";				
+				sql = sql + " AND (a.estadoactivo in(0,1,15) or a.estadoactivo is null) AND a.grupo_id NOT IN('01','15','08')"; 
+				
+				
+				ArrayActivo = jdbcTemplate.queryForList(sql);
+				int contador = 1;
+				System.out.println(ArrayActivo.size()+" | "+jsonMap.get("regimen")+" | "+sql);
+				
+				float sumaTotalCostoHistorico 		= 0;
+				float sumaTotalCostoActualizado 	= 0;
+				float sumaTotalDepAcumTotalGrupo	= 0;
+				float sumaTotalVAlorNetoIni 		= 0;
+				float sumaTotalActGestion 			= 0;
+				float sumaTotalCostoTotActualizado 	= 0;
+				float sumaTotalDepGestion 			= 0;
+				float sumaTotalActDepAcum	 		= 0;
+				float sumaTotalDepAcum				= 0;
+				float sumaTotalValorNeto			= 0;
 
+				for(Map<String, Object> activo	 : ArrayActivo) {
+					//ACTUALIZACION
+					float valorActivo 			= 0;
+					float actualizacion 		= 0;
+					float valorActualizado 		= 0;
+					
+					valorActivo 				= Float.parseFloat(activo.get("precio").toString());
+					valorActualizado 			= Float.parseFloat(activo.get("valactualizado").toString());
+					actualizacion 				= (activo.get("act_gestion") != null)? Float.parseFloat(activo.get("act_gestion").toString()) : 0 ;	
+					LocalDate fechaCompra		= LocalDate.parse(activo.get("fechacompra").toString());
+					Float Depre 				= (float) Math.round(Float.parseFloat(activo.get("porcentaje_depreciacion").toString())*12);				
+									
+					//DEPRESIACION
+					float depreciacionAcumulada 	= 0;
+					float actualzaiconDepre 		= 0;
+					float deprePeriodo 				= 0;			
+					float valorResidual		 		= 0;
+					float depreciacionAcumuladaIni	= 0;
+					Long  cantMesD 				= (long) 0;				
+					
+					float UfvIni				= (float) 1;
+					float Ufvfin				= (float) 1;
+									
+					float porcentajeDepre		= Depre/100;
+									
+					LocalDate fechaInicio		= fechaCompra;
+					LocalDate fechaFin			= LocalDate.of(fechaInicio.getYear(), 12, 31);
+					LocalDate fechaFinAntesMigra= LocalDate.of(2022, 12, 31);
+					long mesesFaltantes 		= ChronoUnit.MONTHS.between(fechaCompra, fechaFin);
+					mesesFaltantes++;	
+					int mesesYaDepreciado = (int) (((fechaFinAntesMigra.getYear()-fechaCompra.getYear())*12)+mesesFaltantes);
+					int aniosdepreciados;
+					int cantidadAniosVidaUtil = (int) (100/Depre) ;
+					if(mesesYaDepreciado % 12 == 0) {
+						aniosdepreciados = (mesesYaDepreciado / 12);					
+					}else {					
+						aniosdepreciados = (mesesYaDepreciado / 12) + 1;
+						cantidadAniosVidaUtil++;
+					}
+					aniosdepreciados++;
+					
+					System.out.println("["+contador+"]"+activo.get("idactivo")+" | "+fechaCompra+" | "+fechaFin+" | "+mesesFaltantes+" | > "+mesesYaDepreciado + " | "+aniosdepreciados);
+								
+					depreciacionAcumulada 	= (activo.get("depacumulada") != null)? Float.parseFloat(activo.get("depacumulada").toString() ): 0 ;
+					actualzaiconDepre 		= (activo.get("act_dep_acumulado") != null)? Float.parseFloat(activo.get("act_dep_acumulado").toString()) : 0;
+					deprePeriodo 			= (activo.get("dep_gestion") != null)? Float.parseFloat(activo.get("dep_gestion").toString()) : 0 ;
+					valorResidual 			= (activo.get("valpresente") != null)? Float.parseFloat(activo.get("valpresente").toString()) : 0 ;
+					
+					LocalDate fechaFinDeAnioSigueinteIni 	= LocalDate.parse(fechaIniEnviado);
+					LocalDate fechaFinEnvia					= LocalDate.parse(fechaFinEnviado);
+					LocalDate fechaFinDeAnioSigueinteFin	;				
+					//int gestion 				 			= fechaFinDeAnioSigueinteFin.getYear();
+					int gestion 				 			= 2023;
+					boolean entro 							= false;
+					System.out.println(mesesYaDepreciado+" | "+
+										aniosdepreciados+" <= "+
+										cantidadAniosVidaUtil+" | "+
+										fechaFinDeAnioSigueinteIni+" | "+
+										fechaFinEnvia+" | "+
+										(aniosdepreciados <= cantidadAniosVidaUtil)+" | "+
+										(fechaFinDeAnioSigueinteIni.isBefore(fechaFinEnvia))
+										);
+					while(aniosdepreciados <= cantidadAniosVidaUtil && fechaFinDeAnioSigueinteIni.isBefore(fechaFinEnvia)) {
+						entro = true ; 
+					
+						//ACTUALZIACION
+						valorActivo 		= valorActualizado;
+						actualizacion 		= ((valorActivo * Ufvfin) / UfvIni) - valorActivo; 
+						valorActualizado	= valorActivo + actualizacion;
+						
+						if(cantidadAniosVidaUtil  == aniosdepreciados) {
+							int mes = (int) (12 - mesesFaltantes);
+							if(mes == 0) {
+								mes = 12;
+							}
+							YearMonth aniMes = YearMonth.of(gestion, Month.of(mes));
+							fechaFinDeAnioSigueinteFin = LocalDate.of(gestion,mes,aniMes.lengthOfMonth());
+							cantMesD    				=  (long) mes;
+						}else {
+							fechaFinDeAnioSigueinteFin = LocalDate.of(gestion,12,31);
+							
+							if(fechaFinDeAnioSigueinteFin.isBefore(fechaFinEnvia)) {
+								cantMesD    				= ((Period.between(fechaFinDeAnioSigueinteIni, fechaFinDeAnioSigueinteFin)).toTotalMonths());
+							}else {
+								cantMesD    				= (long) fechaFinEnvia.getMonthValue();
+							}
+						}					
+						
+						depreciacionAcumuladaIni	= depreciacionAcumulada;
+						actualzaiconDepre			= ((depreciacionAcumuladaIni*Ufvfin)/UfvIni)-depreciacionAcumuladaIni;
+						deprePeriodo				= ((valorActualizado*porcentajeDepre)/12)*cantMesD;
+						depreciacionAcumulada		= depreciacionAcumuladaIni+actualzaiconDepre+deprePeriodo;
+						valorResidual				= valorActualizado - depreciacionAcumulada;
+						
+						datos.put("valorActivo",					valorActivo);
+						datos.put("actualizacion",					actualizacion);
+						datos.put("valorActualizado",				valorActualizado);
+						datos.put("depreciacionAcumuladaIni",		depreciacionAcumuladaIni);
+						datos.put("actualzaiconDepre",				actualzaiconDepre);
+						datos.put("Depre",					 		Depre);
+						datos.put("fechaFinDeAnioSigueinteIni",		fechaFinDeAnioSigueinteIni);
+						datos.put("fechaFinDeAnioSigueinteFin",		fechaFinDeAnioSigueinteFin);
+						datos.put("deprePeriodo",					deprePeriodo);
+						datos.put("cantMesD",					 	cantMesD);
+						datos.put("depreciacionAcumulada",			depreciacionAcumulada);
+						datos.put("valorResidual",					valorResidual);
+												
+						//PARA LA SIGUEINTE EGSTION						
+						gestion++;		
+						fechaFinDeAnioSigueinteIni = fechaFinDeAnioSigueinteFin;
+						aniosdepreciados++;
+					}
+	
+					Map<String, Object> activoDevuelo = new HashMap();
+					
+					activoDevuelo.put("idactivo", 					activo.get("idactivo"));
+					activoDevuelo.put("codigo", 					activo.get("codigo"));
+					activoDevuelo.put("descripcion", 				activo.get("descripcion"));
+					activoDevuelo.put("fechacompra", 				activo.get("fechacompra"));
+					activoDevuelo.put("precio", 					activo.get("precio"));
+					
+					
+					Map<String, Object> objActivo  = new HashMap();
+					
+					objActivo.put("codigo",							activo.get("regId"));
+					objActivo.put("descripcion",					activo.get("regDes"));
+					objActivo.put("fecha_adq",						activo.get("fechacompra").toString());
+					objActivo.put("costo_historico",				Float.parseFloat(activo.get("precio").toString()));
+
+					float costo_historico = Float.parseFloat(activo.get("precio").toString());
+					float costo_actual ;
+					float dep_acu_inicial ;
+					float factor_actualizado ;
+					float act_gestion ;
+					float cost_actualizado ;
+					float porc_dep_anual ;
+					float dep_gestion ;
+					float act_dep_acum ;
+					float dep_acum_total ;
+					float valor_neto ;
+					
+					if(entro) {						
+						
+						objActivo.put("costo_actual",				Float.parseFloat(datos.get("valorActivo").toString()));
+						objActivo.put("dep_acu_inicial",			Float.parseFloat(datos.get("depreciacionAcumuladaIni").toString()));
+						objActivo.put("factor_actualizado",			datos.get("actualizacion").toString());
+						objActivo.put("act_gestion",				Float.parseFloat(datos.get("deprePeriodo").toString()));						
+						objActivo.put("cost_actualizado",			Float.parseFloat(datos.get("valorActualizado").toString()));
+						objActivo.put("porc_dep_anual",				datos.get("Depre").toString());
+						objActivo.put("dep_gestion",				Float.parseFloat(datos.get("deprePeriodo").toString()));
+						objActivo.put("act_dep_acum",				Float.parseFloat(datos.get("actualzaiconDepre").toString()));
+						objActivo.put("dep_acum_total",				Float.parseFloat(datos.get("depreciacionAcumulada").toString()));						
+						objActivo.put("valor_neto",					Float.parseFloat(datos.get("valorResidual").toString()));	
+						
+						
+						costo_actual 			= Float.parseFloat(datos.get("valorActivo").toString());
+						dep_acu_inicial 		= Float.parseFloat(datos.get("depreciacionAcumuladaIni").toString());
+						act_gestion 			= Float.parseFloat(datos.get("deprePeriodo").toString());
+						cost_actualizado 		= Float.parseFloat(datos.get("valorActualizado").toString());
+						dep_gestion 			= Float.parseFloat(datos.get("deprePeriodo").toString());
+						act_dep_acum 			= Float.parseFloat(datos.get("actualzaiconDepre").toString());
+						dep_acum_total 			= Float.parseFloat(datos.get("depreciacionAcumulada").toString());
+						valor_neto 				= Float.parseFloat(datos.get("valorResidual").toString());			
+						
+					}else {
+						Depre 				= (float) Math.round(Float.parseFloat(activo.get("porcentaje_depreciacion").toString())*12);
+						
+						objActivo.put("costo_actual",				(activo.get("valactualizado") != null)? Float.parseFloat(activo.get("valactualizado").toString()) : 0);
+						objActivo.put("dep_acu_inicial",			(activo.get("act_dep_acumulado") != null)? Float.parseFloat(activo.get("act_dep_acumulado").toString()): 0);
+						objActivo.put("factor_actualizado",			(activo.get("valactualizado") != null)? activo.get("valactualizado").toString(): "");					
+						objActivo.put("act_gestion",				(activo.get("dep_gestion") != null)? Float.parseFloat(activo.get("dep_gestion").toString()): 0);					
+						objActivo.put("cost_actualizado",			(activo.get("valactualizado") != null)? Float.parseFloat(activo.get("valactualizado").toString()): 0);
+						objActivo.put("porc_dep_anual",				Depre.toString());
+						objActivo.put("dep_gestion",				(activo.get("dep_gestion") != null)? Float.parseFloat(activo.get("dep_gestion").toString()): 0);
+						objActivo.put("act_dep_acum",				(activo.get("act_dep_acumulado") != null)? Float.parseFloat(activo.get("act_dep_acumulado").toString()): 0);
+						objActivo.put("dep_acum_total",				(activo.get("depacumulada") != null)? Float.parseFloat(activo.get("depacumulada").toString()): 0);
+						objActivo.put("valor_neto",					(activo.get("valpresente") != null)? Float.parseFloat(activo.get("valpresente").toString()): 0);
+
+						costo_actual 		= (activo.get("valactualizado") != null)? Float.parseFloat(activo.get("valactualizado").toString()) : 0;
+						dep_acu_inicial 	= (activo.get("act_dep_acumulado") != null)? Float.parseFloat(activo.get("act_dep_acumulado").toString()): 0;
+						act_gestion 		= (activo.get("dep_gestion") != null)? Float.parseFloat(activo.get("dep_gestion").toString()): 0;				
+						cost_actualizado 	= (activo.get("valactualizado") != null)? Float.parseFloat(activo.get("valactualizado").toString()): 0;
+						dep_gestion 		= (activo.get("dep_gestion") != null)? Float.parseFloat(activo.get("dep_gestion").toString()): 0;
+						act_dep_acum 		= (activo.get("act_dep_acumulado") != null)? Float.parseFloat(activo.get("act_dep_acumulado").toString()): 0;
+						dep_acum_total 		= (activo.get("depacumulada") != null)? Float.parseFloat(activo.get("depacumulada").toString()): 0;
+						valor_neto 			= (activo.get("valpresente") != null)? Float.parseFloat(activo.get("valpresente").toString()): 0;
+					}				
+					ArrayProv.add(activoDevuelo);		
+					contador++;
+
+					// AQUI SE SUMA LA DEPRE DE LOS ACTIVOS DE UN REGIMEN 
+					sumaTotalCostoHistorico			= sumaTotalCostoHistorico 		+ costo_historico;
+					sumaTotalCostoActualizado		= sumaTotalCostoActualizado 	+ costo_actual;	
+					sumaTotalDepAcumTotalGrupo		= sumaTotalDepAcumTotalGrupo 	+ dep_acu_inicial;	
+					sumaTotalVAlorNetoIni			= sumaTotalVAlorNetoIni 		+ 0;
+					sumaTotalActGestion			 	= sumaTotalActGestion 			+ act_gestion;
+					sumaTotalCostoTotActualizado	= sumaTotalCostoTotActualizado 	+ cost_actualizado;		
+					sumaTotalDepGestion			 	= sumaTotalDepGestion 			+ dep_gestion;
+					sumaTotalActDepAcum			 	= sumaTotalActDepAcum 			+ act_dep_acum;
+					sumaTotalDepAcum			 	= sumaTotalDepAcum 				+ dep_acum_total;
+					sumaTotalValorNeto			 	= sumaTotalValorNeto 			+ valor_neto;
+				}
+
+				Map<String, Object> objActivoSuma  = new HashMap();
+					
+				objActivoSuma.put("codigo",							valGrupo);
+				objActivoSuma.put("descripcion",					nomGrupo);
+				objActivoSuma.put("fecha_adq",						"1");
+
+				objActivoSuma.put("costo_historico",				sumaTotalCostoHistorico);
+				objActivoSuma.put("costo_actual",					sumaTotalCostoActualizado);
+				objActivoSuma.put("dep_acu_inicial",				sumaTotalDepAcumTotalGrupo);
+				objActivoSuma.put("factor_actualizado",				"");
+				objActivoSuma.put("act_gestion",					sumaTotalActGestion);						
+				objActivoSuma.put("cost_actualizado",				sumaTotalCostoTotActualizado);
+				objActivoSuma.put("porc_dep_anual",					"");
+				objActivoSuma.put("dep_gestion",					sumaTotalDepGestion);
+				objActivoSuma.put("act_dep_acum",					sumaTotalActDepAcum);
+				objActivoSuma.put("dep_acum_total",					sumaTotalDepAcum);						
+				objActivoSuma.put("valor_neto",						sumaTotalValorNeto);
+			
+				listadoActivosReporte.add(objActivoSuma);
+			}
+			*/
+			
+		} catch (JsonProcessingException e) {
+		     e.printStackTrace();
+		 }	
+		
+		/*===========	AQUI TERMINA EL REPORTE CHEEEE	=========*/
+		return ResponseEntity.ok().headers(headers).body(exporToPdfGroup(listadoActivosReporte, nombreArchivoReporte, datosAux));
+	}
+	
 }

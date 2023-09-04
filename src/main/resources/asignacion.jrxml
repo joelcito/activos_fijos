@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.5.final using JasperReports Library version 6.20.5-3efcf2e67f959db3888d79f73dde2dbd7acb4f8e  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="det_gen" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7f470b50-361e-4ec6-9ead-db255ed36148">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<parameter name="logo" class="java.io.InputStream"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="nro" class="java.lang.String"/>
+	<field name="codigo" class="java.lang.String"/>
+	<field name="grupo" class="java.lang.String"/>
+	<field name="nameGrupo" class="java.lang.String"/>
+	<field name="descripcion" class="java.lang.String"/>
+	<group name="grupoContable">
+		<groupExpression><![CDATA[$F{grupo}]]></groupExpression>
+		<groupHeader>
+			<band height="31">
+				<textField>
+					<reportElement x="10" y="6" width="58" height="20" uuid="94f3764a-6854-47d0-8250-ef6b3c47a3a4"/>
+					<textFieldExpression><![CDATA[$F{grupo}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="80" y="6" width="375" height="20" uuid="30a49f92-a50b-4844-b466-9dc1aa07afd6"/>
+					<textFieldExpression><![CDATA[$F{nameGrupo}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="114" splitType="Stretch">
+			<image>
+				<reportElement x="50" y="8" width="59" height="59" uuid="e581af5a-c65e-461c-bd5e-7aee6282a0c0"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="12" y="58" width="135" height="30" uuid="b44ae324-e083-4a81-abdc-8abb64c951f0"/>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[MINISTERIO DE DEFENSA NACIONAL
+Corporacion del Seguro Social Militar
+La Paz - Bolivia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="271" y="48" width="210" height="18" uuid="0f0104fc-c25c-4cfc-b247-fa6d28e4f4cc"/>
+				<text><![CDATA[ACTA DE ASIGNACIÒN DE ACTIVOS FIJOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="600" y="22" width="100" height="21" uuid="917fec0f-6b6c-4492-9d86-709faaaf3bd8"/>
+				<text><![CDATA[Fecha de Emision: ]]></text>
+			</staticText>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="690" y="22" width="100" height="30" uuid="e1d56ca9-6878-4812-8c9b-6b8513612302"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="486" y="1" width="192" height="30" uuid="1488a565-2c0f-4813-91a0-8af7524b4f9b"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Pagina " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="680" y="2" width="100" height="30" uuid="1e9a9ec3-0893-4a0f-86c2-41a58754d60e"/>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[" de " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="41">
+			<staticText>
+				<reportElement x="10" y="10" width="20" height="20" uuid="76932864-2bc0-4d7c-98db-828f62adb404"/>
+				<text><![CDATA[No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="68" y="10" width="60" height="20" uuid="4bf0821c-c038-45f7-82d9-b2acfdec46c9"/>
+				<text><![CDATA[Cod. Patrim.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="180" y="10" width="305" height="20" uuid="5a799a73-0cc4-491a-ba08-74c1b04bf364"/>
+				<text><![CDATA[Detalle del bien]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="27" splitType="Stretch">
+			<textField>
+				<reportElement x="12" y="6" width="48" height="20" uuid="243f82c3-762b-4f79-9c99-6eb762088e84"/>
+				<textFieldExpression><![CDATA[$F{nro}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="70" y="6" width="85" height="20" uuid="02d3fc91-eacc-42cb-8ecb-4b935f5cdd5a"/>
+				<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="180" y="3" width="304" height="22" uuid="75612dcb-4712-45a1-8ca7-0d3a4d57d579"/>
+				<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="89" splitType="Stretch">
+			<staticText>
+				<reportElement x="333" y="72" width="86" height="9" uuid="cb5b653e-f5b2-4140-8e68-5e495ea68a1a"/>
+				<textElement textAlignment="Center">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[GERENTE GENERAL]]></text>
+			</staticText>
+			<line>
+				<reportElement x="297" y="70" width="159" height="1" uuid="12fa944f-b706-4b68-9fed-01aeb29f04f1">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="39" y="20" width="90" height="10" uuid="c6dd6dfd-df75-464e-94ce-373d384c82e1"/>
+				<textElement textAlignment="Center">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[ENCARGADO DE ACTIVOS FIJOS]]></text>
+			</staticText>
+			<line>
+				<reportElement x="44" y="17" width="86" height="1" uuid="5e1795ec-d288-4bbb-b8f9-de47430600f4">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="210" y="20" width="90" height="18" uuid="54648e01-5e15-4304-8fbb-6599ebd88fbf"/>
+				<textElement textAlignment="Center">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[JEFE DE LA UNIDAD DE MANEJO Y DISPOSICION DE BIENES]]></text>
+			</staticText>
+			<line>
+				<reportElement x="208" y="16" width="97" height="1" uuid="1c549c4b-f7cb-4556-a664-7f6be71500d5">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="410" y="20" width="110" height="10" uuid="60928f8c-3bde-4c86-9479-695cd67c4f07"/>
+				<textElement textAlignment="Center">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[JEFE DEPARTAMENTO ADMINISTRATIVO]]></text>
+			</staticText>
+			<line>
+				<reportElement x="411" y="17" width="110" height="1" uuid="89c5c124-0dcf-4213-8778-851f0e8b0254">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="630" y="20" width="70" height="10" uuid="0d18bb0d-ecd9-4e84-a1d5-c8f716f81402"/>
+				<textElement textAlignment="Center">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[GERENTE DE FINANZAS]]></text>
+			</staticText>
+			<line>
+				<reportElement x="627" y="17" width="73" height="1" uuid="b700f031-d568-4b20-b09f-b2c22edddb36">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+</jasperReport>
