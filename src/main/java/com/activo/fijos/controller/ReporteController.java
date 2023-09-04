@@ -210,10 +210,11 @@ public class ReporteController {
 				float depreciacionAcumuladaIni	= 0;
 				Long  cantMesD 				= (long) 0;
 				
-				//float UfvIni				= (float) 2.33187;
-				float UfvIni				= (float) 1;
-				//float Ufvfin				= (float) 2.40498;
-				float Ufvfin				= (float) 1;
+				//float UfvIni				= (float) 1;
+				//float Ufvfin				= (float) 1;
+				
+				float UfvIni				= (float) 2.35998;
+				float Ufvfin				= (float) 2.35998;
 								
 				float porcentajeDepre		= Depre/100;
 								
@@ -875,10 +876,11 @@ public class ReporteController {
 					float depreciacionAcumuladaIni	= 0;
 					Long  cantMesD 				= (long) 0;
 					
-					//float UfvIni				= (float) 2.33187;
-					float UfvIni				= (float) 1;
-					//float Ufvfin				= (float) 2.40498;
-					float Ufvfin				= (float) 1;
+					//float UfvIni				= (float) 1;
+					//float Ufvfin				= (float) 1;
+					
+					float UfvIni				= (float) 2.35998;
+					float Ufvfin				= (float) 2.35998;
 									
 					float porcentajeDepre		= Depre/100;
 									

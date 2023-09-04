@@ -73,6 +73,7 @@ public class ExternoRestController {
 	public void migracionActivo() {
 		
 		List<Map<String, Object>> activos = jdbcTemplate.queryForList("SELECT * FROM af_item");
+		//List<Map<String, Object>> activos = jdbcTemplate.queryForList("SELECT * FROM af_item WHERE cod = '10-0035168'");
 		
 		System.out.println(activos.size());
 		int contador = 0;		
@@ -148,9 +149,15 @@ public class ExternoRestController {
 					String vida_util 		= (act.get("vidautil") != null) ? act.get("vidautil").toString().trim() : null;
 					String grupo_id 		= (act.get("codgrupo") != null) ? act.get("codgrupo").toString().trim() : null;
 					String regimen_id 		= (act.get("refe2") != null) ? act.get("refe2").toString().trim() : null;
-					String regional_id 		= (act.get("codregion") != null) ? act.get("codregion").toString().trim() : null;
+					//String regional_id 		= (act.get("codregion") != null) ? act.get("codregion").toString().trim() : null;
+					String regional_id 		= (act.get("codregion") != null) ? ((!act.get("codregion").toString().trim().isEmpty())? act.get("codregion").toString().trim() : null ) : null;
 					String unidadmanejo_id	= (act.get("codumanejo") != null) ? act.get("codumanejo").toString().trim() : null;
 					
+					/*
+					System.out.println(regional_id);
+					System.out.println(act.get("codregion") != null);
+					System.out.println(act.get("codregion").toString().trim().isEmpty());
+					*/
 					
 					Map<String, Object> ulMov = getUltimoMovActivo(idactivo);
 					String estado_vigencia = "";
