@@ -11,18 +11,45 @@
 	<field name="grupo" class="java.lang.String"/>
 	<field name="nameGrupo" class="java.lang.String"/>
 	<field name="descripcion" class="java.lang.String"/>
+	<field name="estado" class="java.lang.String"/>
+	<field name="fecha" class="java.sql.Timestamp"/>
 	<group name="grupoContable">
 		<groupExpression><![CDATA[$F{grupo}]]></groupExpression>
 		<groupHeader>
-			<band height="31">
+			<band height="28">
 				<textField>
-					<reportElement x="10" y="6" width="58" height="20" uuid="94f3764a-6854-47d0-8250-ef6b3c47a3a4"/>
+					<reportElement x="55" y="5" width="58" height="14" uuid="94f3764a-6854-47d0-8250-ef6b3c47a3a4"/>
 					<textFieldExpression><![CDATA[$F{grupo}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="80" y="6" width="375" height="20" uuid="30a49f92-a50b-4844-b466-9dc1aa07afd6"/>
+					<reportElement x="120" y="5" width="630" height="14" uuid="30a49f92-a50b-4844-b466-9dc1aa07afd6"/>
 					<textFieldExpression><![CDATA[$F{nameGrupo}]]></textFieldExpression>
 				</textField>
+				<line>
+					<reportElement x="6" y="24" width="744" height="1" uuid="59f74ce2-a52f-4044-8830-2d7f6399d390">
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<graphicElement>
+						<pen lineStyle="Solid"/>
+					</graphicElement>
+				</line>
+				<staticText>
+					<reportElement x="6" y="5" width="47" height="14" uuid="c9abfa4c-5886-4be1-a46f-579ac9d6bb78"/>
+					<textElement markup="styled">
+						<font isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+					<text><![CDATA[GRUPO:]]></text>
+				</staticText>
+				<line>
+					<reportElement x="6" y="25" width="744" height="1" uuid="62a74700-b00b-46bb-81e8-87ffd98e5492">
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<graphicElement>
+						<pen lineStyle="Solid"/>
+					</graphicElement>
+				</line>
 			</band>
 		</groupHeader>
 	</group>
@@ -30,7 +57,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<pageHeader>
-		<band height="114" splitType="Stretch">
+		<band height="125" splitType="Stretch">
 			<image>
 				<reportElement x="50" y="8" width="59" height="59" uuid="e581af5a-c65e-461c-bd5e-7aee6282a0c0"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
@@ -49,81 +76,155 @@ La Paz - Bolivia]]></text>
 				<text><![CDATA[ACTA DE ASIGNACIÒN DE ACTIVOS FIJOS]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="600" y="22" width="100" height="21" uuid="917fec0f-6b6c-4492-9d86-709faaaf3bd8"/>
+				<reportElement x="570" y="22" width="100" height="21" uuid="917fec0f-6b6c-4492-9d86-709faaaf3bd8"/>
 				<text><![CDATA[Fecha de Emision: ]]></text>
 			</staticText>
 			<textField pattern="MMMMM dd, yyyy">
-				<reportElement x="690" y="22" width="100" height="30" uuid="e1d56ca9-6878-4812-8c9b-6b8513612302"/>
+				<reportElement x="668" y="23" width="100" height="30" uuid="e1d56ca9-6878-4812-8c9b-6b8513612302"/>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="486" y="1" width="192" height="30" uuid="1488a565-2c0f-4813-91a0-8af7524b4f9b"/>
+				<reportElement x="478" y="0" width="192" height="30" uuid="1488a565-2c0f-4813-91a0-8af7524b4f9b"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA["Pagina " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report">
-				<reportElement x="680" y="2" width="100" height="30" uuid="1e9a9ec3-0893-4a0f-86c2-41a58754d60e"/>
+				<reportElement x="672" y="0" width="100" height="30" uuid="1e9a9ec3-0893-4a0f-86c2-41a58754d60e"/>
 				<textElement textAlignment="Left"/>
 				<textFieldExpression><![CDATA[" de " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="41">
+		<band height="32">
+			<rectangle>
+				<reportElement mode="Opaque" x="0" y="0" width="40" height="20" uuid="01c604bf-699e-4f39-811b-9b8daee49771"/>
+				<graphicElement>
+					<pen lineWidth="1.0"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Opaque" x="40" y="0" width="90" height="20" uuid="bcb2c561-24f4-4a82-a798-8718725ea8bc"/>
+				<graphicElement>
+					<pen lineWidth="1.0"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Opaque" x="130" y="0" width="510" height="20" uuid="55f2e6ae-536f-435a-a1b4-b1a91b8ec3c8"/>
+				<graphicElement>
+					<pen lineWidth="1.0"/>
+				</graphicElement>
+			</rectangle>
 			<staticText>
-				<reportElement x="10" y="10" width="20" height="20" uuid="76932864-2bc0-4d7c-98db-828f62adb404"/>
+				<reportElement x="10" y="0" width="20" height="20" uuid="76932864-2bc0-4d7c-98db-828f62adb404"/>
 				<text><![CDATA[No]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="68" y="10" width="60" height="20" uuid="4bf0821c-c038-45f7-82d9-b2acfdec46c9"/>
+				<reportElement x="57" y="0" width="60" height="20" uuid="4bf0821c-c038-45f7-82d9-b2acfdec46c9"/>
 				<text><![CDATA[Cod. Patrim.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="180" y="10" width="305" height="20" uuid="5a799a73-0cc4-491a-ba08-74c1b04bf364"/>
+				<reportElement x="130" y="0" width="510" height="20" uuid="5a799a73-0cc4-491a-ba08-74c1b04bf364"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Detalle del bien]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement mode="Opaque" x="640" y="0" width="110" height="10" uuid="02debe29-9cfc-4e5b-801e-3397f36ee161"/>
+				<graphicElement>
+					<pen lineWidth="1.0"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Opaque" x="640" y="10" width="50" height="10" uuid="d48fb920-7cac-44a8-a99d-9e78e5fc5865"/>
+				<graphicElement>
+					<pen lineWidth="1.0"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Opaque" x="690" y="10" width="60" height="10" uuid="1b4c69df-9b9a-4851-b471-3cddca1d6078"/>
+				<graphicElement>
+					<pen lineWidth="1.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="674" y="0" width="42" height="11" uuid="c44557cf-75f1-45c0-a4aa-e9a4bb950593"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Asignacion]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="650" y="10" width="30" height="11" uuid="bfbc97ea-b5b1-4722-aca8-c101b03ffcbc"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Estado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="707" y="11" width="30" height="11" uuid="5cc89bc1-fc02-4ccc-a4c2-ead567729805"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Fecha]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="27" splitType="Stretch">
+		<band height="22" splitType="Stretch">
 			<textField>
-				<reportElement x="12" y="6" width="48" height="20" uuid="243f82c3-762b-4f79-9c99-6eb762088e84"/>
+				<reportElement x="6" y="0" width="33" height="20" uuid="243f82c3-762b-4f79-9c99-6eb762088e84"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{nro}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="70" y="6" width="85" height="20" uuid="02d3fc91-eacc-42cb-8ecb-4b935f5cdd5a"/>
+				<reportElement x="40" y="0" width="88" height="20" uuid="02d3fc91-eacc-42cb-8ecb-4b935f5cdd5a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="180" y="3" width="304" height="22" uuid="75612dcb-4712-45a1-8ca7-0d3a4d57d579"/>
+				<reportElement x="130" y="-1" width="510" height="22" uuid="75612dcb-4712-45a1-8ca7-0d3a4d57d579"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="6" y="21" width="744" height="1" uuid="1f1117c6-f749-407b-9ca8-17b1f640ca4d">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<graphicElement>
+					<pen lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="640" y="-1" width="50" height="11" uuid="e2d673ae-4207-4540-9625-7f2110b5fde1"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="690" y="-1" width="60" height="11" uuid="5ef0d07d-4d44-4a8b-9d76-93e04388e364"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
 	<columnFooter>
 		<band height="89" splitType="Stretch">
 			<staticText>
-				<reportElement x="333" y="72" width="86" height="9" uuid="cb5b653e-f5b2-4140-8e68-5e495ea68a1a"/>
-				<textElement textAlignment="Center">
-					<font size="5"/>
-				</textElement>
-				<text><![CDATA[GERENTE GENERAL]]></text>
-			</staticText>
-			<line>
-				<reportElement x="297" y="70" width="159" height="1" uuid="12fa944f-b706-4b68-9fed-01aeb29f04f1">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-				<graphicElement>
-					<pen lineStyle="Dashed"/>
-				</graphicElement>
-			</line>
-			<staticText>
 				<reportElement x="39" y="20" width="90" height="10" uuid="c6dd6dfd-df75-464e-94ce-373d384c82e1"/>
 				<textElement textAlignment="Center">
 					<font size="5"/>
 				</textElement>
-				<text><![CDATA[ENCARGADO DE ACTIVOS FIJOS]]></text>
+				<text><![CDATA[ENTREGUE CONFORME]]></text>
 			</staticText>
 			<line>
 				<reportElement x="44" y="17" width="86" height="1" uuid="5e1795ec-d288-4bbb-b8f9-de47430600f4">
@@ -139,7 +240,7 @@ La Paz - Bolivia]]></text>
 				<textElement textAlignment="Center">
 					<font size="5"/>
 				</textElement>
-				<text><![CDATA[JEFE DE LA UNIDAD DE MANEJO Y DISPOSICION DE BIENES]]></text>
+				<text><![CDATA[RECIBI CONFORME]]></text>
 			</staticText>
 			<line>
 				<reportElement x="208" y="16" width="97" height="1" uuid="1c549c4b-f7cb-4556-a664-7f6be71500d5">
@@ -155,7 +256,7 @@ La Paz - Bolivia]]></text>
 				<textElement textAlignment="Center">
 					<font size="5"/>
 				</textElement>
-				<text><![CDATA[JEFE DEPARTAMENTO ADMINISTRATIVO]]></text>
+				<text><![CDATA[JEFE DE UNIDAD]]></text>
 			</staticText>
 			<line>
 				<reportElement x="411" y="17" width="110" height="1" uuid="89c5c124-0dcf-4213-8778-851f0e8b0254">
@@ -167,11 +268,12 @@ La Paz - Bolivia]]></text>
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement x="630" y="20" width="70" height="10" uuid="0d18bb0d-ecd9-4e84-a1d5-c8f716f81402"/>
+				<reportElement x="630" y="20" width="70" height="18" uuid="0d18bb0d-ecd9-4e84-a1d5-c8f716f81402"/>
 				<textElement textAlignment="Center">
 					<font size="5"/>
 				</textElement>
-				<text><![CDATA[GERENTE DE FINANZAS]]></text>
+				<text><![CDATA[JEFE DPTO.ADM./MAXIMO
+EJECUTIVO UNIDAD]]></text>
 			</staticText>
 			<line>
 				<reportElement x="627" y="17" width="73" height="1" uuid="b700f031-d568-4b20-b09f-b2c22edddb36">

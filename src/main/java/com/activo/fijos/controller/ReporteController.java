@@ -1532,15 +1532,21 @@ public class ReporteController {
 		try {	
 			Map<String, Object> jsonMap = objectMapper.readValue(json, Map.class);
 			
-			String cedula = jsonMap.get("cedula").toString();
-			String nombre = jsonMap.get("nombre").toString();	
+			String cedula 	= jsonMap.get("cedula").toString();
+			String nombre 	= jsonMap.get("nombre").toString();
+			String tipo 	= jsonMap.get("tipo").toString();
+			String fechaIni	= jsonMap.get("fechaIni").toString();
+			String fechaFin	= jsonMap.get("fechaFin").toString();
 			
-			sql = "select a.grupo_id, a.codigo, ag.descripcion, a.descripcion as desAct "
+			System.out.println(jsonMap);
+			
+			sql = "select a.grupo_id, a.codigo, ag.descripcion, a.descripcion as desAct , mov.fecha, mov.estado "
 				+ "from persona p inner join af_itemmov mov "
 				+ "	ON p.ci = mov.ci inner join afw_activo a "
 				+ "		ON mov.cod = a.idactivo inner join afw_grupo ag "
 				+ "			ON ag.idgrupo = a.grupo_id "
-				+ "WHERE p.ci = '"+cedula+"' "
+				+ "WHERE p.ci = '"+cedula+"' AND mov.estado = "+tipo+" "
+						+ "AND mov.fecha BETWEEN '"+fechaIni+"' and '"+fechaFin+"' "
 				+ "ORDER BY a.grupo_id ";
 			
 			ArrayAsignaciones = jdbcTemplate.queryForList(sql);
@@ -1557,6 +1563,12 @@ public class ReporteController {
 				asignacionS.put("codigo",	asignacion.get("codigo"));
 				asignacionS.put("nameGrupo",	asignacion.get("descripcion"));
 				asignacionS.put("descripcion",	asignacion.get("desAct"));
+				if(asignacion.get("estado").equals("1"))
+					asignacionS.put("estado",	"ASIGNACION");	
+				else
+					asignacionS.put("estado",	"LIBERACION");
+				
+				asignacionS.put("fecha",	asignacion.get("fecha"));
 			
 				listadoActivosReporte.add(asignacionS);
 			}
