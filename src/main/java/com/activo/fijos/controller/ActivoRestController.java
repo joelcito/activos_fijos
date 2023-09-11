@@ -51,10 +51,14 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import java.time.temporal.ChronoUnit;
 
 //@CrossOrigin(origins = {"http://localhost:4200/"})
+
+/*
 @CrossOrigin(origins = {
 		"http://10.150.10.13/",
 		"http://localhost:4200/"
 		})
+*/
+
 @RestController
 @RequestMapping("/api/activo")
 public class ActivoRestController {
@@ -86,6 +90,8 @@ public class ActivoRestController {
 	
 	@GetMapping("/{id}")
 	public Activo show(@PathVariable String id) {
+		System.out.println(activoService.findById(id).getActDepAcumulado());
+		//return null;
 		return activoService.findById(id);
 	}
 	

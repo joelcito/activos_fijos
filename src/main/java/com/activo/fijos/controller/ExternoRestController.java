@@ -27,10 +27,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 //@CrossOrigin(origins = {"http://localhost:4200/"})
+/*
 @CrossOrigin(origins = {
 		"http://10.150.10.13/",
 		"http://localhost:4200/"
 		})
+		*/
 @RestController
 @RequestMapping("/api/externo")
 public class ExternoRestController {
@@ -1224,6 +1226,17 @@ public class ExternoRestController {
 	@GetMapping("/getUbiEsp")
 	public List<Map<String, Object>> getUbiEsp(){		
 		String sql = "select * from af_ubicesp ORDER BY des";
+		List<Map<String, Object>>  ArrayProv = jdbcTemplate.queryForList(sql);		
+		return ArrayProv;
+	}
+	
+	@GetMapping("/getUbiGral")
+	public List<Map<String, Object>> getUbiGral(){		
+		//String sql = "select * from af_ubicgral ORDER BY des";
+		String sql = "select afug.codubicgral, afug.codregion, afug.des, reg.descripcion "
+					+ "from af_ubicgral afug INNER JOIN afw_regional reg "
+					+ "	ON afug.codregion = reg.idregional "
+					+ "ORDER BY des ";
 		List<Map<String, Object>>  ArrayProv = jdbcTemplate.queryForList(sql);		
 		return ArrayProv;
 	}

@@ -21,10 +21,12 @@ import com.activo.fijos.models.entity.Grupo;
 import com.activo.fijos.models.services.IGrupoService;
 
 //@CrossOrigin(origins = {"http://localhost:4200/"})
+/*
 @CrossOrigin(origins = {
 		"http://10.150.10.13/",
 		"http://localhost:4200/"
 		})
+		*/
 @RestController
 @RequestMapping("/api/grupo")
 public class GrupoRestController {	
