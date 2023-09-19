@@ -3,6 +3,13 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="det_gen" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7f470b50-361e-4ec6-9ead-db255ed36148">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<parameter name="logo" class="java.io.InputStream"/>
+	<parameter name="numActa" class="java.lang.String"/>
+	<parameter name="desReparticion" class="java.lang.String"/>
+	<parameter name="reparticion" class="java.lang.String"/>
+	<parameter name="ubicEspe" class="java.lang.String"/>
+	<parameter name="desCargo" class="java.lang.String"/>
+	<parameter name="responsable" class="java.lang.String"/>
+	<parameter name="cedula" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -13,20 +20,21 @@
 	<field name="descripcion" class="java.lang.String"/>
 	<field name="estado" class="java.lang.String"/>
 	<field name="fecha" class="java.sql.Timestamp"/>
+	<field name="eficiencia" class="java.lang.String"/>
 	<group name="grupoContable">
 		<groupExpression><![CDATA[$F{grupo}]]></groupExpression>
 		<groupHeader>
-			<band height="28">
+			<band height="23">
 				<textField>
-					<reportElement x="55" y="5" width="58" height="14" uuid="94f3764a-6854-47d0-8250-ef6b3c47a3a4"/>
+					<reportElement x="55" y="2" width="58" height="14" uuid="94f3764a-6854-47d0-8250-ef6b3c47a3a4"/>
 					<textFieldExpression><![CDATA[$F{grupo}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="120" y="5" width="630" height="14" uuid="30a49f92-a50b-4844-b466-9dc1aa07afd6"/>
+					<reportElement x="120" y="2" width="630" height="14" uuid="30a49f92-a50b-4844-b466-9dc1aa07afd6"/>
 					<textFieldExpression><![CDATA[$F{nameGrupo}]]></textFieldExpression>
 				</textField>
 				<line>
-					<reportElement x="6" y="24" width="744" height="1" uuid="59f74ce2-a52f-4044-8830-2d7f6399d390">
+					<reportElement x="6" y="20" width="744" height="1" uuid="59f74ce2-a52f-4044-8830-2d7f6399d390">
 						<property name="com.jaspersoft.studio.unit.y" value="px"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
@@ -35,14 +43,14 @@
 					</graphicElement>
 				</line>
 				<staticText>
-					<reportElement x="6" y="5" width="47" height="14" uuid="c9abfa4c-5886-4be1-a46f-579ac9d6bb78"/>
+					<reportElement x="6" y="2" width="47" height="14" uuid="c9abfa4c-5886-4be1-a46f-579ac9d6bb78"/>
 					<textElement markup="styled">
 						<font isBold="true" isItalic="false" isUnderline="false"/>
 					</textElement>
 					<text><![CDATA[GRUPO:]]></text>
 				</staticText>
 				<line>
-					<reportElement x="6" y="25" width="744" height="1" uuid="62a74700-b00b-46bb-81e8-87ffd98e5492">
+					<reportElement x="6" y="18" width="744" height="1" uuid="62a74700-b00b-46bb-81e8-87ffd98e5492">
 						<property name="com.jaspersoft.studio.unit.y" value="px"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
@@ -57,7 +65,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<pageHeader>
-		<band height="125" splitType="Stretch">
+		<band height="142" splitType="Stretch">
 			<image>
 				<reportElement x="50" y="8" width="59" height="59" uuid="e581af5a-c65e-461c-bd5e-7aee6282a0c0"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
@@ -72,8 +80,11 @@ Corporacion del Seguro Social Militar
 La Paz - Bolivia]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="271" y="48" width="210" height="18" uuid="0f0104fc-c25c-4cfc-b247-fa6d28e4f4cc"/>
-				<text><![CDATA[ACTA DE ASIGNACIÒN DE ACTIVOS FIJOS]]></text>
+				<reportElement x="260" y="49" width="230" height="18" uuid="0f0104fc-c25c-4cfc-b247-fa6d28e4f4cc"/>
+				<textElement>
+					<font isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[ACTA DE ASIGNACIÓN DE ACTIVOS FIJOS No]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="570" y="22" width="100" height="21" uuid="917fec0f-6b6c-4492-9d86-709faaaf3bd8"/>
@@ -93,10 +104,77 @@ La Paz - Bolivia]]></text>
 				<textElement textAlignment="Left"/>
 				<textFieldExpression><![CDATA[" de " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement x="485" y="49" width="70" height="18" uuid="7f6a766f-8a07-435c-8e6a-58011539292d"/>
+				<textElement>
+					<font isBold="true" isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{numActa}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="327" y="63" width="164" height="20" uuid="0fb81687-c17e-4720-9c94-c9f4ec55ff94"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{desReparticion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="109" width="80" height="14" uuid="a542e40e-7d20-4ec4-9659-15bbe1966950"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPARTICION:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="123" width="129" height="14" uuid="105192a1-1548-4617-99a9-7ad2e31a7354"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[UBICACIÓN ESPECÍFICA:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="480" y="96" width="50" height="14" uuid="845459a2-274e-40a8-aa41-45353cb2c50f"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CARGO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="480" y="110" width="80" height="14" uuid="f3c027cd-1eb1-49ff-aa77-1abf23423ad1"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[RESPONSABLE:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="480" y="123" width="30" height="14" uuid="4dbe1170-1633-41cb-8797-121bc76a29fb"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[C.I.:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="80" y="109" width="398" height="15" uuid="8629576c-9ff0-4091-8228-a0d2fec366c4"/>
+				<textFieldExpression><![CDATA[$P{reparticion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="130" y="124" width="348" height="13" uuid="a342c71d-8b2f-4666-b53c-b49e5e7d3f23"/>
+				<textFieldExpression><![CDATA[$P{ubicEspe}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="564" y="95" width="186" height="15" uuid="346c6653-644c-4f62-bf3e-e1bd5a35f3db"/>
+				<textFieldExpression><![CDATA[$P{desCargo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="564" y="110" width="185" height="14" uuid="480bb8bb-f7b0-4726-8858-8f88da19a894"/>
+				<textFieldExpression><![CDATA[$P{responsable}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="564" y="123" width="185" height="14" uuid="6ae734cc-cf69-4824-9868-abf1220a08b9"/>
+				<textFieldExpression><![CDATA[$P{cedula}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="32">
+		<band height="22">
 			<rectangle>
 				<reportElement mode="Opaque" x="0" y="0" width="40" height="20" uuid="01c604bf-699e-4f39-811b-9b8daee49771"/>
 				<graphicElement>
@@ -104,13 +182,13 @@ La Paz - Bolivia]]></text>
 				</graphicElement>
 			</rectangle>
 			<rectangle>
-				<reportElement mode="Opaque" x="40" y="0" width="90" height="20" uuid="bcb2c561-24f4-4a82-a798-8718725ea8bc"/>
+				<reportElement mode="Opaque" x="40" y="0" width="81" height="20" uuid="bcb2c561-24f4-4a82-a798-8718725ea8bc"/>
 				<graphicElement>
 					<pen lineWidth="1.0"/>
 				</graphicElement>
 			</rectangle>
 			<rectangle>
-				<reportElement mode="Opaque" x="130" y="0" width="510" height="20" uuid="55f2e6ae-536f-435a-a1b4-b1a91b8ec3c8"/>
+				<reportElement mode="Opaque" x="180" y="0" width="460" height="20" uuid="55f2e6ae-536f-435a-a1b4-b1a91b8ec3c8"/>
 				<graphicElement>
 					<pen lineWidth="1.0"/>
 				</graphicElement>
@@ -120,11 +198,11 @@ La Paz - Bolivia]]></text>
 				<text><![CDATA[No]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="57" y="0" width="60" height="20" uuid="4bf0821c-c038-45f7-82d9-b2acfdec46c9"/>
+				<reportElement x="50" y="0" width="60" height="20" uuid="4bf0821c-c038-45f7-82d9-b2acfdec46c9"/>
 				<text><![CDATA[Cod. Patrim.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="130" y="0" width="510" height="20" uuid="5a799a73-0cc4-491a-ba08-74c1b04bf364"/>
+				<reportElement x="179" y="0" width="460" height="20" uuid="5a799a73-0cc4-491a-ba08-74c1b04bf364"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Detalle del bien]]></text>
 			</staticText>
@@ -167,26 +245,37 @@ La Paz - Bolivia]]></text>
 				</textElement>
 				<text><![CDATA[Fecha]]></text>
 			</staticText>
+			<rectangle>
+				<reportElement mode="Opaque" x="120" y="0" width="60" height="20" uuid="7fdf65e9-6aa6-4c96-94a8-0670533d19a0"/>
+				<graphicElement>
+					<pen lineWidth="1.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="130" y="0" width="50" height="20" uuid="46cd2edf-ca69-41b3-ab85-f61c6d61749e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Estado]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="22" splitType="Stretch">
+		<band height="24" splitType="Stretch">
 			<textField>
-				<reportElement x="6" y="0" width="33" height="20" uuid="243f82c3-762b-4f79-9c99-6eb762088e84"/>
+				<reportElement x="6" y="0" width="24" height="20" uuid="243f82c3-762b-4f79-9c99-6eb762088e84"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nro}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="40" y="0" width="88" height="20" uuid="02d3fc91-eacc-42cb-8ecb-4b935f5cdd5a"/>
+				<reportElement x="30" y="0" width="88" height="20" uuid="02d3fc91-eacc-42cb-8ecb-4b935f5cdd5a"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="130" y="-1" width="510" height="22" uuid="75612dcb-4712-45a1-8ca7-0d3a4d57d579"/>
+				<reportElement x="180" y="0" width="450" height="22" uuid="75612dcb-4712-45a1-8ca7-0d3a4d57d579"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
@@ -203,17 +292,24 @@ La Paz - Bolivia]]></text>
 			</line>
 			<textField>
 				<reportElement x="640" y="-1" width="50" height="11" uuid="e2d673ae-4207-4540-9625-7f2110b5fde1"/>
-				<textElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{estado}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="690" y="-1" width="60" height="11" uuid="5ef0d07d-4d44-4a8b-9d76-93e04388e364"/>
-				<textElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="120" y="0" width="60" height="20" uuid="908000ce-f653-46d1-a85e-9eaf36f28396"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{eficiencia}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

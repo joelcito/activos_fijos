@@ -20,12 +20,9 @@ import com.activo.fijos.models.entity.Partida;
 import com.activo.fijos.models.services.IPartidaService;
 
 //@CrossOrigin(origins = {"http://localhost:4200/"})
-/*
-@CrossOrigin(origins = {
-		"http://10.150.10.13/",
-		"http://localhost:4200/"
-		})
-		*/
+
+@CrossOrigin(origins = {"http://10.150.10.13/","http://localhost:4200/"})
+		
 @RestController
 @RequestMapping("/api/partida")
 public class PartidaRestController {

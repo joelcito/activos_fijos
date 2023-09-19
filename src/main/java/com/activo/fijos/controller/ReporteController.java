@@ -50,12 +50,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
-/*
-@CrossOrigin(origins = {
-		"http://10.150.10.13/",
-		"http://localhost:4200/"
-		})
-*/
+
+@CrossOrigin(origins = {"http://10.150.10.13/","http://localhost:4200/"})
+
 @RestController
 @RequestMapping("/api/reporte")
 public class ReporteController {
@@ -104,8 +101,47 @@ public class ReporteController {
 		Map<String, Object> params  = new HashMap();
 		
 		//params.put("tableActivos", new JRBeanCollectionDataSource(List));
-		params.put("fechaIni", datosAux.get("fechaIni"));
-		params.put("fechaFin", datosAux.get("fechaFin"));
+		
+		if(datosAux.get("fechaIni") != null) {
+			params.put("fechaIni", datosAux.get("fechaIni"));	
+		}		
+		if(datosAux.get("fechaFin") != null) {
+			params.put("fechaFin", datosAux.get("fechaFin"));	
+		}
+		if(datosAux.get("numeroIncorporacion") != null) {
+			params.put("numeroIncorporacion", datosAux.get("numeroIncorporacion"));		
+		}
+		if(datosAux.get("regionalPricipal") != null) {
+			params.put("regionalPricipal", datosAux.get("regionalPricipal"));		
+		}
+		if(datosAux.get("unidadTrabajo") != null) {
+			params.put("unidadTrabajo", datosAux.get("unidadTrabajo"));		
+		}		
+		if(datosAux.get("numActa") != null) {
+			params.put("numActa", datosAux.get("numActa"));		
+		}
+		if(datosAux.get("desReparticion") != null) {
+			params.put("desReparticion", datosAux.get("desReparticion"));		
+		}
+		if(datosAux.get("reparticion") != null) {
+			params.put("reparticion", datosAux.get("reparticion"));		
+		}
+		if(datosAux.get("ubicEspe") != null) {
+			params.put("ubicEspe", datosAux.get("ubicEspe"));		
+		}
+		if(datosAux.get("desCargo") != null) {
+			params.put("desCargo", datosAux.get("desCargo"));		
+		}
+		if(datosAux.get("responsable") != null) {
+			params.put("responsable", datosAux.get("responsable"));		
+		}
+		if(datosAux.get("cedula") != null) {
+			params.put("cedula", datosAux.get("cedula"));		
+		}
+		
+		
+		System.out.println(datosAux);
+		System.out.println(datosAux.get("numerojkoe"));
 		
 		// Cargar la imagen "logocossmil.png" desde el classpath utilizando ClassPathResource
 	    ClassPathResource imageResource = new ClassPathResource("logocoosmil.png");
@@ -1467,7 +1503,7 @@ public class ReporteController {
 		
 		try {	
 			Map<String, Object> jsonMap = objectMapper.readValue(json, Map.class);
-			String sql = " SELECT TOP 10 * FROM persona WHERE 1 = 1  ";
+			String sql = " SELECT TOP 10 * FROM persona WHERE 1 = 1 and estado = 'VIG' ";
 			
 			if(jsonMap.get("cedula") != null && jsonMap.get("cedula") != "")
 				sql = sql + " AND ci LIKE '%"+jsonMap.get("cedula").toString()+"%' ";
@@ -1536,32 +1572,55 @@ public class ReporteController {
 			String tipo 	= jsonMap.get("tipo").toString();
 			String fechaIni	= jsonMap.get("fechaIni").toString();
 			String fechaFin	= jsonMap.get("fechaFin").toString();
+			String numActa	= jsonMap.get("numActa").toString();		
 			
-			System.out.println(jsonMap);
 			
-			sql = "select a.grupo_id, a.codigo, ag.descripcion, a.descripcion as desAct , mov.fecha, mov.estado "
-				+ "from persona p inner join af_itemmov mov "
-				+ "	ON p.ci = mov.ci inner join afw_activo a "
-				+ "		ON mov.cod = a.idactivo inner join afw_grupo ag "
-				+ "			ON ag.idgrupo = a.grupo_id "
-				+ "WHERE p.ci = '"+cedula+"' AND mov.estado = "+tipo+" "
-						+ "AND mov.fecha BETWEEN '"+fechaIni+"' and '"+fechaFin+"' "
-				+ "ORDER BY a.grupo_id ";
+			
+			sql = "select a.grupo_id, a.codigo, ag.descripcion, a.descripcion as desAct , mov.fecha, mov.estado ,a.eficiencia as eficiencia, carg.des as desCargo,eee.des as desReparticion, CONCAT(TRIM(p.des),' ',TRIM(p.des1),' ',TRIM(p.des2)) as responsable, CONCAT(TRIM(eee.cod),' ',TRIM(eee.des)) as reparticion, CONCAT(TRIM(afu.cod), ' ',TRIM(afu.des)) as ubicEspe , p.ci as cedula "
+					+ "from persona p inner join af_itemmov mov "
+					+ "	ON p.ci = mov.ci inner join afw_activo a "
+					+ "		ON mov.cod = a.idactivo inner join afw_grupo ag "
+					+ "			ON ag.idgrupo = a.grupo_id inner join e2 eee "
+					+ "				ON mov.codrepart = eee.cod AND eee.tipo = 'RPT' inner join af_ubicesp afu "
+					+ "					ON afu.cod = mov.codubic INNER JOIN p_cargos carg "
+					+ "						ON carg.cod = mov.codcargoresp "
+					+ "WHERE p.ci = '"+cedula+"' AND mov.estado = "+tipo+" AND left(FORMAT(mov.fecha, 'yyyy-MM-dd'),10) BETWEEN '"+fechaIni+"' and '"+fechaFin+"' AND p.estado = 'VIG' "
+					+ "ORDER BY a.grupo_id ";
 			
 			ArrayAsignaciones = jdbcTemplate.queryForList(sql);
+						
+			datosAux.put("numActa",	numActa);
+			
+			if(ArrayAsignaciones.size() > 0){
+				
+				String desReparticion = ArrayAsignaciones.get(0).get("desReparticion").toString();
+				String reparticion    = ArrayAsignaciones.get(0).get("reparticion").toString();
+				String ubicEspe       = ArrayAsignaciones.get(0).get("ubicEspe").toString();
+				String desCargo       = ArrayAsignaciones.get(0).get("desCargo").toString();
+				String responsable    = ArrayAsignaciones.get(0).get("responsable").toString();
+				String cedula4        = ArrayAsignaciones.get(0).get("cedula").toString();
+								
+				datosAux.put("desReparticion",	desReparticion);
+				datosAux.put("reparticion",	reparticion);
+				datosAux.put("ubicEspe",	ubicEspe);
+				datosAux.put("desCargo",	desCargo);
+				datosAux.put("responsable",	responsable);
+				datosAux.put("cedula",	cedula4);
+			}
 			
 			int contador = 0;
 			
 			for(Map<String, Object> asignacion : ArrayAsignaciones) {
 				
 				contador ++;
-				System.out.println(contador+" "+asignacion.get("grupo_id") +" "+asignacion.get("codigo"));
+				//System.out.println(contador+" "+asignacion.get("grupo_id") +" "+asignacion.get("codigo"));
 				Map<String, Object> asignacionS  = new HashMap();
 				asignacionS.put("nro",		contador+"" );
 				asignacionS.put("grupo",	asignacion.get("grupo_id"));
 				asignacionS.put("codigo",	asignacion.get("codigo"));
 				asignacionS.put("nameGrupo",	asignacion.get("descripcion"));
 				asignacionS.put("descripcion",	asignacion.get("desAct"));
+				asignacionS.put("eficiencia",	asignacion.get("eficiencia"));
 				if(asignacion.get("estado").equals("1"))
 					asignacionS.put("estado",	"ASIGNACION");	
 				else
@@ -1593,6 +1652,7 @@ public class ReporteController {
 		/*===========	DE AQUI COMIENZA EL REPORTE CHEEEE	=========*/
 		ObjectMapper objectMapper 						= new ObjectMapper();
 		List<Map<String, Object>>  ArrayIncorporacion 	= new ArrayList();
+		List<Map<String, Object>>  arrayIncorporacionDatos 	= new ArrayList();
 		Map<String, Object> datosAux 	= new HashMap();
 				
 		String sql, slqAntes;
@@ -1600,13 +1660,33 @@ public class ReporteController {
 		try {	
 			Map<String, Object> jsonMap = objectMapper.readValue(json, Map.class);
 			
-			System.out.println(jsonMap);
+			//System.out.println(jsonMap);
 			
 			String fechaIni 	= jsonMap.get("fechaIni").toString();
 			String fechaFin 	= jsonMap.get("fechaFin").toString();
 			String ubiGeneral 	= jsonMap.get("ubiGeneral").toString();
+			String regional 	= jsonMap.get("regional").toString();
+			String numero	 	= jsonMap.get("numero").toString();
+			String provedor	 	= jsonMap.get("provedor").toString();
+			String numeroFactura= jsonMap.get("numeroFactura").toString();
 			
-			//System.out.println(jsonMap);			
+			
+			
+			String  sqlRegional = " select reg.descripcion, ug.des "
+								+ " from af_ubicgral ug INNER JOIN afw_regional reg "
+								+ "	ON reg.idregional = ug.codregion "
+								+ " where ug.codregion = '"+regional+"' and ug.codubicgral = '"+ubiGeneral+"' ";
+			
+			arrayIncorporacionDatos = jdbcTemplate.queryForList(sqlRegional);
+						
+			if(arrayIncorporacionDatos.size() > 0) {
+				datosAux.put("regionalPricipal", arrayIncorporacionDatos.get(0).get("descripcion"));
+				datosAux.put("unidadTrabajo", arrayIncorporacionDatos.get(0).get("des"));
+			}
+			
+			datosAux.put("numeroIncorporacion", numero);
+			datosAux.put("fechaIni", fechaIni);
+			datosAux.put("fechaFin", fechaFin);				
 			
 			sql = "select af.codigo, af.descripcion, af.fechacompra, af.eficiencia, af.fechacreacion,af.precio, afug.des as ubiGral, afue.des as ubiEsp, afue.codubicesp , afg.descripcion as descrGrupo, pe.des as apPaterno, pe.des1 as apMaterno, pe.des2 as nombrePe "
 				+ "from afw_activo af INNER JOIN af_itemmov afm "
@@ -1615,24 +1695,37 @@ public class ReporteController {
 				+ "			ON afug.codubicgral = afue.codubicgral AND afug.codregion = afue.codregion  INNER JOIN afw_grupo afg "
 				+ "				ON af.grupo_id = afg.idgrupo INNER JOIN persona pe "
 				+ "					ON afm.ci = pe.ci "
-				+ "where af.fechacreacion between '"+fechaIni+"' and '"+fechaFin+"' AND afue.codubicgral = '"+ubiGeneral+"' ";
+				+ "where left(af.fechacreacion, 10) between '"+fechaIni+"' and '"+fechaFin+"' AND afue.codubicgral = '"+ubiGeneral+"' AND pe.estado = 'VIG'";
+			
+			//System.out.println(jsonMap);
+			//System.out.println(jsonMap.get("provedor"));
+			//System.out.println(jsonMap.get("numeroFactura"));
+			
+			Object provedorPol = jsonMap.get("provedor");
+			if(provedorPol != null && !provedorPol.toString().isEmpty()) {
+				sql = sql + " AND af.codprovedor = '"+jsonMap.get("provedor").toString()+"' ";
+			}
+			
+			Object numeroFacturaPol = jsonMap.get("numeroFactura");
+			if(numeroFacturaPol != null && !numeroFacturaPol.toString().isEmpty()) {
+				sql = sql + " AND af.factura = '"+jsonMap.get("numeroFactura").toString()+"' ";
+			}
 			
 			System.out.println(sql);
-					
-			//sql  = "select * from af_ubicesp";
 			
 			ArrayIncorporacion = jdbcTemplate.queryForList(sql);
 			
 			int contador = 0;
 			
+			//System.out.println(ArrayIncorporacion.get(0));			
 			
 			for(Map<String, Object> incorporacion : ArrayIncorporacion) {
 				
 				contador ++;
 				Map<String, Object> incorporacionSe  = new HashMap();
-				incorporacionSe.put("nro",			contador+"" );
-				incorporacionSe.put("ubiEspec",		incorporacion.get("codubicesp") );
-				incorporacionSe.put("codigo",		incorporacion.get("codigo"));
+				incorporacionSe.put("nro",				contador+"" );
+				incorporacionSe.put("ubiEspec",			incorporacion.get("codubicesp") );
+				incorporacionSe.put("codigo",			incorporacion.get("codigo"));
 				incorporacionSe.put("nameUbiEspec",		incorporacion.get("ubiEsp"));
 				incorporacionSe.put("nameGrupo",		incorporacion.get("descrGrupo"));
 				incorporacionSe.put("descripcion",		incorporacion.get("descripcion"));
@@ -1641,21 +1734,22 @@ public class ReporteController {
 				Timestamp timestampValue = (Timestamp) incorporacion.get("fechacreacion");
 				SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 				String formattedDate = dateFormat.format(new Date(timestampValue.getTime()));
-
 				
 				incorporacionSe.put("fechaAlta",		formattedDate);
 				incorporacionSe.put("valorCompra",		incorporacion.get("precio"));
 				incorporacionSe.put("responsable",		incorporacion.get("apPaterno").toString().trim()+" "+incorporacion.get("apMaterno").toString().trim()+" "+incorporacion.get("nombrePe").toString().trim());
 				
-				System.out.println(incorporacion.get("codubicesp"));
+				//System.out.println(incorporacion.get("codubicesp"));
 			
 				listadoActivosReporte.add(incorporacionSe);
+				incorporacionSe.get("codigo");
+				
 			}
 		} catch (JsonProcessingException e) {
 		     e.printStackTrace();
 		 }	
 		
-		System.out.println(listadoActivosReporte);
+		//System.out.println(listadoActivosReporte);
 		
 		/*===========	AQUI TERMINA EL REPORTE CHEEEE	=========*/
 		return ResponseEntity.ok().headers(headers).body(exporToPdfGroup(listadoActivosReporte, nombreArchivoReporte, datosAux));

@@ -27,12 +27,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 //@CrossOrigin(origins = {"http://localhost:4200/"})
-/*
-@CrossOrigin(origins = {
-		"http://10.150.10.13/",
-		"http://localhost:4200/"
-		})
-		*/
+
+@CrossOrigin(origins = {"http://10.150.10.13/","http://localhost:4200/"})
+	
 @RestController
 @RequestMapping("/api/externo")
 public class ExternoRestController {
@@ -814,7 +811,7 @@ public class ExternoRestController {
 					+ "ON afm.ci = p.ci INNER JOIN af_ubicesp ubi "
 					+ "ON afm.codubic = ubi.cod INNER JOIN af_ubicgral ubig "
 					+ "ON ubi.codubicgral = ubig.codubicgral "
-					+ "WHERE afm.cod = ? AND ubi.codregion = ubig.codregion "
+					+ "WHERE afm.cod = ? AND ubi.codregion = ubig.codregion  AND p.estado = 'VIG' "
 					+ "ORDER BY afm.dr DESC";
 		List<Map<String, Object>>  ArrayProv = jdbcTemplate.queryForList(sql, idactivo);		
 		return ArrayProv;
@@ -1240,13 +1237,28 @@ public class ExternoRestController {
 		List<Map<String, Object>>  ArrayProv = jdbcTemplate.queryForList(sql);		
 		return ArrayProv;
 	}
+	
+	@GetMapping("/getUbiGralByIdRegional/{regional}")
+	public List<Map<String, Object>> getUbiGralByIdRegional(@PathVariable String regional){		
+		String sql = "select * from af_ubicgral where codregion = '"+regional+"' order by des asc";
+		List<Map<String, Object>>  ArrayProv = jdbcTemplate.queryForList(sql);		
+		return ArrayProv;
+	}
+	
+	@GetMapping("/getUbiEspByIdGral/{idUbiGral}")
+	public List<Map<String, Object>> getUbiEspByIdGral(@PathVariable String idUbiGral){		
+		String sql = "select * from af_ubicesp where codubicgral = '"+idUbiGral+"' order by des asc";
+		List<Map<String, Object>>  ArrayProv = jdbcTemplate.queryForList(sql);		
+		return ArrayProv;
+	}	
+	
 	// ******************* END UBICACION ESPECIFICA *******************
 
 
 	// ******************* PERSONAS *******************
 	@GetMapping("/getPersonaByCi/{cipersona}")
 	public Map<String, Object> getPersonaByCi(@PathVariable String cipersona){		
-		String sql = "select * from persona WHERE ci = ?";
+		String sql = "select * from persona WHERE ci = ? AND estado = 'VIG'";
 		List<Map<String, Object>>  ArrayProv = jdbcTemplate.queryForList(sql, cipersona);		
 		
 		Map<String, Object> obj = new HashMap();
@@ -1264,7 +1276,7 @@ public class ExternoRestController {
 		
 		String[] palabras = nombre.split(" ");
 		
-		String query = "SELECT TOP 15 p.des,p.des1, p.des2, p.ci FROM persona p WHERE 1 = 1 ";
+		String query = "SELECT TOP 15 p.des,p.des1, p.des2, p.ci FROM persona p WHERE 1 = 1 AND p.estado = 'VIG' ";
 		
 		System.out.println(nombre+" "+palabras.length);
 		if(palabras.length <= 3) {
